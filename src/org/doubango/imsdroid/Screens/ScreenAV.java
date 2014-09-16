@@ -30,6 +30,8 @@ import org.doubango.imsdroid.Engine;
 import org.doubango.imsdroid.IMSDroid;
 import org.doubango.imsdroid.Main;
 import org.doubango.imsdroid.R;
+import org.doubango.imsdroid.XMPPSetting;
+import org.doubango.imsdroid.Main.MyThread;
 import org.doubango.imsdroid.Services.IScreenService;
 import org.doubango.imsdroid.Utils.DialerUtils;
 import org.doubango.ngn.events.NgnInviteEventArgs;
@@ -48,6 +50,14 @@ import org.doubango.ngn.utils.NgnGraphicsUtils;
 import org.doubango.ngn.utils.NgnStringUtils;
 import org.doubango.ngn.utils.NgnTimer;
 import org.doubango.ngn.utils.NgnUriUtils;
+import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.filter.MessageTypeFilter;
+import org.jivesoftware.smack.filter.PacketFilter;
+import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.util.StringUtils;
+import org.xmlpull.v1.XmlPullParser;
 
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
@@ -57,6 +67,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -66,15 +77,21 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -135,6 +152,18 @@ public class ScreenAV extends BaseScreen{
 	
 	private static boolean SHOW_SIP_PHRASE = true;
 	
+	
+	private XMPPConnection connection;
+	private XMPPSetting XMPPSet;
+	
+    public Thread test = new Thread();
+    public Thread XMPPThreadv = new XMPPThread(); 
+    private boolean isNeedAdd = false;
+	
+    
+    
+	//private Main mainclass = new Main();
+	
 	private static enum ViewType{
 		ViewNone,
 		ViewTrying,
@@ -158,6 +187,14 @@ public class ScreenAV extends BaseScreen{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.screen_av);
 		
+        // William Added , for XMPP connection
+        //XMPPSet.XMPPStart();
+		XMPPSet = new XMPPSetting(this);
+		XMPPThreadv = new XMPPThread();
+		XMPPThreadv.start();
+		
+		
+		setButtonLayout();
 		super.mId = getIntent().getStringExtra("id");
 		if(NgnStringUtils.isNullOrEmpty(super.mId)){
 			Log.e(TAG, "Invalid audio/video session");
@@ -259,6 +296,42 @@ public class ScreenAV extends BaseScreen{
         
         setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 	}
+	
+	
+	class XMPPThread extends Thread {
+		 
+        @Override
+        public void run() {
+            // TODO Auto-generated method stub
+            super.run();
+            try {
+            		XMPPSet.XMPPStart();
+
+            } catch (Exception e) {
+                 e.printStackTrace();
+            }
+        }
+    }
+	
+	public void setConnection(XMPPConnection connection) {
+		this.connection = connection;
+		Log.i("XMPPClient", "Connection =  " + connection);
+		if (connection != null) {
+		    // Add a packet listener to get messages sent to us
+		    PacketFilter filter = new MessageTypeFilter(Message.Type.chat);
+		    connection.addPacketListener(new PacketListener() {
+		        public void processPacket(Packet packet) {
+		            Message message = (Message) packet;
+		            if (message.getBody() != null) {
+		                String fromName = StringUtils.parseBareAddress(message.getFrom());
+		                Log.i("XMPPClient", "Got text [" + message.getBody() + "] from [" + fromName + "]");
+		                //We receive message here.
+		                
+		            }
+		        }
+		    }, filter);
+		}
+    }
 	
 	@Override
 	protected void onStart() {
@@ -1264,4 +1337,143 @@ public class ScreenAV extends BaseScreen{
 			}
 		}
 	}
+	
+	
+	public void setButtonLayout() {
+    	// TODO Auto-generated method stub
+    	Resources res = this.getResources();
+        XmlPullParser parser = res.getXml(R.layout.direction_btn);
+        AttributeSet attributes = Xml.asAttributeSet(parser);
+        
+        // Layout Set
+        RelativeLayout imageBtnLinearLayout = new RelativeLayout(this);
+        imageBtnLinearLayout.setLayoutParams(new LayoutParams
+        		(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+      
+        //imageBtnLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        
+        // Add  image button
+        Context context = this.getApplicationContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        RelativeLayout imagebtnLinearLayout = 
+        	(RelativeLayout)inflater.inflate(R.layout.direction_btn, imageBtnLinearLayout, false);
+        imageBtnLinearLayout.addView(imagebtnLinearLayout);
+        
+        // Add Button content view
+        addContentView(imageBtnLinearLayout, new LayoutParams
+        		(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        
+    	  
+        findViewById(R.id.FORWARD).setOnTouchListener(mylisten);
+        findViewById(R.id.BACKWARD).setOnTouchListener(mylisten);
+        findViewById(R.id.LEFT).setOnTouchListener(mylisten);
+        findViewById(R.id.RIGHT).setOnTouchListener(mylisten);
+        findViewById(R.id.STOP).setOnTouchListener(mylisten);
+        
+        // Set Button Listener
+       /* forward = (ImageButton)findViewById(R.id.FORWARD);		    
+        back = (ImageButton)findViewById(R.id.BACKWARD);
+        left = (ImageButton)findViewById(R.id.LEFT);
+        right = (ImageButton)findViewById(R.id.RIGHT);
+        stop = (ImageButton)findViewById(R.id.STOP);
+        
+
+        // Set mylisten
+        
+        forward.setOnTouchListener(mylisten);
+        back.setOnTouchListener(mylisten);
+        left.setOnTouchListener(mylisten);
+        right.setOnTouchListener(mylisten);  
+        stop.setOnTouchListener(mylisten);  
+    	*/
+      }
+	
+	//20140515 - Add Button listener
+    private Button.OnTouchListener mylisten = new OnTouchListener(){
+
+  		@Override
+  		public boolean onTouch(View v, MotionEvent event) {
+  			//return gestureDetector.onTouchEvent(event);
+
+  			int eventAction = event.getAction();
+  			switch(eventAction){
+
+  				case MotionEvent.ACTION_DOWN:
+  					isNeedAdd = true;
+                     	Runnable r = new MyThread(v);
+                     	new Thread(r).start();
+  					
+  					break;
+  				case MotionEvent.ACTION_UP:
+
+  					isNeedAdd = false;
+  					XMPPSendText("STOP");
+  					//comm.setMsg(v.getId(), 0);
+  					//sctc.SctpSendData("STOP");
+  					//start(service);
+  					break;
+  			
+  				case MotionEvent.ACTION_MOVE:
+  				//	System.out.println("action move");
+  					break;
+  			default:
+
+  					break;
+  		}
+  			
+  			return false;
+  		}
+
+
+    };
+    
+    public class MyThread implements Runnable {
+
+ 	   private View view;
+ 	   String SendMsg;
+ 	   
+ 	   
+ 		public MyThread(View v) {
+ 		       // store parameter for later user
+ 			   this.view = v;
+ 		   }
+
+ 		public void run() {
+ 			while (isNeedAdd) {
+ 				// uiHandler.sendEmptyMessage(0);
+ 				try {
+ 					// Using SCTP transmit message
+
+ 					//SendMsg = this.view.getTag().toString();
+ 					SendMsg = view.getResources().getResourceName(view.getId());
+ 					String sub = SendMsg.substring(SendMsg.indexOf("/") + 1);
+ 					Log.i(TAG,"Send message" +  sub);
+ 					//sctc.SctpSendData(sub); //We don't use sctp protocol .
+ 					XMPPSendText(sub);
+ 					// comm.setMsg(this.view.getId(), 1);
+ 					// start(service);
+ 					Thread.sleep(100l);
+ 				} catch (InterruptedException e) {
+ 					// TODO Auto-generated catch block
+ 					e.printStackTrace();
+ 				}
+ 			}	
+ 		}
+
+    }
+    
+	private void XMPPSendText(String istr)
+    {
+    	
+    	//String to = mRecipient.getText().toString();
+    	//Hardcore here , for test
+    	String to = "william1@james-pc/Smack";
+        String text = istr;
+
+        Log.i("XMPPClient", "Sending text [" + text + "] to [" + to + "]");
+        Message msg = new Message(to, Message.Type.chat);
+        msg.setBody(text);
+        connection.sendPacket(msg);
+
+    }
 }

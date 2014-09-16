@@ -11,4 +11,8 @@
         <FrameLayout android:layout_gravity="center" android:id="@+id/view_call_incall_video_FrameLayout_local_video" android:layout_height="fill_parent" android:layout_width="fill_parent"></FrameLayout>
     </FrameLayout>
 
+        
+   
+    
+        
 </RelativeLayout>

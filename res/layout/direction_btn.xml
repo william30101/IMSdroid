@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="right" >
+    </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/BACKWARD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/RIGHT"
+        android:src="@drawable/back" />
+
+    <ImageButton
+        android:id="@+id/RIGHT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/right" />
+
+    <ImageButton
+        android:id="@+id/LEFT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/BACKWARD"
+        android:src="@drawable/left" />
+
+    <ImageButton
+        android:id="@+id/FORWARD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/BACKWARD"
+        android:layout_toLeftOf="@+id/RIGHT"
+        android:src="@drawable/forward" />
+
+    <ImageButton
+        android:id="@+id/STOP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/stop" />
+    
+
+</RelativeLayout>
