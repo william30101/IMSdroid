@@ -78,13 +78,16 @@ public class ScreenNatt extends BaseScreen {
         
         // load values from configuration file (do it before adding UI listeners)
         mCbHackAoR.setChecked(mConfigurationService.getBoolean(NgnConfigurationEntry.NATT_HACK_AOR, NgnConfigurationEntry.DEFAULT_NATT_HACK_AOR));
-        mCbEnableStunForSIP.setChecked(mConfigurationService.getBoolean(NgnConfigurationEntry.NATT_USE_STUN_FOR_SIP, NgnConfigurationEntry.DEFAULT_NATT_USE_STUN_FOR_SIP));
+        mCbEnableStunForSIP.setChecked(true);
+        //mCbEnableStunForSIP.setChecked(mConfigurationService.getBoolean(NgnConfigurationEntry.NATT_USE_STUN_FOR_SIP, NgnConfigurationEntry.DEFAULT_NATT_USE_STUN_FOR_SIP));
         mCbEnableStunForICE.setChecked(mConfigurationService.getBoolean(NgnConfigurationEntry.NATT_USE_STUN_FOR_ICE, NgnConfigurationEntry.DEFAULT_NATT_USE_STUN_FOR_ICE));
         mCbEnableTurnForICE.setChecked(mConfigurationService.getBoolean(NgnConfigurationEntry.NATT_USE_TURN_FOR_ICE, NgnConfigurationEntry.DEFAULT_NATT_USE_TURN_FOR_ICE));
         mCbEnableIce.setChecked(mConfigurationService.getBoolean(NgnConfigurationEntry.NATT_USE_ICE, NgnConfigurationEntry.DEFAULT_NATT_USE_ICE));
         mRbDiscoStun.setChecked(mConfigurationService.getBoolean(NgnConfigurationEntry.NATT_STUN_DISCO, NgnConfigurationEntry.DEFAULT_NATT_STUN_DISCO));
-        mEtStunStunHostname.setText(mConfigurationService.getString(NgnConfigurationEntry.NATT_STUN_SERVER, NgnConfigurationEntry.DEFAULT_NATT_STUN_SERVER));
-        mEtStunPort.setText(mConfigurationService.getString(NgnConfigurationEntry.NATT_STUN_PORT, Integer.toString(NgnConfigurationEntry.DEFAULT_NATT_STUN_PORT)));
+        mEtStunStunHostname.setText("stun.l.google.com");
+        //mEtStunStunHostname.setText(mConfigurationService.getString(NgnConfigurationEntry.NATT_STUN_SERVER, NgnConfigurationEntry.DEFAULT_NATT_STUN_SERVER));
+        mEtStunPort.setText("19302");
+        //mEtStunPort.setText(mConfigurationService.getString(NgnConfigurationEntry.NATT_STUN_PORT, Integer.toString(NgnConfigurationEntry.DEFAULT_NATT_STUN_PORT)));
         mEtStunUsername.setText(mConfigurationService.getString(NgnConfigurationEntry.NATT_STUN_USERNAME, NgnConfigurationEntry.DEFAULT_NATT_STUN_USERNAME));
         mEtStunPassword.setText(mConfigurationService.getString(NgnConfigurationEntry.NATT_STUN_PASSWORD, NgnConfigurationEntry.DEFAULT_NATT_STUN_PASSWORD));
         

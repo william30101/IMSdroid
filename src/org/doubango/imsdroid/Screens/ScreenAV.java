@@ -31,7 +31,6 @@ import org.doubango.imsdroid.IMSDroid;
 import org.doubango.imsdroid.Main;
 import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.XMPPSetting;
-import org.doubango.imsdroid.Main.MyThread;
 import org.doubango.imsdroid.Services.IScreenService;
 import org.doubango.imsdroid.Utils.DialerUtils;
 import org.doubango.ngn.events.NgnInviteEventArgs;
@@ -156,9 +155,11 @@ public class ScreenAV extends BaseScreen{
 	private XMPPConnection connection;
 	private XMPPSetting XMPPSet;
 	
-    public Thread test = new Thread();
-    public Thread XMPPThreadv = new XMPPThread(); 
+    //public Thread test = new Thread();
+    //public Thread XMPPThreadv = new XMPPThread(); 
     private boolean isNeedAdd = false;
+    
+    //public static ScreenAV mScreenAV;
 	
     
     
@@ -187,11 +188,14 @@ public class ScreenAV extends BaseScreen{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.screen_av);
 		
+		//mScreenAV = this;
+		
         // William Added , for XMPP connection
         //XMPPSet.XMPPStart();
-		XMPPSet = new XMPPSetting(this);
-		XMPPThreadv = new XMPPThread();
-		XMPPThreadv.start();
+		XMPPSet = new XMPPSetting();
+		
+		//XMPPThreadv = new XMPPThread();
+		//XMPPThreadv.start();
 		
 		
 		setButtonLayout();
@@ -199,14 +203,14 @@ public class ScreenAV extends BaseScreen{
 		if(NgnStringUtils.isNullOrEmpty(super.mId)){
 			Log.e(TAG, "Invalid audio/video session");
 			finish(); 
-			mScreenService.show(ScreenHome.class);
+			mScreenService.show(ScreenFuncTest.class);
 			return;
 		}
 		mAVSession = NgnAVSession.getSession(NgnStringUtils.parseLong(super.mId, -1));
 		if(mAVSession == null){
 			Log.e(TAG, String.format("Cannot find audio/video session with id=%s", super.mId));
 			finish(); 
-			mScreenService.show(ScreenHome.class);
+			mScreenService.show(ScreenFuncTest.class);
 			return;
 		}
 		mAVSession.incRef();
@@ -297,7 +301,7 @@ public class ScreenAV extends BaseScreen{
         setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 	}
 	
-	
+	/*
 	class XMPPThread extends Thread {
 		 
         @Override
@@ -305,14 +309,16 @@ public class ScreenAV extends BaseScreen{
             // TODO Auto-generated method stub
             super.run();
             try {
-            		XMPPSet.XMPPStart();
+            	Log.i(TAG,"Name = "+mScreenAV.GetmName() + " Pass="+mScreenAV.GetmPass());
+            		XMPPSet.XMPPStart(mScreenAV.GetmName(),mScreenAV.GetmPass());
 
             } catch (Exception e) {
                  e.printStackTrace();
             }
         }
     }
-	
+	*/
+	/*
 	public void setConnection(XMPPConnection connection) {
 		this.connection = connection;
 		Log.i("XMPPClient", "Connection =  " + connection);
@@ -331,7 +337,7 @@ public class ScreenAV extends BaseScreen{
 		        }
 		    }, filter);
 		}
-    }
+    }*/
 	
 	@Override
 	protected void onStart() {
@@ -611,7 +617,7 @@ public class ScreenAV extends BaseScreen{
 	
 	@Override
 	public boolean back(){
-		boolean ret =  mScreenService.show(ScreenHome.class);
+		boolean ret =  mScreenService.show(ScreenFuncTest.class);
 		if(ret){
 			mScreenService.destroy(getId());
 		}
@@ -1216,7 +1222,7 @@ public class ScreenAV extends BaseScreen{
 					IBaseScreen currentScreen = mScreenService.getCurrentScreen();
 					boolean gotoHome = (currentScreen != null && currentScreen.getId() == getId());
 					if(gotoHome){
-						mScreenService.show(ScreenHome.class);
+						mScreenService.show(ScreenFuncTest.class);
 					}
 					mScreenService.destroy(getId());
 				}});
@@ -1407,7 +1413,8 @@ public class ScreenAV extends BaseScreen{
   				case MotionEvent.ACTION_UP:
 
   					isNeedAdd = false;
-  					XMPPSendText("STOP");
+  					//XMPPSendText("STOP");
+  					XMPPSet.XMPPSendText("james1", "STOP");
   					//comm.setMsg(v.getId(), 0);
   					//sctc.SctpSendData("STOP");
   					//start(service);
@@ -1449,7 +1456,8 @@ public class ScreenAV extends BaseScreen{
  					String sub = SendMsg.substring(SendMsg.indexOf("/") + 1);
  					Log.i(TAG,"Send message" +  sub);
  					//sctc.SctpSendData(sub); //We don't use sctp protocol .
- 					XMPPSendText(sub);
+ 					//XMPPSendText(sub);
+ 					XMPPSet.XMPPSendText("james1", sub);
  					// comm.setMsg(this.view.getId(), 1);
  					// start(service);
  					Thread.sleep(100l);

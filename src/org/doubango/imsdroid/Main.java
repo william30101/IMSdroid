@@ -25,7 +25,10 @@ import org.doubango.imsdroid.Screens.ScreenAV;
 import org.doubango.imsdroid.Screens.ScreenAVQueue;
 import org.doubango.imsdroid.Screens.ScreenChatQueue;
 import org.doubango.imsdroid.Screens.ScreenFileTransferQueue;
+import org.doubango.imsdroid.Screens.ScreenFuncTest;
 import org.doubango.imsdroid.Screens.ScreenHome;
+import org.doubango.imsdroid.Screens.ScreenWLogin;
+
 import org.doubango.imsdroid.Screens.ScreenSplash;
 import org.doubango.imsdroid.Screens.ScreenTabMessages;
 import org.doubango.imsdroid.Screens.BaseScreen.SCREEN_TYPE;
@@ -121,13 +124,9 @@ public class Main extends ActivityGroup {
         	handleAction(bundle);
         }
         else if(mScreenService != null){
-        	mScreenService.show(ScreenHome.class);
+        	//mScreenService.show(ScreenHome.class);
+        	mScreenService.show(ScreenWLogin.class);
         }
-        
-        
-        // William Added , for XMPP connection
-        //XMPPSet.XMPPStart();
-        
     }
     
     
@@ -240,7 +239,7 @@ public class Main extends ActivityGroup {
 						break;
 					default:
 						if(!mScreenService.show(id)){
-							mScreenService.show(ScreenHome.class);
+							mScreenService.show(ScreenWLogin.class);
 						}
 						break;
 				}
@@ -281,12 +280,13 @@ public class Main extends ActivityGroup {
 					}
 					if(avSession != null){
 						if(!mScreenService.show(ScreenAV.class, Long.toString(avSession.getId()))){
-							mScreenService.show(ScreenHome.class);
+							//mScreenService.show(ScreenHome.class);
+							mScreenService.show(ScreenFuncTest.class);
 						}
 					}
 					else{
 						Log.e(TAG,"Failed to find associated audio/video session");
-						mScreenService.show(ScreenHome.class);
+						mScreenService.show(ScreenFuncTest.class);
 						mEngine.refreshAVCallNotif(R.drawable.phone_call_25);
 					}
 				}
@@ -304,153 +304,5 @@ public class Main extends ActivityGroup {
 		}
 	}
     
-    //20140515 - Add Button listener
-    private Button.OnTouchListener mylisten = new OnTouchListener(){
-
-  		@Override
-  		public boolean onTouch(View v, MotionEvent event) {
-  			//return gestureDetector.onTouchEvent(event);
-
-  			int eventAction = event.getAction();
-  			switch(eventAction){
-
-  				case MotionEvent.ACTION_DOWN:
-  					isNeedAdd = true;
-                     	Runnable r = new MyThread(v);
-                     	new Thread(r).start();
-  					
-  					break;
-  				case MotionEvent.ACTION_UP:
-
-  					isNeedAdd = false;
-  					XMPPSendText("STOP");
-  					//comm.setMsg(v.getId(), 0);
-  					//sctc.SctpSendData("STOP");
-  					//start(service);
-  					break;
-  			
-  				case MotionEvent.ACTION_MOVE:
-  				//	System.out.println("action move");
-  					break;
-  			default:
-
-  					break;
-  		}
-  			
-  			return false;
-  		}
-
-
-    };
-    
-    public class MyThread implements Runnable {
-
- 	   private View view;
- 	   String SendMsg;
- 	   
- 	   
- 		public MyThread(View v) {
- 		       // store parameter for later user
- 			   this.view = v;
- 		   }
-
- 		public void run() {
- 			while (isNeedAdd) {
- 				// uiHandler.sendEmptyMessage(0);
- 				try {
- 					// Using SCTP transmit message
-
- 					//SendMsg = this.view.getTag().toString();
- 					SendMsg = view.getResources().getResourceName(view.getId());
- 					String sub = SendMsg.substring(SendMsg.indexOf("/") + 1);
- 					Log.i(TAG,"Send message" +  sub);
- 					//sctc.SctpSendData(sub); //We don't use sctp protocol .
- 					XMPPSendText(sub);
- 					// comm.setMsg(this.view.getId(), 1);
- 					// start(service);
- 					Thread.sleep(100l);
- 				} catch (InterruptedException e) {
- 					// TODO Auto-generated catch block
- 					e.printStackTrace();
- 				}
- 			}
- 		   }
-   }
-    
-    
-    private void XMPPSendText(String istr)
-    {
-    	
-    	//String to = mRecipient.getText().toString();
-    	//Hardcore here , for test
-    	String to = "william1@james-pc/Smack";
-        String text = istr;
-
-        Log.i("XMPPClient", "Sending text [" + text + "] to [" + to + "]");
-        Message msg = new Message(to, Message.Type.chat);
-        msg.setBody(text);
-        connection.sendPacket(msg);
-
-    }
-    
-    private void setButtonListen()
-    {
-    	
-    	findViewById(R.id.FORWARD).setOnTouchListener(mylisten);
-        findViewById(R.id.BACKWARD).setOnTouchListener(mylisten);
-        findViewById(R.id.LEFT).setOnTouchListener(mylisten);
-        findViewById(R.id.RIGHT).setOnTouchListener(mylisten);
-        findViewById(R.id.STOP).setOnTouchListener(mylisten);
-    	
-    }
-    
-    public void setButtonLayout() {
-    	// TODO Auto-generated method stub
-    	Resources res = this.getResources();
-        XmlPullParser parser = res.getXml(R.layout.direction_btn);
-        AttributeSet attributes = Xml.asAttributeSet(parser);
-        
-        // Layout Set
-        RelativeLayout imageBtnLinearLayout = new RelativeLayout(this);
-        imageBtnLinearLayout.setLayoutParams(new LayoutParams
-        		(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-      
-        //imageBtnLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        
-        // Add  image button
-        Context context = this.getApplicationContext();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        RelativeLayout imagebtnLinearLayout = 
-        	(RelativeLayout)inflater.inflate(R.layout.direction_btn, imageBtnLinearLayout, false);
-        imageBtnLinearLayout.addView(imagebtnLinearLayout);
-        
-        // Add Button content view
-        addContentView(imageBtnLinearLayout, new LayoutParams
-        		(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        
-    	  
-        findViewById(R.id.FORWARD).setOnTouchListener(mylisten);
-        findViewById(R.id.BACKWARD).setOnTouchListener(mylisten);
-        findViewById(R.id.LEFT).setOnTouchListener(mylisten);
-        findViewById(R.id.RIGHT).setOnTouchListener(mylisten);
-        findViewById(R.id.STOP).setOnTouchListener(mylisten);
-        
-        // Set Button Listener
-       /* forward = (ImageButton)findViewById(R.id.FORWARD);		    
-        back = (ImageButton)findViewById(R.id.BACKWARD);
-        left = (ImageButton)findViewById(R.id.LEFT);
-        right = (ImageButton)findViewById(R.id.RIGHT);
-        stop = (ImageButton)findViewById(R.id.STOP);
-        
-
-        // Set mylisten
-        
-        forward.setOnTouchListener(mylisten);
-        back.setOnTouchListener(mylisten);
-        left.setOnTouchListener(mylisten);
-        right.setOnTouchListener(mylisten);  
-        stop.setOnTouchListener(mylisten);  
-    	*/
-      }
     
 }

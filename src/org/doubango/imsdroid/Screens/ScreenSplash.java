@@ -55,7 +55,8 @@ public class ScreenSplash extends BaseScreen {
 				
 				if(NativeService.ACTION_STATE_EVENT.equals(action)){
 					if(intent.getBooleanExtra("started", false)){
-						mScreenService.show(ScreenHome.class);
+						//mScreenService.show(ScreenHome.class);
+						mScreenService.show(ScreenWLogin.class);
 						getEngine().getConfigurationService().putBoolean(NgnConfigurationEntry.GENERAL_AUTOSTART, true);
 						finish();
 					}

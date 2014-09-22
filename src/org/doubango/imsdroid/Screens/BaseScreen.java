@@ -92,6 +92,8 @@ public abstract class BaseScreen extends Activity implements IBaseScreen {
 	protected boolean mComputeConfiguration;
 	protected ProgressDialog mProgressDialog;
 	protected Handler mHanler;
+	static protected String mName;
+	static protected String mPass;
 	
 	protected final IScreenService mScreenService;
 
@@ -339,6 +341,27 @@ public abstract class BaseScreen extends Activity implements IBaseScreen {
 			}
 		}
 		return false;
+	}
+	
+	public void SetmName(String iName)
+	{
+		mName = iName;
+	}
+	
+	public String GetmName()
+	{
+		return mName;
+	}
+	
+	
+	public void SetmPass(String iPass)
+	{
+		mPass = iPass;
+	}
+	
+	public String GetmPass()
+	{
+		return mPass;
 	}
 }
 

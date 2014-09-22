@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"  android:layout_width="fill_parent" android:layout_height="wrap_content"
+    android:id="@+id/screen_linear_layout">
+
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:isScrollContainer="true"
+    android:orientation="vertical"
+    android:scrollbars="vertical" >
+
+<TextView android:layout_height="wrap_content" android:id="@+id/screen_identity_textView_displayname" android:text="Display Name" android:layout_width="fill_parent" android:layout_marginLeft="2px" android:textSize="20dp"></TextView>
+<EditText android:layout_height="wrap_content" android:ellipsize="end" android:layout_width="fill_parent" android:gravity="fill_horizontal" android:layout_below="@+id/screen_identity_textView_displayname" android:id="@+id/screen_identity_editText_displayname" android:text="william1"></EditText>
+
+<TextView
+    android:id="@+id/screen_identity_textView_impu"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/screen_identity_editText_displayname"
+    android:layout_marginLeft="2px"
+    android:layout_marginTop="2dp"
+    android:text="Public Identity*"
+    android:textSize="20dp"
+    android:visibility="invisible" >
+</TextView>
+
+<EditText
+    android:id="@+id/screen_identity_editText_impu"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/screen_identity_textView_impu"
+    android:text="sip:william1@61.222.245.149"
+    android:visibility="invisible" >
+</EditText>
+
+<TextView
+    android:id="@+id/screen_identity_textView_impi"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/screen_identity_editText_impu"
+    android:layout_marginTop="2dp"
+    android:text="Private Identity*"
+    android:textSize="20dp"
+    android:visibility="invisible" >
+</TextView>
+
+<EditText
+    android:id="@+id/screen_identity_editText_impi"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/screen_identity_textView_impi"
+    android:text="william1"
+    android:visibility="invisible" >
+</EditText>
+<EditText android:layout_height="wrap_content" android:id="@+id/screen_identity_editText_password" android:text="1qaz@WSX" android:layout_below="@+id/screen_identity_textView_password" android:layout_width="fill_parent" android:inputType="textPassword"></EditText>
+
+<TextView
+    android:id="@+id/screen_identity_TextView_realm"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/screen_identity_editText_password"
+    android:layout_marginTop="2dp"
+    android:text="Realm*"
+    android:textSize="20dp"
+    android:visibility="invisible" >
+</TextView>
+
+<EditText
+    android:id="@+id/screen_identity_editText_realm"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/screen_identity_TextView_realm"
+    android:text="sip:61.222.245.149"
+    android:visibility="invisible" >
+</EditText>
+<CheckBox android:layout_height="wrap_content" android:layout_below="@+id/screen_identity_editText_realm" android:id="@+id/screen_identity_checkBox_earlyIMS" android:text="3GPP Early IMS Security" android:layout_width="fill_parent" android:textSize="20dp" android:layout_marginTop="4dp"></CheckBox>
+
+<Button
+    android:id="@+id/signinbtn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/screen_identity_checkBox_earlyIMS"
+    android:layout_centerHorizontal="true"
+    android:text="Sign in" />
+
+<Button
+    android:id="@+id/NetworkBtn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:text="NetworkSetting" />
+
+<Button
+    android:id="@+id/NattBtn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+    android:layout_margin="20dp"
+    android:text="NattSetting" />
+
+<TextView
+    android:id="@+id/screen_identity_textView_password"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@+id/screen_identity_editText_displayname"
+    android:text="Password"
+    android:textSize="20dp" />
+
+</RelativeLayout>
+	
+</ScrollView>

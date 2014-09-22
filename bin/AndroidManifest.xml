@@ -16,12 +16,15 @@
         </activity>
         <activity android:name=".Screens.ScreenSplash"/>
         <activity android:name=".Screens.ScreenHome"/>
+        <activity android:name=".Screens.ScreenWLogin"/>
         <activity android:name=".Screens.ScreenTabDialer"></activity>
         <activity android:name=".Screens.ScreenTabHistory"></activity>
         <activity android:name=".Screens.ScreenTabInfo"></activity>
         <activity android:name=".Screens.ScreenTabContacts"></activity>
         <activity android:name=".Screens.ScreenTabOnline"></activity>
         <activity android:name=".Screens.ScreenAV"></activity>
+        <activity android:name=".Screens.ScreenFuncTest"></activity>
+        <activity android:name=".Screens.ScreenDirection"></activity>
         <activity android:name=".Screens.ScreenInterceptCall">
         	<intent-filter>
 <!--                <action android:name="android.intent.action.CALL" />-->

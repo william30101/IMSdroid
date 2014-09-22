@@ -79,8 +79,12 @@ public class ScreenNetwork extends BaseScreen {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpProxyDiscovery.setAdapter(adapter);
         
-        mEtProxyHost.setText(mConfigurationService.getString(NgnConfigurationEntry.NETWORK_PCSCF_HOST, NgnConfigurationEntry.DEFAULT_NETWORK_PCSCF_HOST));
-        mEtProxyPort.setText(Integer.toString(mConfigurationService.getInt(NgnConfigurationEntry.NETWORK_PCSCF_PORT, NgnConfigurationEntry.DEFAULT_NETWORK_PCSCF_PORT)));
+        //mEtProxyHost.setText(mConfigurationService.getString(NgnConfigurationEntry.NETWORK_PCSCF_HOST, NgnConfigurationEntry.DEFAULT_NETWORK_PCSCF_HOST));
+        mEtProxyHost.setText("61.222.245.149");
+        //mEtProxyPort.setText(Integer.toString(mConfigurationService.getInt(NgnConfigurationEntry.NETWORK_PCSCF_PORT, NgnConfigurationEntry.DEFAULT_NETWORK_PCSCF_PORT)));
+        mEtProxyPort.setText("20060");
+
+        
         mSpTransport.setSelection(super.getSpinnerIndex(
 				mConfigurationService.getString(NgnConfigurationEntry.NETWORK_TRANSPORT, sSpinnerTransportItems[0]),
 				sSpinnerTransportItems));

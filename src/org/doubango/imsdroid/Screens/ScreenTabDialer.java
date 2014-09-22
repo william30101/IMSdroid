@@ -190,7 +190,7 @@ public class ScreenTabDialer  extends BaseScreen {
 	
 	@Override
 	public boolean back(){
-		boolean ret = mScreenService.show(ScreenHome.class);
+		boolean ret = mScreenService.show(ScreenFuncTest.class);
 		if(ret){
 			mScreenService.destroy(getId());
 		}
