@@ -181,28 +181,27 @@ public final class R {
     }
     public static final class id {
         public static final int AVBtn=0x7f09004e;
-        public static final int BACKWARD=0x7f090006;
         public static final int BLEBtn=0x7f09004f;
         public static final int DirectionBtn=0x7f09004d;
-        public static final int FORWARD=0x7f090009;
-        public static final int LEFT=0x7f090008;
         public static final int NattBtn=0x7f090051;
         public static final int NetworkBtn=0x7f090050;
-        public static final int RIGHT=0x7f090007;
-        public static final int STOP=0x7f09000a;
         public static final int TextView01=0x7f0900a3;
         public static final int arrow_down=0x7f090011;
         public static final int arrow_up=0x7f09000d;
+        public static final int backward=0x7f090008;
         public static final int content=0x7f0900fd;
         public static final int custom_dialog_imageView_icon=0x7f090003;
         public static final int custom_dialog_textView_msg=0x7f090004;
         public static final int custom_dialog_textView_title=0x7f090002;
         public static final int footer=0x7f090010;
+        public static final int forward=0x7f09000a;
         public static final int handle=0x7f0900fc;
         public static final int header2=0x7f09000c;
         public static final int icon=0x7f090000;
+        public static final int left=0x7f090007;
         public static final int main_linearLayout_principal=0x7f09000b;
         public static final int relativeLayout1=0x7f090005;
+        public static final int right=0x7f090009;
         public static final int screen_about_textView_copyright=0x7f090012;
         public static final int screen_av_queue_item_imageView=0x7f090015;
         public static final int screen_av_queue_item_textView_info=0x7f090017;
@@ -426,6 +425,7 @@ public final class R {
         public static final int screen_tab_messages_listView=0x7f0900ef;
         public static final int scroll=0x7f09000e;
         public static final int signinbtn=0x7f09011c;
+        public static final int stop=0x7f090006;
         public static final int sview_call_trying_imageView_avatar=0x7f0900fe;
         public static final int textView1=0x7f0900ee;
         public static final int title=0x7f090001;

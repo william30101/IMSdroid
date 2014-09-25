@@ -12,15 +12,30 @@
     </RelativeLayout>
 
     <ImageButton
-        android:id="@+id/BACKWARD"
+        android:id="@+id/stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/RIGHT"
+        android:src="@drawable/stop" />
+
+    <ImageButton
+        android:id="@+id/left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/backward"
+        android:src="@drawable/left" />
+
+    <ImageButton
+        android:id="@+id/backward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/right"
         android:src="@drawable/back" />
 
     <ImageButton
-        android:id="@+id/RIGHT"
+        android:id="@+id/right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -28,28 +43,12 @@
         android:src="@drawable/right" />
 
     <ImageButton
-        android:id="@+id/LEFT"
+        android:id="@+id/forward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/BACKWARD"
-        android:src="@drawable/left" />
-
-    <ImageButton
-        android:id="@+id/FORWARD"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/BACKWARD"
-        android:layout_toLeftOf="@+id/RIGHT"
+        android:layout_above="@+id/backward"
+        android:layout_marginBottom="18dp"
+        android:layout_toLeftOf="@+id/right"
         android:src="@drawable/forward" />
-
-    <ImageButton
-        android:id="@+id/STOP"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:src="@drawable/stop" />
-    
 
 </RelativeLayout>

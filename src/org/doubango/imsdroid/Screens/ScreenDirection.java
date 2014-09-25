@@ -1,6 +1,7 @@
 package org.doubango.imsdroid.Screens;
 
 import org.doubango.imsdroid.R;
+import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.ngn.services.INgnSipService;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class ScreenDirection extends BaseScreen{
 	
 	private XMPPSetting XMPPSet;
 	
+	
 	public Thread test = new Thread();
 	private boolean isNeedAdd = false;
 	
@@ -34,20 +36,23 @@ public class ScreenDirection extends BaseScreen{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.direction_btn);
 		
-		ImageButton BACKWARD= (ImageButton)findViewById(R.id.BACKWARD);
-		ImageButton FORWARD= (ImageButton)findViewById(R.id.FORWARD);
-		ImageButton LEFT= (ImageButton)findViewById(R.id.LEFT);
-		ImageButton RIGHT= (ImageButton)findViewById(R.id.RIGHT);
-		ImageButton STOP= (ImageButton)findViewById(R.id.STOP);
+		ImageButton Backward= (ImageButton)findViewById(R.id.backward);
+		ImageButton Forward= (ImageButton)findViewById(R.id.forward);
+		ImageButton Left = (ImageButton)findViewById(R.id.left);
+		ImageButton Right= (ImageButton)findViewById(R.id.right);
+		ImageButton Stop = (ImageButton)findViewById(R.id.stop);
 		
-		BACKWARD.setOnTouchListener(ClickListener);
-		FORWARD.setOnTouchListener(ClickListener);
-		LEFT.setOnTouchListener(ClickListener);
-		RIGHT.setOnTouchListener(ClickListener);
-		STOP.setOnTouchListener(ClickListener);
+		Backward.setOnTouchListener(ClickListener);
+		Forward.setOnTouchListener(ClickListener);
+		Left.setOnTouchListener(ClickListener);
+		Right.setOnTouchListener(ClickListener);
+		Stop.setOnTouchListener(ClickListener);
 		
 		
 		XMPPSet = new XMPPSetting();
+		
+		
+
 	}
 	
 	private Button.OnTouchListener ClickListener = new OnTouchListener(){
@@ -68,7 +73,7 @@ public class ScreenDirection extends BaseScreen{
 				case MotionEvent.ACTION_UP:
 
 					isNeedAdd = false;
-					XMPPSet.XMPPSendText("james1","STOP");
+					XMPPSet.XMPPSendText("james1","stop stop no no");
 					break;
 			
 				case MotionEvent.ACTION_MOVE:
@@ -107,7 +112,11 @@ public class ScreenDirection extends BaseScreen{
 					SendMsg = view.getResources().getResourceName(view.getId());
 					String sub = SendMsg.substring(SendMsg.indexOf("/") + 1);
 					Log.i(TAG,"Send message" +  sub);
-					XMPPSet.XMPPSendText("james1",sub);
+					if (!sub.equals("stop"))
+						XMPPSet.XMPPSendText("james1","direction " + sub + " no no");
+					else
+						XMPPSet.XMPPSendText("james1","stop stop no no");	//Stop button be pressed.
+					//XMPPSet.XMPPSendText("james1",sub+" test");
 					//sctc.SctpSendData(sub);
 					// comm.setMsg(this.view.getId(), 1);
 					// start(service);

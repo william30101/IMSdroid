@@ -1,5 +1,7 @@
 package org.doubango.imsdroid;
 
+import java.io.IOException;
+
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
@@ -18,6 +20,7 @@ public class XMPPSetting {
 	private String TAG = "william";
 
 	private static XMPPConnection connection;
+	private static UartCmd UCmd;
 	private boolean LogSuc = false;
 
 	//public XMPPSetting(ScreenAV xmppClient)
@@ -40,6 +43,8 @@ public class XMPPSetting {
 	             new ConnectionConfiguration(host, Integer.parseInt(port));
 	     connection = new XMPPConnection(connConfig);
 	     Log.i(TAG, "Name= " + username + " Pass = " + Pass);
+	     
+	     UCmd = new UartCmd();
 
 	     try {
 	         connection.connect();
@@ -80,7 +85,24 @@ public class XMPPSetting {
 		            Message message = (Message) packet;
 		            if (message.getBody() != null) {
 		                String fromName = StringUtils.parseBareAddress(message.getFrom());
-		                Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]");
+		                
+		                
+		                String[] inM = message.getBody().split("\\s+");
+						try {
+							byte[] cmdByte = UCmd.GetAllByte(inM);
+							Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" + " Func num = " + cmdByte[1] + " Direc = " + cmdByte[2]);
+							//Do JNI here , We got correct data format here.
+							UCmd.SendMsgUart(msg);
+							
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		                
+		                
+		                
+						
+							Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" );
 		                //We receive message here.
 		                
 		            }

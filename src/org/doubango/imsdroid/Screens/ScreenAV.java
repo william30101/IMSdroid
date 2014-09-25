@@ -1370,11 +1370,11 @@ public class ScreenAV extends BaseScreen{
         		(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         
     	  
-        findViewById(R.id.FORWARD).setOnTouchListener(mylisten);
-        findViewById(R.id.BACKWARD).setOnTouchListener(mylisten);
-        findViewById(R.id.LEFT).setOnTouchListener(mylisten);
-        findViewById(R.id.RIGHT).setOnTouchListener(mylisten);
-        findViewById(R.id.STOP).setOnTouchListener(mylisten);
+        findViewById(R.id.forward).setOnTouchListener(mylisten);
+        findViewById(R.id.backward).setOnTouchListener(mylisten);
+        findViewById(R.id.left).setOnTouchListener(mylisten);
+        findViewById(R.id.right).setOnTouchListener(mylisten);
+        findViewById(R.id.stop).setOnTouchListener(mylisten);
         
         // Set Button Listener
        /* forward = (ImageButton)findViewById(R.id.FORWARD);		    
@@ -1453,11 +1453,9 @@ public class ScreenAV extends BaseScreen{
 
  					//SendMsg = this.view.getTag().toString();
  					SendMsg = view.getResources().getResourceName(view.getId());
- 					String sub = SendMsg.substring(SendMsg.indexOf("/") + 1);
- 					Log.i(TAG,"Send message" +  sub);
- 					//sctc.SctpSendData(sub); //We don't use sctp protocol .
- 					//XMPPSendText(sub);
- 					XMPPSet.XMPPSendText("james1", sub);
+					String sub = SendMsg.substring(SendMsg.indexOf("/") + 1);
+					Log.i(TAG,"Send message" +  sub);
+					XMPPSet.XMPPSendText("james1","Direction " + sub + "0 0");
  					// comm.setMsg(this.view.getId(), 1);
  					// start(service);
  					Thread.sleep(100l);
