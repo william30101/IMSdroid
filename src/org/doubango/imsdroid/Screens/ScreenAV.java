@@ -31,6 +31,7 @@ import org.doubango.imsdroid.IMSDroid;
 import org.doubango.imsdroid.Main;
 import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.XMPPSetting;
+import org.doubango.imsdroid.Screens.ScreenDirection.MyThread;
 import org.doubango.imsdroid.Services.IScreenService;
 import org.doubango.imsdroid.Utils.DialerUtils;
 import org.doubango.ngn.events.NgnInviteEventArgs;
@@ -1250,14 +1251,14 @@ public class ScreenAV extends BaseScreen{
 						((ViewGroup)(viewParent)).removeView(localPreview);
 					}
 					if(localPreview instanceof SurfaceView){
-						((SurfaceView)localPreview).setZOrderOnTop(true);
+						//((SurfaceView)localPreview).setZOrderOnTop(true);
 					}
 					mViewLocalVideoPreview.addView(localPreview);
-					mViewLocalVideoPreview.bringChildToFront(localPreview);
+					//mViewLocalVideoPreview.bringChildToFront(localPreview);
 				}
 			}
-			mViewLocalVideoPreview.setVisibility(bStart ? View.VISIBLE : View.GONE);
-			mViewLocalVideoPreview.bringToFront();
+			//mViewLocalVideoPreview.setVisibility(bStart ? View.VISIBLE : View.GONE);
+			//mViewLocalVideoPreview.bringToFront();
 		}
 	}
 	
@@ -1348,7 +1349,7 @@ public class ScreenAV extends BaseScreen{
 	public void setButtonLayout() {
     	// TODO Auto-generated method stub
     	Resources res = this.getResources();
-        XmlPullParser parser = res.getXml(R.layout.direction_btn);
+        XmlPullParser parser = res.getXml(R.layout.screen_direction);
         AttributeSet attributes = Xml.asAttributeSet(parser);
         
         // Layout Set
@@ -1362,7 +1363,7 @@ public class ScreenAV extends BaseScreen{
         Context context = this.getApplicationContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         RelativeLayout imagebtnLinearLayout = 
-        	(RelativeLayout)inflater.inflate(R.layout.direction_btn, imageBtnLinearLayout, false);
+        	(RelativeLayout)inflater.inflate(R.layout.screen_direction, imageBtnLinearLayout, false);
         imageBtnLinearLayout.addView(imagebtnLinearLayout);
         
         // Add Button content view
@@ -1370,11 +1371,11 @@ public class ScreenAV extends BaseScreen{
         		(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         
     	  
-        findViewById(R.id.forward).setOnTouchListener(mylisten);
-        findViewById(R.id.backward).setOnTouchListener(mylisten);
-        findViewById(R.id.left).setOnTouchListener(mylisten);
-        findViewById(R.id.right).setOnTouchListener(mylisten);
-        findViewById(R.id.stop).setOnTouchListener(mylisten);
+        findViewById(R.id.forward).setOnTouchListener(ClickListener);
+        findViewById(R.id.backward).setOnTouchListener(ClickListener);
+        findViewById(R.id.left).setOnTouchListener(ClickListener);
+        findViewById(R.id.right).setOnTouchListener(ClickListener);
+        findViewById(R.id.stop).setOnTouchListener(ClickListener);
         
         // Set Button Listener
        /* forward = (ImageButton)findViewById(R.id.FORWARD);		    
@@ -1394,79 +1395,78 @@ public class ScreenAV extends BaseScreen{
     	*/
       }
 	
-	//20140515 - Add Button listener
-    private Button.OnTouchListener mylisten = new OnTouchListener(){
+	private Button.OnTouchListener ClickListener = new OnTouchListener(){
 
-  		@Override
-  		public boolean onTouch(View v, MotionEvent event) {
-  			//return gestureDetector.onTouchEvent(event);
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			//return gestureDetector.onTouchEvent(event);
 
-  			int eventAction = event.getAction();
-  			switch(eventAction){
+			int eventAction = event.getAction();
+			switch(eventAction){
 
-  				case MotionEvent.ACTION_DOWN:
-  					isNeedAdd = true;
-                     	Runnable r = new MyThread(v);
-                     	new Thread(r).start();
-  					
-  					break;
-  				case MotionEvent.ACTION_UP:
+				case MotionEvent.ACTION_DOWN:
+					isNeedAdd = true;
+                   	Runnable r = new MyThread(v);
+                   	new Thread(r).start();
+					
+					break;
+				case MotionEvent.ACTION_UP:
 
-  					isNeedAdd = false;
-  					//XMPPSendText("STOP");
-  					XMPPSet.XMPPSendText("james1", "STOP");
-  					//comm.setMsg(v.getId(), 0);
-  					//sctc.SctpSendData("STOP");
-  					//start(service);
-  					break;
-  			
-  				case MotionEvent.ACTION_MOVE:
-  				//	System.out.println("action move");
-  					break;
-  			default:
+					isNeedAdd = false;
+					XMPPSet.XMPPSendText("james1","stop stop no no");
+					break;
+			
+				case MotionEvent.ACTION_MOVE:
+				//	System.out.println("action move");
+					break;
+			default:
 
-  					break;
-  		}
-  			
-  			return false;
-  		}
+					break;
+		}
+			
+			return false;
+		}
 
 
-    };
+  };
     
-    public class MyThread implements Runnable {
+  public class MyThread implements Runnable {
 
- 	   private View view;
- 	   String SendMsg;
- 	   
- 	   
- 		public MyThread(View v) {
- 		       // store parameter for later user
- 			   this.view = v;
- 		   }
+	   private View view;
+	   String SendMsg;
+	   
+	   
+		public MyThread(View v) {
+		       // store parameter for later user
+			   this.view = v;
+		   }
 
- 		public void run() {
- 			while (isNeedAdd) {
- 				// uiHandler.sendEmptyMessage(0);
- 				try {
- 					// Using SCTP transmit message
+		public void run() {
+			while (isNeedAdd) {
+				// uiHandler.sendEmptyMessage(0);
+				try {
+					// Using SCTP transmit message
 
- 					//SendMsg = this.view.getTag().toString();
- 					SendMsg = view.getResources().getResourceName(view.getId());
+					//SendMsg = this.view.getTag().toString();
+					SendMsg = view.getResources().getResourceName(view.getId());
 					String sub = SendMsg.substring(SendMsg.indexOf("/") + 1);
 					Log.i(TAG,"Send message" +  sub);
-					XMPPSet.XMPPSendText("james1","Direction " + sub + "0 0");
- 					// comm.setMsg(this.view.getId(), 1);
- 					// start(service);
- 					Thread.sleep(100l);
- 				} catch (InterruptedException e) {
- 					// TODO Auto-generated catch block
- 					e.printStackTrace();
- 				}
- 			}	
- 		}
-
-    }
+					if (sub.equals("stop"))
+						XMPPSet.XMPPSendText("james1","stop stop no no");	//Stop button be pressed.
+					else
+						XMPPSet.XMPPSendText("james1","direction " + sub + " no no");
+					//XMPPSet.XMPPSendText("james1",sub+" test");
+					//sctc.SctpSendData(sub);
+					// comm.setMsg(this.view.getId(), 1);
+					// start(service);
+					Thread.sleep(100l);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		   }
+}
     
 	private void XMPPSendText(String istr)
     {

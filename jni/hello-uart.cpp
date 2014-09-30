@@ -11,7 +11,7 @@
 #include <termios.h>
 #include <android/log.h>
 #include <sys/ioctl.h>
-#include "MyClient.h"
+
 
 #undef	TCSAFLUSH
 #define	TCSAFLUSH	TCSETSF
@@ -22,26 +22,27 @@
 static int fd;
 struct termios newtio, oldtio;
 
-static const char *classPathName = "org/appspot/apprtc/Uart2C";
+static const char *classPathName = "org/doubango/imsdroid/UartCmd";
 #define LOG_TAG "hello-uart"
 #define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, fmt, ##args)
 #define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, fmt, ##args)
 #define LOGE(fmt, args...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, fmt, ##args)
 
 
-using namespace android;
+
 
 extern "C"
 {
 
-	JNIEXPORT jint JNICALL Native_ReadService(JNIEnv *env,jobject mc, jstring s)
+	JNIEXPORT jlong JNICALL Native_ReadService(JNIEnv *env,jobject mc, jstring s)
 	{
-		MyClient client;
-		char *str = (char*)env->GetStringUTFChars(s, NULL);
-		int ret = client.setN(2012);
-		LOGI("setN return: %d\n", ret);
+		//unsigned long long test = 55544112365156165544;
+		//MyClient client;
+		//char *str = (char*)env->GetStringUTFChars(s, NULL);
+		//int ret = client.setN(2012);
+		//LOGI("setN return: %d\n", ret);
 
-		env->ReleaseStringUTFChars(s, str);
+		//env->ReleaseStringUTFChars(s, str);
 		return 0;
 	}
 
@@ -97,14 +98,23 @@ extern "C"
 		return fd;
 	}
 
-	JNIEXPORT jint JNICALL Native_SendMsgUart(JNIEnv *env,jobject mc, jstring str)
+	JNIEXPORT jint JNICALL Native_SendMsgUart(JNIEnv *env,jobject mc, jbyteArray inByte)
 	{
-		int len;
-		const char *buf;
-		buf = env->GetStringUTFChars(str, NULL);
-		len = env->GetStringLength(str);
-		write(fd, buf, len);
-		env->ReleaseStringUTFChars(str, buf);
+		int len,i;
+
+		jbyte* dataByteArray = env->GetByteArrayElements(inByte,NULL);
+		jsize byteArrayLength = env->GetArrayLength(inByte);
+		//const char *buf;
+		//buf = env->GetStringUTFChars(str, NULL);
+		//len = env->GetStringLength(str);
+		LOGI("len = %d\n",byteArrayLength);
+		for(i = 0; i< byteArrayLength ; i++)
+		{
+			LOGI("data = 0x%x\n",dataByteArray[i]);
+		}
+		write(fd, dataByteArray, byteArrayLength);
+		//env->ReleaseStringUTFChars(str, buf);
+		env->ReleaseByteArrayElements(inByte, dataByteArray, 0);
 	}
 
 	JNIEXPORT jstring JNICALL Native_ReceiveMsgUart(JNIEnv *env,jobject mc)
@@ -127,7 +137,7 @@ extern "C"
 	static JNINativeMethod gMethods[] = {
 		//Java Name			(Input Arg) return arg   JNI Name
 		{"ReceiveMsgUart",   "()Ljava/lang/String;",(void *)Native_ReceiveMsgUart},
-		{"SendMsgUart",   "(Ljava/lang/String;)I",  (void *)Native_SendMsgUart},
+		{"SendMsgUart",   "([B)I",  (void *)Native_SendMsgUart},
 		{"SetUart",   "(I)I",   					(void *)Native_SetUart},
 		{"OpenUart",   "(Ljava/lang/String;)I",   	(void *)Native_OpenUart},
 		{"ReadService",   "(Ljava/lang/String;)I",   	(void *)Native_ReadService},

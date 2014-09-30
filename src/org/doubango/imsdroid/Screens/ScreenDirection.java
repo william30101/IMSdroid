@@ -34,7 +34,7 @@ public class ScreenDirection extends BaseScreen{
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.direction_btn);
+		setContentView(R.layout.screen_direction);
 		
 		ImageButton Backward= (ImageButton)findViewById(R.id.backward);
 		ImageButton Forward= (ImageButton)findViewById(R.id.forward);
@@ -112,10 +112,10 @@ public class ScreenDirection extends BaseScreen{
 					SendMsg = view.getResources().getResourceName(view.getId());
 					String sub = SendMsg.substring(SendMsg.indexOf("/") + 1);
 					Log.i(TAG,"Send message" +  sub);
-					if (!sub.equals("stop"))
-						XMPPSet.XMPPSendText("james1","direction " + sub + " no no");
-					else
+					if (sub.equals("stop"))
 						XMPPSet.XMPPSendText("james1","stop stop no no");	//Stop button be pressed.
+					else
+						XMPPSet.XMPPSendText("james1","direction " + sub + " no no");
 					//XMPPSet.XMPPSendText("james1",sub+" test");
 					//sctc.SctpSendData(sub);
 					// comm.setMsg(this.view.getId(), 1);

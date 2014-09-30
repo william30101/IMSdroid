@@ -15,8 +15,8 @@ public class DirectionCmd extends BaseCmd{
 	private byte[] dataByte = new byte[dataSize];
 	
 
-	private String[] cmdStr= {"forward","backward","left","right","forRig","backRig","fordLeft","backLeft"};
-	private byte[] cmdByte = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,(byte) 0x80};
+	private String[] cmdStr= {"no","forward","backward","left","right","forRig","backRig","fordLeft","backLeft"};
+	private byte[] cmdByte = {0x00,0x01,0x02,0x04,0x08,0x10,0x20,0x40,(byte) 0x80};
 
 	public void SetByte(String[] inStr)
 	{
@@ -27,6 +27,8 @@ public class DirectionCmd extends BaseCmd{
 		super.SetFuncByte(funcByte);
 		
 		dataByte[0] = super.GetNum(inStr[1]);
+		dataByte[1] = super.GetNum(inStr[2]);
+		dataByte[2] = super.GetNum(inStr[3]);
 		
 		super.SetDataByte(dataByte);
 	}

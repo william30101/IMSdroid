@@ -12,7 +12,7 @@ public abstract class BaseCmd {
 	protected byte funcByte;
 	protected int datasize = 0;
 	protected byte[] dataByte = new byte[20];
-	protected byte[] rdataByte = new byte[20];
+	//protected byte[] rdataByte = new byte[20];
 	
 	protected ByteArrayOutputStream retDataByte = new ByteArrayOutputStream();
 	
@@ -44,6 +44,8 @@ public abstract class BaseCmd {
 		//retDataByte.write(buffer)
 		//retDataByte.add(start);
 		//retDataByte.add(this.funcByte);
+		
+		byte[] rdataByte = new byte[2 + datasize + 1];
 		
 		rdataByte[0] = start;
 		rdataByte[1] = this.funcByte;

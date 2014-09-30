@@ -92,7 +92,9 @@ public class XMPPSetting {
 							byte[] cmdByte = UCmd.GetAllByte(inM);
 							Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" + " Func num = " + cmdByte[1] + " Direc = " + cmdByte[2]);
 							//Do JNI here , We got correct data format here.
-							UCmd.SendMsgUart(msg);
+							UCmd.SendMsgUart(cmdByte);
+
+							
 							
 						} catch (IOException e) {
 							// TODO Auto-generated catch block

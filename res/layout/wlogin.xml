@@ -75,7 +75,7 @@
     android:text="sip:61.222.245.149"
     android:visibility="invisible" >
 </EditText>
-<CheckBox android:layout_height="wrap_content" android:layout_below="@+id/screen_identity_editText_realm" android:id="@+id/screen_identity_checkBox_earlyIMS" android:text="3GPP Early IMS Security" android:layout_width="fill_parent" android:textSize="20dp" android:layout_marginTop="4dp"></CheckBox>
+<CheckBox android:layout_height="wrap_content" android:layout_below="@+id/screen_identity_editText_realm" android:id="@+id/screen_identity_checkBox_earlyIMS" android:text="3GPP Early IMS Security" android:layout_width="fill_parent" android:textSize="20dp" android:layout_marginTop="4dp" android:visibility="invisible"></CheckBox>
 
 <Button
     android:id="@+id/signinbtn"

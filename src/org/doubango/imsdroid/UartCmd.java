@@ -2,6 +2,7 @@ package org.doubango.imsdroid;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.doubango.imsdroid.cmd.BaseCmd;
 import org.doubango.imsdroid.cmd.DirectionCmd;
@@ -16,10 +17,14 @@ public class UartCmd extends BaseCmd{
 
 	private String[] cmdStr= {"direction","stop","angle","stretch","stopBySensor","ask",
 			"destination","health","axis","ret","startBySensor","map"};
-	private byte[] cmdByte = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b};
+	private byte[] cmdByte = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c};
 	
 	public byte[] GetAllByte(String[] inStr) throws IOException
 	{
+		
+		
+		super.SetNum(cmdStr,cmdByte);
+
 		retStreamDatas = new ByteArrayOutputStream();
 		byte[] retBytes ;
 		switch(super.GetNum(inStr[0]))
