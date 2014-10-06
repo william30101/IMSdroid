@@ -2,11 +2,12 @@ package org.doubango.imsdroid;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import org.doubango.imsdroid.cmd.BaseCmd;
 import org.doubango.imsdroid.cmd.DirectionCmd;
 import org.doubango.imsdroid.cmd.StopCmd;
+
 
 import android.util.Log;
 
@@ -18,6 +19,12 @@ public class UartCmd extends BaseCmd{
 	private String[] cmdStr= {"direction","stop","angle","stretch","stopBySensor","ask",
 			"destination","health","axis","ret","startBySensor","map"};
 	private byte[] cmdByte = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c};
+	
+	private boolean drivingOpend = false , nanoPanOpend = false;
+	private int Baud_rate = 0; // { B19200, B115200};
+	private static final String functionName = IMSDroid.class.getSimpleName();
+	
+	public static int fd = 0,nanoFd = 0,driFd = 0;
 	
 	public byte[] GetAllByte(String[] inStr) throws IOException
 	{
@@ -75,6 +82,54 @@ public class UartCmd extends BaseCmd{
 		return retBytes;
 	}
 
+	
+	public int OpenSetUartPort(String portName)
+	{
+		
+		// mxc0 for driving board , 19200
+		// mxc2 for nanoPan , Baudrate 115200
+		if (portName.equals("ttymxc0")) {
+			nanoFd = OpenUart(portName, 1 );
+
+			
+			if (nanoFd > 0) {
+				Baud_rate = 0; // 19200
+				SetUart(Baud_rate, 1);
+				fd = nanoFd;
+			}
+
+		} else if (portName.equals("ttymxc2")) {
+
+			driFd = OpenUart(portName, 2 );
+			if (driFd > 0) {
+				Baud_rate = 1; // 115200
+				SetUart(Baud_rate, 2);
+				fd = driFd;
+			}
+		}
+		else
+		{
+			fd = 0;
+		}
+		
+		
+		Log.i(TAG, functionName + " portname = "  + portName +" fd = " + fd);
+		
+
+		return fd;
+		
+	}
+	
+	public boolean GetNanoPanOpend()
+	{
+		return (nanoFd > 0 ? true : false);
+	}
+	
+	public boolean GetDrivingOpend()
+	{
+		return (driFd > 0 ? true : false);
+	}
+	
 	static
 	{
 		try
@@ -88,11 +143,13 @@ public class UartCmd extends BaseCmd{
 		}
 	}
 	
-	public static native int OpenUart(String str);
-	public static native int ReadService(String str);
-	public static native void CloseUart(int i);
-	public static native int SetUart(int i);
-	public static native int SendMsgUart(byte[] msg);
-	public static native String ReceiveMsgUart();
+	public static native int WriteDemoData(int[] data, int size);
+	public static native int OpenUart(String str, int fdNum);
+	public static native int CloseUart(int fdNum);
+	public static native int SetUart(int i , int fdNum);
+	public static native int SendMsgUart(String msg,int fdNum);
+	public static native String ReceiveMsgUart(int fdNum);
+	public static native int StartCal();
+	public static native byte[] Combine(ArrayList<float[]> nanoq , ArrayList<byte[]> encoq);
 	
 }

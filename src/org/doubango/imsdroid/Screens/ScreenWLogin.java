@@ -1,6 +1,7 @@
 package org.doubango.imsdroid.Screens;
 
 import org.doubango.imsdroid.R;
+import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.Screens.BaseScreen.SCREEN_TYPE;
 import org.doubango.imsdroid.Screens.ScreenHome.ScreenHomeAdapter;
@@ -59,6 +60,8 @@ public class ScreenWLogin extends BaseScreen {
 	
 	private boolean loggin; // For XMPP thread detect user status,
 	
+	private UartCmd uartCmd = new UartCmd();
+	
 	public ScreenWLogin() {
 		super(SCREEN_TYPE.HOME_T, TAG);
 		
@@ -109,6 +112,9 @@ public class ScreenWLogin extends BaseScreen {
         
 		super.SetmName(mEtDisplayName.getText().toString().trim());
 		super.SetmPass(mEtPassword.getText().toString().trim());
+		
+		uartCmd.OpenSetUartPort("ttymxc0");
+		uartCmd.OpenSetUartPort("ttymxc2");
 		
 		mSipBroadCastRecv = new BroadcastReceiver() {
 			@Override
@@ -265,6 +271,9 @@ public class ScreenWLogin extends BaseScreen {
             	if (loggin)
             	{
             		Log.i(TAG,mName + " Loggin successfule");
+            		
+            		
+            		
             		Sendmsg("ok");
             	}
             	else

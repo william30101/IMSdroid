@@ -11,8 +11,8 @@
 #include <termios.h>
 #include <android/log.h>
 #include <sys/ioctl.h>
-#include "example.h"
 #include "MyClient.h"
+#include "example.h"
 
 #undef	TCSAFLUSH
 #define	TCSAFLUSH	TCSETSF
@@ -23,11 +23,11 @@
 
 static int debugData = false;
 
-static int fd = 0 , nanoFd , driveFd;
+static int fd , nanoFd , driveFd;
 
 struct termios newtio, oldtio;
 
-static const char *classPathName = "org/doubango/imsdroid/UartCmd";
+static const char *classPathName = "com/example/demojni/MainActivity";
 #define LOG_TAG "hello"
 #define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, fmt, ##args)
 #define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, fmt, ##args)
@@ -84,6 +84,8 @@ extern "C"
 			jfloat* flt1 = env->GetFloatArrayElements( nanoTemp,0);
 			LOGI("jni nanobyte = %.2f i = %d",flt1[0],i);
 			nanoFloatArray[i] = flt1[0];
+
+			env->ReleaseFloatArrayElements(nanoTemp, flt1, 0);
 		 }
 
 
@@ -105,10 +107,13 @@ extern "C"
 
 
 		 op->addToByteArray('G',2);
-		 op->printByteArray();
+		 //op->printByteArray();
 
 		 //Output Data format  0x53 0x09 X4 X3 X2 X1 Y4 Y3 Y2 Y1 CRC2 CRC1 0x45
 		 //Save to byte array beSendMsg[13]
+
+		 env->DeleteLocalRef(nanoq);
+		 env->DeleteLocalRef(encodq );
 
 		 unsigned char * beSendMsgchar = op->ByteArrayToString();
 
@@ -124,9 +129,9 @@ extern "C"
 
 		//int *str = (char*)env->GetStringUTFChars(data, NULL);
 
-		//Circle* cir = new Circle(5);
-		//cir->area();
-		//LOGI("radius = %lf area=%lf",cir->radius,cir->area());
+		Circle* cir = new Circle(5);
+		cir->area();
+		LOGI("radius = %lf area=%lf",cir->radius,cir->area());
 		//cir.
 
 
@@ -163,22 +168,15 @@ extern "C"
 		strcat(sall, str2);
 
 		LOGI("open uart port device node = %s , fdnum=%d \n",sall,fdnum);
-
 		if (fdnum == 1)
 		{
 			driveFd = open(sall, O_RDWR | O_NOCTTY | O_NDELAY);
-			if (driveFd > 0)
-				fd = driveFd;
+			fd = driveFd;
 		}
 		else if (fdnum == 2)
 		{
 			nanoFd = open(sall, O_RDWR | O_NOCTTY | O_NDELAY);
-			if (nanoFd > 0)
-				fd = nanoFd;
-		}
-		else
-		{
-			fd = 0;
+			fd = nanoFd;
 		}
 
 		env->ReleaseStringUTFChars(s, str2);
@@ -196,7 +194,7 @@ extern "C"
 
 	JNIEXPORT jint JNICALL Native_SetUart(JNIEnv *env,jobject mc, jint i,jint fdnum)
 	{
-		int Baud_rate[] = { B19200, B115200};
+		int Baud_rate[] = { B9600, B115200};
 		LOGI("Native_SetUart %d", i);
 
 		if (fdnum == 1)
@@ -385,6 +383,5 @@ extern "C"
 			return result;
 	}
 }
-
 
 

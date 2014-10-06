@@ -12,7 +12,7 @@
     </RelativeLayout>
 
     <ImageButton
-        android:id="@+id/backRig"
+        android:id="@+id/bacRig"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -20,7 +20,7 @@
         android:src="@drawable/backrig" />
 
     <ImageButton
-        android:id="@+id/backLeft"
+        android:id="@+id/bacLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -36,39 +36,7 @@
         android:src="@drawable/forrig" />
 
     <ImageButton
-        android:id="@+id/backward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/backRig"
-        android:src="@drawable/back" />
-
-    <ImageButton
-        android:id="@+id/right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/backRig"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/right" />
-
-    <ImageButton
-        android:id="@+id/stop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/right"
-        android:layout_toLeftOf="@+id/right"
-        android:src="@drawable/stop" />
-
-    <ImageButton
-        android:id="@+id/left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/backLeft"
-        android:layout_toLeftOf="@+id/backward"
-        android:src="@drawable/left" />
-
-    <ImageButton
-        android:id="@+id/fordLeft"
+        android:id="@+id/forLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/stop"
@@ -82,5 +50,37 @@
         android:layout_above="@+id/stop"
         android:layout_alignLeft="@+id/stop"
         android:src="@drawable/forward" />
+
+    <ImageButton
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bacRig"
+        android:layout_toLeftOf="@+id/bacRig"
+        android:src="@drawable/stop" />
+
+    <ImageButton
+        android:id="@+id/backward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/bacRig"
+        android:src="@drawable/back" />
+
+    <ImageButton
+        android:id="@+id/left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bacLeft"
+        android:layout_alignLeft="@+id/bacLeft"
+        android:src="@drawable/left" />
+
+    <ImageButton
+        android:id="@+id/right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bacRig"
+        android:layout_toRightOf="@+id/stop"
+        android:src="@drawable/right" />
 
 </RelativeLayout>

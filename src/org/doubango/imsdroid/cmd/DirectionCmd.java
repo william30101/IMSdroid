@@ -15,8 +15,8 @@ public class DirectionCmd extends BaseCmd{
 	private byte[] dataByte = new byte[dataSize];
 	
 
-	private String[] cmdStr= {"no","forward","backward","left","right","forRig","backRig","fordLeft","backLeft"};
-	private byte[] cmdByte = {0x00,0x01,0x02,0x04,0x08,0x10,0x20,0x40,(byte) 0x80};
+	private String[] cmdStr= {"no","forward","backward","left","right","forRig","bacRig","forLeft","bacLeft"};
+	private byte[] cmdByte = {0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08};
 
 	public void SetByte(String[] inStr)
 	{

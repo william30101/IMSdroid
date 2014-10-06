@@ -36,17 +36,25 @@ public class ScreenDirection extends BaseScreen{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.screen_direction);
 		
-		ImageButton Backward= (ImageButton)findViewById(R.id.backward);
-		ImageButton Forward= (ImageButton)findViewById(R.id.forward);
-		ImageButton Left = (ImageButton)findViewById(R.id.left);
-		ImageButton Right= (ImageButton)findViewById(R.id.right);
-		ImageButton Stop = (ImageButton)findViewById(R.id.stop);
+		ImageButton backward= (ImageButton)findViewById(R.id.backward);
+		ImageButton forward= (ImageButton)findViewById(R.id.forward);
+		ImageButton left = (ImageButton)findViewById(R.id.left);
+		ImageButton right= (ImageButton)findViewById(R.id.right);
+		ImageButton stop = (ImageButton)findViewById(R.id.stop);
+		ImageButton forRig= (ImageButton)findViewById(R.id.forRig);
+		ImageButton forLeft = (ImageButton)findViewById(R.id.forLeft);
+		ImageButton bacRig = (ImageButton)findViewById(R.id.bacRig);
+		ImageButton bacLeft= (ImageButton)findViewById(R.id.bacLeft);
 		
-		Backward.setOnTouchListener(ClickListener);
-		Forward.setOnTouchListener(ClickListener);
-		Left.setOnTouchListener(ClickListener);
-		Right.setOnTouchListener(ClickListener);
-		Stop.setOnTouchListener(ClickListener);
+		backward.setOnTouchListener(ClickListener);
+		forward.setOnTouchListener(ClickListener);
+		left.setOnTouchListener(ClickListener);
+		right.setOnTouchListener(ClickListener);
+		stop.setOnTouchListener(ClickListener);
+		forRig.setOnTouchListener(ClickListener);
+		forLeft.setOnTouchListener(ClickListener);
+		bacRig.setOnTouchListener(ClickListener);
+		bacLeft.setOnTouchListener(ClickListener);
 		
 		
 		XMPPSet = new XMPPSetting();

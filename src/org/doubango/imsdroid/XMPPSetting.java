@@ -20,7 +20,7 @@ public class XMPPSetting {
 	private String TAG = "william";
 
 	private static XMPPConnection connection;
-	private static UartCmd UCmd;
+	private UartCmd UCmd = new UartCmd();
 	private boolean LogSuc = false;
 
 	//public XMPPSetting(ScreenAV xmppClient)
@@ -92,7 +92,8 @@ public class XMPPSetting {
 							byte[] cmdByte = UCmd.GetAllByte(inM);
 							Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" + " Func num = " + cmdByte[1] + " Direc = " + cmdByte[2]);
 							//Do JNI here , We got correct data format here.
-							UCmd.SendMsgUart(cmdByte);
+							String decoded = new String(cmdByte, "UTF-8");
+							UCmd.SendMsgUart(decoded,1);
 
 							
 							
