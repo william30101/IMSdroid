@@ -83,4 +83,74 @@
         android:layout_toRightOf="@+id/stop"
         android:src="@drawable/right" />
 
+    <Button
+        android:id="@+id/angleTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/forRig"
+        android:layout_alignLeft="@+id/forRig"
+        android:layout_marginBottom="24dp"
+        android:text="Top" />
+
+    <Button
+        android:id="@+id/angleMiddle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/angleTop"
+        android:layout_alignLeft="@+id/forward"
+        android:text="Middle" />
+
+    <Button
+        android:id="@+id/stretchTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView1"
+        android:layout_alignRight="@+id/angleTop"
+        android:text="Top" />
+
+    <Button
+        android:id="@+id/angleBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/angleMiddle"
+        android:layout_alignBottom="@+id/angleMiddle"
+        android:layout_alignLeft="@+id/forLeft"
+        android:text="Bottom" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/angleMiddle"
+        android:layout_alignLeft="@+id/angleBottom"
+        android:layout_marginBottom="16dp"
+        android:text="Pitch Angle"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/stretchBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/stretchTop"
+        android:layout_alignBottom="@+id/stretchTop"
+        android:layout_alignLeft="@+id/forLeft"
+        android:text="Bottom" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/stretchBottom"
+        android:layout_alignLeft="@+id/stretchBottom"
+        android:text="Stretch"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/axisBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/textView1"
+        android:text="Axis" />
+
 </RelativeLayout>

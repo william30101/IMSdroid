@@ -32,7 +32,7 @@ private String TAG = "AxisCmd";
 		// dataByte[8] -> CRC
 		for (int i=0; i < dataSize ; i++)
 		{
-			dataByte[i] = super.GetNum(inStr[i+1]);
+			dataByte[i] = super.GetByteNum(inStr[i+1],3);
 		}
 		
 		xByte = Arrays.copyOfRange(dataByte, 0, 3);

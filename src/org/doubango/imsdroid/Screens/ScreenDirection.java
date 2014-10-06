@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -46,6 +47,14 @@ public class ScreenDirection extends BaseScreen{
 		ImageButton bacRig = (ImageButton)findViewById(R.id.bacRig);
 		ImageButton bacLeft= (ImageButton)findViewById(R.id.bacLeft);
 		
+		Button angleBottom = (Button)findViewById(R.id.angleBottom);
+		Button angleMiddle = (Button)findViewById(R.id.angleMiddle);
+		Button angleTop = (Button)findViewById(R.id.angleTop);
+		Button stretchBottom = (Button)findViewById(R.id.stretchBottom);
+		Button stretchTop = (Button)findViewById(R.id.stretchTop);
+		
+		Button axisBtn = (Button)findViewById(R.id.axisBtn);
+		
 		backward.setOnTouchListener(ClickListener);
 		forward.setOnTouchListener(ClickListener);
 		left.setOnTouchListener(ClickListener);
@@ -56,6 +65,12 @@ public class ScreenDirection extends BaseScreen{
 		bacRig.setOnTouchListener(ClickListener);
 		bacLeft.setOnTouchListener(ClickListener);
 		
+		angleBottom.setOnClickListener(onClickListener);
+		angleMiddle.setOnClickListener(onClickListener);
+		angleTop.setOnClickListener(onClickListener);
+		stretchBottom.setOnClickListener(onClickListener);
+		stretchTop.setOnClickListener(onClickListener);
+		axisBtn.setOnClickListener(onClickListener);
 		
 		XMPPSet = new XMPPSetting();
 		
@@ -81,7 +96,7 @@ public class ScreenDirection extends BaseScreen{
 				case MotionEvent.ACTION_UP:
 
 					isNeedAdd = false;
-					XMPPSet.XMPPSendText("james1","stop stop no no");
+					XMPPSet.XMPPSendText("james1","stop stop");
 					break;
 			
 				case MotionEvent.ACTION_MOVE:
@@ -103,12 +118,11 @@ public class ScreenDirection extends BaseScreen{
 
 	   private View view;
 	   String SendMsg;
-	   
-	   
+
 		public MyThread(View v) {
-		       // store parameter for later user
-			   this.view = v;
-		   }
+			// store parameter for later user
+			this.view = v;
+		}
 
 		public void run() {
 			while (isNeedAdd) {
@@ -116,16 +130,19 @@ public class ScreenDirection extends BaseScreen{
 				try {
 					// Using SCTP transmit message
 
-					//SendMsg = this.view.getTag().toString();
+					// SendMsg = this.view.getTag().toString();
 					SendMsg = view.getResources().getResourceName(view.getId());
 					String sub = SendMsg.substring(SendMsg.indexOf("/") + 1);
-					Log.i(TAG,"Send message" +  sub);
+					Log.i(TAG, "Send message" + sub);
 					if (sub.equals("stop"))
-						XMPPSet.XMPPSendText("james1","stop stop no no");	//Stop button be pressed.
+						XMPPSet.XMPPSendText("james1", "stop stop"); // Stop
+																			// button
+																			// be
+																			// pressed.
 					else
-						XMPPSet.XMPPSendText("james1","direction " + sub + " no no");
-					//XMPPSet.XMPPSendText("james1",sub+" test");
-					//sctc.SctpSendData(sub);
+						XMPPSet.XMPPSendText("james1", "direction " + sub);
+					// XMPPSet.XMPPSendText("james1",sub+" test");
+					// sctc.SctpSendData(sub);
 					// comm.setMsg(this.view.getId(), 1);
 					// start(service);
 					Thread.sleep(100l);
@@ -134,8 +151,49 @@ public class ScreenDirection extends BaseScreen{
 					e.printStackTrace();
 				}
 			}
-		   }
- }
+		}
+	}
+
+	private Button.OnClickListener onClickListener = new OnClickListener() {
+
+		int btnMsg;
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			btnMsg = v.getId();
+
+			switch (btnMsg) {
+			case R.id.angleBottom:
+				Log.i(TAG,"angleBottom");
+				XMPPSet.XMPPSendText("james1", "pitchAngle bottom");
+				break;
+			case R.id.angleMiddle:
+				Log.i(TAG,"angleMiddle");
+				XMPPSet.XMPPSendText("james1", "pitchAngle middle");
+				break;
+			case R.id.angleTop:
+				Log.i(TAG,"angleTop");
+				XMPPSet.XMPPSendText("james1", "pitchAngle top");
+				break;
+			case R.id.stretchBottom:
+				Log.i(TAG,"stretchBottom");
+				XMPPSet.XMPPSendText("james1", "stretch bottom");
+				break;
+			case R.id.stretchTop:
+				Log.i(TAG,"stretchTop");
+				XMPPSet.XMPPSendText("james1", "stretch top");
+				break;
+			case R.id.axisBtn:
+				Log.i(TAG,"axisBtn");
+				XMPPSet.XMPPSendText("james1", "axis set");
+				break;
+			default:
+				Log.i(TAG,"onClickListener not support");
+				break;
+			}
+		}
+	};
 	
 	
 }

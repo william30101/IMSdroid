@@ -18,13 +18,13 @@ private String TAG = "RetCmd";
 
 	public void SetByte(String[] inStr)
 	{
-		super.SetNum(cmdStr,cmdByte);
+		super.SetByte(cmdStr,cmdByte,3);
 		
 		Arrays.fill(dataByte, (byte)0x00);
 		super.SetDataSize(dataSize);
 		super.SetFuncByte(funcByte);
 		
-		dataByte[0] = super.GetNum(inStr[1]);
+		dataByte[0] = super.GetByteNum(inStr[1],3);
 		
 		super.SetDataByte(dataByte);
 	}

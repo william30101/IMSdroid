@@ -15,15 +15,19 @@ public class StartBySensor extends BaseCmd{
 	private String[] cmdStr= {"start"};
 	private byte[] cmdByte = {0x01};
 	
+	public StartBySensor()
+	{
+		super.SetByte(cmdStr,cmdByte,3);
+	}
+	
 	public void SetByte(String[] inStr)
 	{
-		super.SetNum(cmdStr,cmdByte);
-		
+
 		Arrays.fill(dataByte, (byte)0x00);
 		super.SetDataSize(dataSize);
 		super.SetFuncByte(funcByte);
 		
-		dataByte[0] = super.GetNum(inStr[1]);
+		dataByte[0] = super.GetByteNum(inStr[1],3);
 		
 		super.SetDataByte(dataByte);
 	}

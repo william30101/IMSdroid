@@ -16,15 +16,19 @@ private String TAG = "StretchCmd";
 	private String[] cmdStr= {"top","bottom"};
 	private byte[] cmdByte = {0x01,0x02};
 	
-	public void SetByte(String[] inStr)
+	public StretchCmd()
 	{
-		super.SetNum(cmdStr,cmdByte);
-		
-		Arrays.fill(dataByte, (byte)0x00);
+		super.SetByte(cmdStr,cmdByte,3);
 		super.SetDataSize(dataSize);
 		super.SetFuncByte(funcByte);
-		
-		dataByte[0] = super.GetNum(inStr[1]);
+	}
+	
+	public void SetByte(String[] inStr)
+	{
+
+		Arrays.fill(dataByte, (byte)0x00);
+
+		dataByte[0] = super.GetByteNum(inStr[1],3);
 		
 		super.SetDataByte(dataByte);
 	}

@@ -16,15 +16,18 @@ public class AskCmd extends BaseCmd{
 			"destination","health","axis","ret","startBySensor","map"};
 	private byte[] cmdByte = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c};
 	
-	public void SetByte(String[] inStr)
+	public AskCmd()
 	{
-		super.SetNum(cmdStr,cmdByte);
-		
-		Arrays.fill(dataByte, (byte)0x00);
+		super.SetByte(cmdStr,cmdByte,3);
 		super.SetDataSize(dataSize);
 		super.SetFuncByte(funcByte);
-		
-		dataByte[0] = super.GetNum(inStr[1]);
+	}
+	
+	public void SetByte(String[] inStr)
+	{
+		Arrays.fill(dataByte, (byte)0x00);
+
+		dataByte[0] = super.GetByteNum(inStr[1],3);
 		
 		super.SetDataByte(dataByte);
 	}
