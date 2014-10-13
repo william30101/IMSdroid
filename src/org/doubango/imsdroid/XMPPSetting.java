@@ -93,7 +93,7 @@ public class XMPPSetting {
 							Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" + " Func num = " + cmdByte[1] + " Direc = " + cmdByte[2]);
 							//Do JNI here , We got correct data format here.
 							String decoded = new String(cmdByte, "ISO-8859-1");
-							UCmd.SendMsgUart(decoded,1);
+							UCmd.SendMsgUart(decoded,1,cmdByte);
 
 							
 							
@@ -102,10 +102,6 @@ public class XMPPSetting {
 							e.printStackTrace();
 						}
 		                
-		                
-		                
-						
-							Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" );
 		                //We receive message here.
 		                
 		            }

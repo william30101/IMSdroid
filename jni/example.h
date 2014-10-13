@@ -37,11 +37,12 @@ class Square : public Shape {
 
 class Ope {
 	public:
-
+		static  int beSendSize;
 		static unsigned char beSendData[13];
 		virtual void initByteArray();
 		virtual int addToByteArray(unsigned char b, int count );
-		virtual void printByteArray(void);
+		virtual void printOpeByteArray(void);
+		virtual void printByteArray(unsigned char inByte[] , int len);
 		virtual unsigned char* ByteArrayToString(void);
 
 };

@@ -70,7 +70,7 @@ extern "C"
 		jfloat encoderFloatArray[encoderSize];
 		//encoder data save in this array.
 
-
+		unsigned char* c;
 
 
 		//encoderFloatArray = env->NewFloatArray(encoderSize);
@@ -90,17 +90,17 @@ extern "C"
 
 
 		 //LOGI("jni nanobyte = %.2f",nanoFloatArray[0]);
-/*
+
 		 for (int i = 0; i < encoderSize; i++)
 		 {
 				jbyteArray encoByte = (jbyteArray)env->CallObjectMethod(encodq, nanoGetMethodID, i);
 
 				jbyte *arr   =   env-> GetByteArrayElements(encoByte, 0);
-				char* c=(char*)arr;
+				c = (unsigned char*)arr;
 
 				LOGI("encobyte = %s",c);
 		 }
-*/
+
 		 Ope *op = new Ope();
 
 		 op->initByteArray();

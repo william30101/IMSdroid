@@ -89,6 +89,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -1370,12 +1371,47 @@ public class ScreenAV extends BaseScreen{
         addContentView(imageBtnLinearLayout, new LayoutParams
         		(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         
-    	  
-        findViewById(R.id.forward).setOnTouchListener(ClickListener);
-        findViewById(R.id.backward).setOnTouchListener(ClickListener);
-        findViewById(R.id.left).setOnTouchListener(ClickListener);
-        findViewById(R.id.right).setOnTouchListener(ClickListener);
-        findViewById(R.id.stop).setOnTouchListener(ClickListener);
+
+        
+        
+        ImageButton backward= (ImageButton)findViewById(R.id.backward);
+		ImageButton forward= (ImageButton)findViewById(R.id.forward);
+		ImageButton left = (ImageButton)findViewById(R.id.left);
+		ImageButton right= (ImageButton)findViewById(R.id.right);
+		ImageButton stop = (ImageButton)findViewById(R.id.stop);
+		ImageButton forRig= (ImageButton)findViewById(R.id.forRig);
+		ImageButton forLeft = (ImageButton)findViewById(R.id.forLeft);
+		ImageButton bacRig = (ImageButton)findViewById(R.id.bacRig);
+		ImageButton bacLeft= (ImageButton)findViewById(R.id.bacLeft);
+		
+		Button angleBottom = (Button)findViewById(R.id.angleBottom);
+		Button angleMiddle = (Button)findViewById(R.id.angleMiddle);
+		Button angleTop = (Button)findViewById(R.id.angleTop);
+		Button stretchBottom = (Button)findViewById(R.id.stretchBottom);
+		Button stretchTop = (Button)findViewById(R.id.stretchTop);
+		
+		Button axisBtn = (Button)findViewById(R.id.axisBtn);
+		
+		Button askBtn = (Button)findViewById(R.id.askBtn);
+		
+		backward.setOnTouchListener(ClickListener);
+		forward.setOnTouchListener(ClickListener);
+		left.setOnTouchListener(ClickListener);
+		right.setOnTouchListener(ClickListener);
+		stop.setOnTouchListener(ClickListener);
+		forRig.setOnTouchListener(ClickListener);
+		forLeft.setOnTouchListener(ClickListener);
+		bacRig.setOnTouchListener(ClickListener);
+		bacLeft.setOnTouchListener(ClickListener);
+		
+		angleBottom.setOnClickListener(onClickListener);
+		angleMiddle.setOnClickListener(onClickListener);
+		angleTop.setOnClickListener(onClickListener);
+		stretchBottom.setOnClickListener(onClickListener);
+		stretchTop.setOnClickListener(onClickListener);
+		axisBtn.setOnClickListener(onClickListener);
+		
+		askBtn.setOnClickListener(onClickListener);
         
         // Set Button Listener
        /* forward = (ImageButton)findViewById(R.id.FORWARD);		    
@@ -1413,7 +1449,7 @@ public class ScreenAV extends BaseScreen{
 				case MotionEvent.ACTION_UP:
 
 					isNeedAdd = false;
-					XMPPSet.XMPPSendText("james1","stop stop no no");
+					XMPPSet.XMPPSendText("james1","stop stop");
 					break;
 			
 				case MotionEvent.ACTION_MOVE:
@@ -1430,6 +1466,52 @@ public class ScreenAV extends BaseScreen{
 
   };
     
+  private Button.OnClickListener onClickListener = new OnClickListener() {
+
+		int btnMsg;
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			btnMsg = v.getId();
+
+			switch (btnMsg) {
+			case R.id.angleBottom:
+				Log.i(TAG,"angleBottom");
+				XMPPSet.XMPPSendText("james1", "pitchAngle bottom");
+				break;
+			case R.id.angleMiddle:
+				Log.i(TAG,"angleMiddle");
+				XMPPSet.XMPPSendText("james1", "pitchAngle middle");
+				break;
+			case R.id.angleTop:
+				Log.i(TAG,"angleTop");
+				XMPPSet.XMPPSendText("james1", "pitchAngle top");
+				break;
+			case R.id.stretchBottom:
+				Log.i(TAG,"stretchBottom");
+				XMPPSet.XMPPSendText("james1", "stretch bottom");
+				break;
+			case R.id.stretchTop:
+				Log.i(TAG,"stretchTop");
+				XMPPSet.XMPPSendText("james1", "stretch top");
+				break;
+			case R.id.axisBtn:
+				Log.i(TAG,"axisBtn");
+				XMPPSet.XMPPSendText("james1", "axis set");
+				break;
+			case R.id.askBtn:
+				Log.i(TAG,"askBtn");
+				XMPPSet.XMPPSendText("james1", "ask encoder");
+				break;
+			default:
+				Log.i(TAG,"onClickListener not support");
+				break;
+			}
+		}
+	};
+  
+  
   public class MyThread implements Runnable {
 
 	   private View view;
@@ -1452,9 +1534,9 @@ public class ScreenAV extends BaseScreen{
 					String sub = SendMsg.substring(SendMsg.indexOf("/") + 1);
 					Log.i(TAG,"Send message" +  sub);
 					if (sub.equals("stop"))
-						XMPPSet.XMPPSendText("james1","stop stop no no");	//Stop button be pressed.
+						XMPPSet.XMPPSendText("james1","stop stop");	//Stop button be pressed.
 					else
-						XMPPSet.XMPPSendText("james1","direction " + sub + " no no");
+						XMPPSet.XMPPSendText("james1","direction " + sub);
 					//XMPPSet.XMPPSendText("james1",sub+" test");
 					//sctc.SctpSendData(sub);
 					// comm.setMsg(this.view.getId(), 1);

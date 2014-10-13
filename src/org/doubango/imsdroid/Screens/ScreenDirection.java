@@ -2,6 +2,7 @@ package org.doubango.imsdroid.Screens;
 
 import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.UartCmd;
+import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.ngn.services.INgnSipService;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ public class ScreenDirection extends BaseScreen{
 	private static String TAG = ScreenTabDialer.class.getCanonicalName();
 	
 	private XMPPSetting XMPPSet;
-	
+	private UartReceive uartRec;
 	
 	public Thread test = new Thread();
 	private boolean isNeedAdd = false;
@@ -55,6 +56,8 @@ public class ScreenDirection extends BaseScreen{
 		
 		Button axisBtn = (Button)findViewById(R.id.axisBtn);
 		
+		Button askBtn = (Button)findViewById(R.id.askBtn);
+		
 		backward.setOnTouchListener(ClickListener);
 		forward.setOnTouchListener(ClickListener);
 		left.setOnTouchListener(ClickListener);
@@ -72,10 +75,12 @@ public class ScreenDirection extends BaseScreen{
 		stretchTop.setOnClickListener(onClickListener);
 		axisBtn.setOnClickListener(onClickListener);
 		
+		askBtn.setOnClickListener(onClickListener);
+		
 		XMPPSet = new XMPPSetting();
+		uartRec = new UartReceive();
+		uartRec.RunRecThread();
 		
-		
-
 	}
 	
 	private Button.OnTouchListener ClickListener = new OnTouchListener(){
@@ -187,6 +192,10 @@ public class ScreenDirection extends BaseScreen{
 			case R.id.axisBtn:
 				Log.i(TAG,"axisBtn");
 				XMPPSet.XMPPSendText("james1", "axis set");
+				break;
+			case R.id.askBtn:
+				Log.i(TAG,"askBtn");
+				XMPPSet.XMPPSendText("james1", "ask encoder");
 				break;
 			default:
 				Log.i(TAG,"onClickListener not support");

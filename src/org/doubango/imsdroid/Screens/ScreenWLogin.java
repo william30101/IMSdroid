@@ -113,7 +113,7 @@ public class ScreenWLogin extends BaseScreen {
 		super.SetmName(mEtDisplayName.getText().toString().trim());
 		super.SetmPass(mEtPassword.getText().toString().trim());
 		
-		uartCmd.OpenSetUartPort("ttymxc0");
+		uartCmd.OpenSetUartPort("ttymxc4");
 		uartCmd.OpenSetUartPort("ttymxc2");
 		
 		mSipBroadCastRecv = new BroadcastReceiver() {
@@ -267,6 +267,7 @@ public class ScreenWLogin extends BaseScreen {
             try {
             	Log.i(TAG,"Name = "+mName + " Pass = "+mPass);
             	loggin = XMPPSet.XMPPStart(mName,mPass);
+            	
             	
             	if (loggin)
             	{

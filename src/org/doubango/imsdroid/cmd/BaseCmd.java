@@ -14,7 +14,7 @@ public abstract class BaseCmd {
 	protected byte[] dataByte = new byte[20];
 	//protected byte[] rdataByte = new byte[20];
 	
-	protected ByteArrayOutputStream retDataByte = new ByteArrayOutputStream();
+	protected static ByteArrayOutputStream retDataByte = new ByteArrayOutputStream();
 	
 	
 	private Map byte2Map = new HashMap();
@@ -69,11 +69,10 @@ public abstract class BaseCmd {
 
 	}
 	
-
-	
 	public ByteArrayOutputStream GetFullByte() throws IOException
 	{
 		
+		retDataByte.reset();
 		byte start = 0x53;
 		byte end = 0x45;
 		//byte[] ret = new byte[12];
