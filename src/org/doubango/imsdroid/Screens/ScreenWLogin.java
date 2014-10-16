@@ -5,6 +5,7 @@ import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.Screens.BaseScreen.SCREEN_TYPE;
 import org.doubango.imsdroid.Screens.ScreenHome.ScreenHomeAdapter;
+import org.doubango.imsdroid.Utils.NetworkStatus;
 import org.doubango.ngn.events.NgnEventArgs;
 import org.doubango.ngn.events.NgnRegistrationEventArgs;
 import org.doubango.ngn.services.INgnConfigurationService;
@@ -50,6 +51,7 @@ public class ScreenWLogin extends BaseScreen {
 	private Button SignBtn;
 	private Button NetworkBtn;
 	private Button NattBtn;
+	private Button btnTest;
 	
 	private XMPPSetting XMPPSet;
 	
@@ -58,7 +60,9 @@ public class ScreenWLogin extends BaseScreen {
 	private String mName;	//For XMPP thread user name
 	private String mPass;	//For XMPP thread user password
 	
-	private boolean loggin; // For XMPP thread detect user status,
+	//private boolean loggin; // For XMPP thread detect user status,
+	
+	private NetworkStatus loggin;
 	
 	private UartCmd uartCmd = new UartCmd();
 	
@@ -80,9 +84,12 @@ public class ScreenWLogin extends BaseScreen {
 		SignBtn = (Button) findViewById(R.id.signinbtn);
 		NetworkBtn = (Button) findViewById(R.id.NetworkBtn);
 		NattBtn = (Button) findViewById(R.id.NattBtn);
+		btnTest = (Button) findViewById(R.id.btnTest);
+		
 		SignBtn.setOnClickListener(ClickListener);
 		NetworkBtn.setOnClickListener(ClickListener);
 		NattBtn.setOnClickListener(ClickListener);
+		btnTest.setOnClickListener(ClickListener);
 		
 		mEtDisplayName = (EditText)findViewById(R.id.screen_identity_editText_displayname);
         mEtIMPU = (EditText)findViewById(R.id.screen_identity_editText_impu);
@@ -108,7 +115,7 @@ public class ScreenWLogin extends BaseScreen {
         super.addConfigurationListener(mEtRealm);
         super.addConfigurationListener(mCbEarlyIMS);
 		
-        loggin = false;
+        loggin = NetworkStatus.getInstance();
         
 		super.SetmName(mEtDisplayName.getText().toString().trim());
 		super.SetmPass(mEtPassword.getText().toString().trim());
@@ -203,6 +210,9 @@ public class ScreenWLogin extends BaseScreen {
 	    		case R.id.NattBtn : 
 	    			mScreenService.show(ScreenNatt.class, "NattSetting");
 	    		break;
+	    		case R.id.btnTest :
+	    			Log.i(TAG,"enter btnTest");
+	    			mScreenService.show(ScreenDirection.class, "BtnTest");
 	    		default:
 	    			Log.i(TAG,"Invaild Button function");
 	    			break;
@@ -266,22 +276,18 @@ public class ScreenWLogin extends BaseScreen {
             super.run();
             try {
             	Log.i(TAG,"Name = "+mName + " Pass = "+mPass);
-            	loggin = XMPPSet.XMPPStart(mName,mPass);
+            	loggin.SetLogStatus(XMPPSet.XMPPStart(mName,mPass));
             	
             	
-            	if (loggin)
+            	if (loggin.GetLogStatus())
             	{
-            		Log.i(TAG,mName + " Loggin successfule");
-            		
-            		
-            		
+            		Log.i(TAG,mName + " Loggin successful");
             		Sendmsg("ok");
             	}
             	else
             	{
             		Log.i(TAG,mName + " Loggin Fail");
             		Sendmsg("Loggin Fail");
-          
             	}
 
             } catch (Exception e) {

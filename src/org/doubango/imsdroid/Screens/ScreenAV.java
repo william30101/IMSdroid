@@ -31,7 +31,6 @@ import org.doubango.imsdroid.IMSDroid;
 import org.doubango.imsdroid.Main;
 import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.XMPPSetting;
-import org.doubango.imsdroid.Screens.ScreenDirection.MyThread;
 import org.doubango.imsdroid.Services.IScreenService;
 import org.doubango.imsdroid.Utils.DialerUtils;
 import org.doubango.ngn.events.NgnInviteEventArgs;
@@ -59,6 +58,7 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -119,6 +119,7 @@ public class ScreenAV extends BaseScreen{
 	private View mViewTrying;
 	private View mViewInAudioCall;
 	private View mViewInCallVideo;
+	private View mViewButton;
 	private FrameLayout mViewLocalVideoPreview;
 	private FrameLayout mViewRemoteVideoPreview;
 	private View mViewTermwait;
@@ -154,12 +155,13 @@ public class ScreenAV extends BaseScreen{
 	private static boolean SHOW_SIP_PHRASE = true;
 	
 	
-	private XMPPConnection connection;
-	private XMPPSetting XMPPSet;
+	//private XMPPConnection connection;
+	//private XMPPSetting XMPPSet;
+	private SetBtnFun setBtn;
 	
     //public Thread test = new Thread();
     //public Thread XMPPThreadv = new XMPPThread(); 
-    private boolean isNeedAdd = false;
+    //private boolean isNeedAdd = false;
     
     //public static ScreenAV mScreenAV;
 	
@@ -194,13 +196,17 @@ public class ScreenAV extends BaseScreen{
 		
         // William Added , for XMPP connection
         //XMPPSet.XMPPStart();
-		XMPPSet = new XMPPSetting();
+		//XMPPSet = new XMPPSetting();
+		setBtn = new SetBtnFun();
 		
 		//XMPPThreadv = new XMPPThread();
 		//XMPPThreadv.start();
 		
 		
-		setButtonLayout();
+		//setButtonLayout();
+		
+		
+		
 		super.mId = getIntent().getStringExtra("id");
 		if(NgnStringUtils.isNullOrEmpty(super.mId)){
 			Log.e(TAG, "Invalid audio/video session");
@@ -299,7 +305,7 @@ public class ScreenAV extends BaseScreen{
 			
 		mMainLayout = (RelativeLayout)findViewById(R.id.screen_av_relativeLayout);
         loadView();
-        
+       
         setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 	}
 	
@@ -1071,6 +1077,7 @@ public class ScreenAV extends BaseScreen{
 			mViewInCallVideo = mInflater.inflate(R.layout.view_call_incall_video, null);
 			mViewLocalVideoPreview = (FrameLayout)mViewInCallVideo.findViewById(R.id.view_call_incall_video_FrameLayout_local_video);
 			mViewRemoteVideoPreview = (FrameLayout)mViewInCallVideo.findViewById(R.id.view_call_incall_video_FrameLayout_remote_video);
+			mViewButton = mInflater.inflate(R.layout.screen_direction, null);
 		}
 		if(mTvDuration != null){
 			synchronized(mTvDuration){
@@ -1080,6 +1087,7 @@ public class ScreenAV extends BaseScreen{
 		mTvInfo = null;
 		mMainLayout.removeAllViews();
 		mMainLayout.addView(mViewInCallVideo);
+		mMainLayout.addView(mViewButton);
 		
 		final View viewSecure = mViewInCallVideo.findViewById(R.id.view_call_incall_video_imageView_secure);
 		if(viewSecure != null){
@@ -1088,7 +1096,8 @@ public class ScreenAV extends BaseScreen{
 		
 		// Video Consumer
 		loadVideoPreview();
-		
+		Activity host = (Activity) mMainLayout.getContext();
+		setBtn.SetBtn(host );
 		// Video Producer
 		startStopVideo(mAVSession.isSendingVideo());
 		
@@ -1346,7 +1355,7 @@ public class ScreenAV extends BaseScreen{
 		}
 	}
 	
-	
+	/*
 	public void setButtonLayout() {
     	// TODO Auto-generated method stub
     	Resources res = this.getResources();
@@ -1390,9 +1399,6 @@ public class ScreenAV extends BaseScreen{
 		Button stretchBottom = (Button)findViewById(R.id.stretchBottom);
 		Button stretchTop = (Button)findViewById(R.id.stretchTop);
 		
-		Button axisBtn = (Button)findViewById(R.id.axisBtn);
-		
-		Button askBtn = (Button)findViewById(R.id.askBtn);
 		
 		backward.setOnTouchListener(ClickListener);
 		forward.setOnTouchListener(ClickListener);
@@ -1409,9 +1415,7 @@ public class ScreenAV extends BaseScreen{
 		angleTop.setOnClickListener(onClickListener);
 		stretchBottom.setOnClickListener(onClickListener);
 		stretchTop.setOnClickListener(onClickListener);
-		axisBtn.setOnClickListener(onClickListener);
-		
-		askBtn.setOnClickListener(onClickListener);
+
         
         // Set Button Listener
        /* forward = (ImageButton)findViewById(R.id.FORWARD);		    
@@ -1428,9 +1432,10 @@ public class ScreenAV extends BaseScreen{
         left.setOnTouchListener(mylisten);
         right.setOnTouchListener(mylisten);  
         stop.setOnTouchListener(mylisten);  
-    	*/
+    	
       }
-	
+	*/
+	/*
 	private Button.OnTouchListener ClickListener = new OnTouchListener(){
 
 		@Override
@@ -1496,22 +1501,14 @@ public class ScreenAV extends BaseScreen{
 				Log.i(TAG,"stretchTop");
 				XMPPSet.XMPPSendText("james1", "stretch top");
 				break;
-			case R.id.axisBtn:
-				Log.i(TAG,"axisBtn");
-				XMPPSet.XMPPSendText("james1", "axis set");
-				break;
-			case R.id.askBtn:
-				Log.i(TAG,"askBtn");
-				XMPPSet.XMPPSendText("james1", "ask encoder");
-				break;
 			default:
 				Log.i(TAG,"onClickListener not support");
 				break;
 			}
 		}
 	};
-  
-  
+  */
+  /*
   public class MyThread implements Runnable {
 
 	   private View view;
@@ -1549,7 +1546,8 @@ public class ScreenAV extends BaseScreen{
 			}
 		   }
 }
-    
+    */
+	/*
 	private void XMPPSendText(String istr)
     {
     	
@@ -1564,4 +1562,5 @@ public class ScreenAV extends BaseScreen{
         connection.sendPacket(msg);
 
     }
+    */
 }

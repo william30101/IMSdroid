@@ -63,7 +63,7 @@ public class UartReceive {
 
 		//handler.postDelayed(rWEncoder, encoderWriteInterval);
 		
-		handler.postDelayed(rREncoder, encoderReadInterval);
+		//handler.postDelayed(rREncoder, encoderReadInterval);
 
 		//handler.postDelayed(rcombine, combineInterval);
 	}
@@ -242,7 +242,7 @@ public class UartReceive {
 					//Log.i(TAG,"receive msg = " + ReByteEnco);
 					
 					
-					if (ReByteEnco[0] != 0x01)
+					if (ReByteEnco.length == 11)
 					{
 
 						//Log.i(TAG,"Receive message = "+ ReStrEnco);

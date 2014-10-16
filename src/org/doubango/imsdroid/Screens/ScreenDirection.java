@@ -20,11 +20,12 @@ public class ScreenDirection extends BaseScreen{
 	private final INgnSipService mSipService;
 	private static String TAG = ScreenTabDialer.class.getCanonicalName();
 	
-	private XMPPSetting XMPPSet;
+	//private XMPPSetting XMPPSet;
 	private UartReceive uartRec;
+	private SetBtnFun setBtn;
 	
 	public Thread test = new Thread();
-	private boolean isNeedAdd = false;
+	//private boolean isNeedAdd = false;
 	
 	public ScreenDirection() {
 		super(SCREEN_TYPE.DIALER_T, TAG);
@@ -37,7 +38,9 @@ public class ScreenDirection extends BaseScreen{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.screen_direction);
-		
+		setBtn = new SetBtnFun();
+		setBtn.SetBtn(this);
+		/*
 		ImageButton backward= (ImageButton)findViewById(R.id.backward);
 		ImageButton forward= (ImageButton)findViewById(R.id.forward);
 		ImageButton left = (ImageButton)findViewById(R.id.left);
@@ -54,9 +57,6 @@ public class ScreenDirection extends BaseScreen{
 		Button stretchBottom = (Button)findViewById(R.id.stretchBottom);
 		Button stretchTop = (Button)findViewById(R.id.stretchTop);
 		
-		Button axisBtn = (Button)findViewById(R.id.axisBtn);
-		
-		Button askBtn = (Button)findViewById(R.id.askBtn);
 		
 		backward.setOnTouchListener(ClickListener);
 		forward.setOnTouchListener(ClickListener);
@@ -73,16 +73,17 @@ public class ScreenDirection extends BaseScreen{
 		angleTop.setOnClickListener(onClickListener);
 		stretchBottom.setOnClickListener(onClickListener);
 		stretchTop.setOnClickListener(onClickListener);
-		axisBtn.setOnClickListener(onClickListener);
+*/
 		
-		askBtn.setOnClickListener(onClickListener);
-		
-		XMPPSet = new XMPPSetting();
+		//XMPPSet = new XMPPSetting();
 		uartRec = new UartReceive();
 		uartRec.RunRecThread();
 		
 	}
 	
+	
+	
+	/*
 	private Button.OnTouchListener ClickListener = new OnTouchListener(){
 
 		@Override
@@ -117,8 +118,8 @@ public class ScreenDirection extends BaseScreen{
 
 
   };
-  
-  
+  */
+  /*
   public class MyThread implements Runnable {
 
 	   private View view;
@@ -158,7 +159,8 @@ public class ScreenDirection extends BaseScreen{
 			}
 		}
 	}
-
+	*/
+/*
 	private Button.OnClickListener onClickListener = new OnClickListener() {
 
 		int btnMsg;
@@ -189,20 +191,12 @@ public class ScreenDirection extends BaseScreen{
 				Log.i(TAG,"stretchTop");
 				XMPPSet.XMPPSendText("james1", "stretch top");
 				break;
-			case R.id.axisBtn:
-				Log.i(TAG,"axisBtn");
-				XMPPSet.XMPPSendText("james1", "axis set");
-				break;
-			case R.id.askBtn:
-				Log.i(TAG,"askBtn");
-				XMPPSet.XMPPSendText("james1", "ask encoder");
-				break;
 			default:
 				Log.i(TAG,"onClickListener not support");
 				break;
 			}
 		}
 	};
-	
+	*/
 	
 }

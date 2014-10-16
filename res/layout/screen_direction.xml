@@ -2,164 +2,206 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent" >
-    
-    <RelativeLayout
-        android:id="@+id/relativeLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="right" >
-    </RelativeLayout>
 
-    <ImageButton
-        android:id="@+id/bacRig"
+    <Button
+        android:id="@+id/uartWriteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/backrig" />
+        android:text="WriteUart"
+        android:visibility="invisible" />
 
-    <ImageButton
-        android:id="@+id/bacLeft"
+    <Button
+        android:id="@+id/btn3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/backward"
-        android:src="@drawable/backleft" />
-
-    <ImageButton
-        android:id="@+id/forRig"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/right"
-        android:layout_alignTop="@+id/forward"
-        android:src="@drawable/forrig" />
-
-    <ImageButton
-        android:id="@+id/forLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/stop"
-        android:layout_toLeftOf="@+id/forward"
-        android:src="@drawable/fordleft" />
-
-    <ImageButton
-        android:id="@+id/forward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/stop"
-        android:layout_alignLeft="@+id/stop"
-        android:src="@drawable/forward" />
-
-    <ImageButton
-        android:id="@+id/stop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bacRig"
-        android:layout_toLeftOf="@+id/bacRig"
-        android:src="@drawable/stop" />
+        android:layout_above="@+id/uartReadBtn"
+        android:layout_alignRight="@+id/uartWriteBtn"
+        android:text="SendEncoder" />
 
     <ImageButton
         android:id="@+id/backward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/bacRig"
+        android:layout_alignLeft="@+id/stop"
+        android:layout_below="@+id/stop"
         android:src="@drawable/back" />
+
+    <ImageButton
+        android:id="@+id/forRig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/forward"
+        android:src="@drawable/forrig" />
+
+    <ImageButton
+        android:id="@+id/bacLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/backward"
+        android:layout_toLeftOf="@+id/backward"
+        android:src="@drawable/backleft" />
+
+    <ImageButton
+        android:id="@+id/bacRig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/backward"
+        android:layout_alignLeft="@+id/forRig"
+        android:src="@drawable/backrig" />
+
+    <Button
+        android:id="@+id/uartBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/statusText"
+        android:minHeight="32dp"
+        android:text="Open Uart" />
+
+    <Button
+        android:id="@+id/uartReadBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/uartBtn"
+        android:minHeight="32dip"
+        android:text="1.INIT 2.MODE" />
+
+    <Button
+        android:id="@+id/btn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/uartReadBtn"
+        android:minHeight="32dip"
+        android:text="3.START" />
+
+    <Button
+        android:id="@+id/thrbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/uartBtn"
+        android:layout_below="@+id/btn1"
+        android:text="startThread" />
+
+    <ImageButton
+        android:id="@+id/forLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/uartReadBtn"
+        android:layout_toLeftOf="@+id/stop"
+        android:src="@drawable/fordleft" />
 
     <ImageButton
         android:id="@+id/left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/bacLeft"
-        android:layout_alignLeft="@+id/bacLeft"
+        android:layout_alignTop="@+id/thrbtn"
+        android:layout_toLeftOf="@+id/forward"
         android:src="@drawable/left" />
-
-    <ImageButton
-        android:id="@+id/right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bacRig"
-        android:layout_toRightOf="@+id/stop"
-        android:src="@drawable/right" />
-
-    <Button
-        android:id="@+id/angleTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/forRig"
-        android:layout_alignLeft="@+id/forRig"
-        android:layout_marginBottom="24dp"
-        android:text="Top" />
-
-    <Button
-        android:id="@+id/angleMiddle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/angleTop"
-        android:layout_alignLeft="@+id/forward"
-        android:text="Middle" />
-
-    <Button
-        android:id="@+id/stretchTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView1"
-        android:layout_alignRight="@+id/angleTop"
-        android:text="Top" />
-
-    <Button
-        android:id="@+id/angleBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/angleMiddle"
-        android:layout_alignBottom="@+id/angleMiddle"
-        android:layout_alignLeft="@+id/forLeft"
-        android:text="Bottom" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/angleMiddle"
-        android:layout_alignLeft="@+id/angleBottom"
-        android:layout_marginBottom="16dp"
-        android:text="Pitch Angle"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
         android:id="@+id/stretchBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/stretchTop"
-        android:layout_alignBottom="@+id/stretchTop"
-        android:layout_alignLeft="@+id/forLeft"
+        android:layout_alignBottom="@+id/bacLeft"
+        android:layout_alignLeft="@+id/stretchTop"
+        android:text="Bottom" />
+
+    <Button
+        android:id="@+id/angleBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/stretchBottom"
+        android:layout_alignBottom="@+id/stretchBottom"
+        android:layout_alignLeft="@+id/angleMiddle"
         android:text="Bottom" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/stretchBottom"
-        android:layout_alignLeft="@+id/stretchBottom"
+        android:layout_above="@+id/btn1"
+        android:layout_marginRight="22dp"
+        android:layout_toLeftOf="@+id/forLeft"
         android:text="Stretch"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
-        android:id="@+id/axisBtn"
+        android:id="@+id/stretchTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textView1"
-        android:text="Axis"
-        android:visibility="invisible" />
+        android:layout_alignBaseline="@+id/angleTop"
+        android:layout_alignBottom="@+id/angleTop"
+        android:layout_alignLeft="@+id/textView2"
+        android:text="Top" />
 
     <Button
-        android:id="@+id/askBtn"
+        android:id="@+id/angleMiddle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/stretchTop"
-        android:layout_alignParentTop="true"
-        android:text="Ask" />
+        android:layout_above="@+id/angleBottom"
+        android:layout_marginRight="14dp"
+        android:layout_toLeftOf="@+id/stretchBottom"
+        android:text="Middle" />
+
+    <Button
+        android:id="@+id/angleTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/angleMiddle"
+        android:layout_alignLeft="@+id/angleMiddle"
+        android:text="Top" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn1"
+        android:layout_alignLeft="@+id/angleTop"
+        android:text="Angle"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageButton
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/right"
+        android:layout_toLeftOf="@+id/bacRig"
+        android:src="@drawable/stop" />
+
+    <ImageButton
+        android:id="@+id/right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/left"
+        android:layout_toRightOf="@+id/stop"
+        android:src="@drawable/right" />
+
+    <ImageButton
+        android:id="@+id/forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn3"
+        android:layout_toLeftOf="@+id/forRig"
+        android:src="@drawable/forward" />
+
+    <TextView
+        android:id="@+id/nanoStatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignTop="@+id/uartBtn"
+        android:text="Nano mxc2 Disconnect" />
+
+    <TextView
+        android:id="@+id/drivingStatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/uartReadBtn"
+        android:layout_alignLeft="@+id/nanoStatusText"
+        android:text="Driving mxc4 Disconnect" />
 
 </RelativeLayout>
