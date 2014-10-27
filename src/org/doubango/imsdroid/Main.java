@@ -28,6 +28,7 @@ import org.doubango.imsdroid.Screens.ScreenFileTransferQueue;
 import org.doubango.imsdroid.Screens.ScreenFuncTest;
 import org.doubango.imsdroid.Screens.ScreenHome;
 import org.doubango.imsdroid.Screens.ScreenWLogin;
+import org.doubango.imsdroid.Screens.ScreenXYZsignin;
 
 import org.doubango.imsdroid.Screens.ScreenSplash;
 import org.doubango.imsdroid.Screens.ScreenTabMessages;
@@ -125,7 +126,8 @@ public class Main extends ActivityGroup {
         }
         else if(mScreenService != null){
         	//mScreenService.show(ScreenHome.class);
-        	mScreenService.show(ScreenWLogin.class);
+        	//mScreenService.show(ScreenWLogin.class);
+        	mScreenService.show(ScreenXYZsignin.class);
         }
     }
     
@@ -239,7 +241,8 @@ public class Main extends ActivityGroup {
 						break;
 					default:
 						if(!mScreenService.show(id)){
-							mScreenService.show(ScreenWLogin.class);
+							//mScreenService.show(ScreenWLogin.class);
+							mScreenService.show(ScreenXYZsignin.class);
 						}
 						break;
 				}
