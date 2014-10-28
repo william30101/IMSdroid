@@ -291,9 +291,53 @@ public class ScreenXYZLogin extends BaseScreen {
 		}
     };
 
+	@Override
+	protected void onDestroy() {
+       if(mSipBroadCastRecv != null){
+    	   unregisterReceiver(mSipBroadCastRecv);
+    	   mSipBroadCastRecv = null;
+       }
+      
+       super.onDestroy();
+	}
+	
+	@Override
+	public void onBackPressed() {
 
-
-
+	    Log.i(TAG, "onBackPressed--");
+	   
+	}
+	
+	protected void onPause() {
+		if(super.mComputeConfiguration){
+			mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_DISPLAY_NAME, 
+					editTextUsername.getText().toString().trim());
+			mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_IMPU, 
+					editTextImpu.getText().toString().trim());
+			mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_IMPI, 
+					editTextImpi.getText().toString().trim());
+			mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_PASSWORD, 
+					editTextPassword.getText().toString().trim());
+			mConfigurationService.putString(NgnConfigurationEntry.NETWORK_REALM, 
+					editTextRealm.getText().toString().trim());
+			mConfigurationService.putBoolean(NgnConfigurationEntry.NETWORK_USE_EARLY_IMS, 
+					checkBoxEarlyIMS.isChecked());
+			
+			super.SetmName(editTextUsername.getText().toString().trim());
+			super.SetmPass(editTextPassword.getText().toString().trim());
+			
+			// Compute
+			if(!mConfigurationService.commit()){
+				Log.e(TAG, "Failed to Commit() configuration");
+			}
+			
+			super.mComputeConfiguration = false;
+		}
+		super.onPause();
+	}
+	
+	
+   
 }
 
 
