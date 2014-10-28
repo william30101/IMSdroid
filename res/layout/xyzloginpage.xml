@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wloginpagelayoutid"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <Button
+        android:id="@+id/logincencel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="18dp"
+        android:background="#00000000"
+        android:scaleType="centerInside"
+        android:text="Cencel"
+        android:textColor="#7B7B7B" />
+
+    <Button
+        android:id="@+id/loginenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="27dp"
+        android:background="#00000000"
+        android:scaleType="centerInside"
+        android:text="Enter"
+        android:textColor="#7B7B7B" />
+
+    <TextView
+        android:id="@+id/textView_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText_username"
+        android:layout_below="@+id/editText_username"
+        android:layout_marginTop="14dp"
+        android:text="Password"
+        android:textColor="#000000"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/editText_password"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText_username"
+        android:layout_below="@+id/textView_password"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="sip:william1@61.222.245.149" 
+        android:textColor="#000000"/>
+
+    <EditText
+        android:id="@+id/editText_username"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_username"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:gravity="fill_horizontal"
+        android:inputType="textPersonName"
+        android:text="Your username"
+        android:textColor="#000000"/>
+
+    <TextView
+        android:id="@+id/textView_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText_username"
+        android:layout_below="@+id/logincencel"
+        android:layout_marginTop="31dp"
+        android:text="User name"
+        android:textColor="#000000"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<CheckBox
+	    android:id="@+id/checkBox_earlyIMS"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:text="3GPP Early IMS Security"
+	    android:textSize="20dp"
+	    android:visibility="invisible" />
+
+	<EditText
+	    android:id="@+id/editText_realm"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:ems="10"
+	    android:text="sip:61.222.245.149"
+	    android:visibility="invisible" />
+
+	<EditText
+	    android:id="@+id/editText_impi"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/editText_password"
+	    android:ems="10"
+	    android:text="william1"
+	    android:visibility="invisible" />
+
+	<EditText
+	    android:id="@+id/editText_impu"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/editText_password"
+	    android:ems="10"
+	    android:text="sip:william1@61.222.245.149"
+	    android:visibility="invisible" />
+
+	<TextView
+	    android:id="@+id/textView_realm"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/editText_impi"
+	    android:layout_alignBottom="@+id/editText_impi"
+	    android:layout_alignParentLeft="true"
+	    android:text="Realm*"
+	    android:textSize="20dp"
+	    android:visibility="invisible" />
+
+	<TextView
+	    android:id="@+id/textView_impi"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/editText_impi"
+	    android:layout_alignBottom="@+id/editText_impi"
+	    android:layout_alignParentLeft="true"
+	    android:text="Private Identity*"
+	    android:textSize="20dp"
+	    android:visibility="invisible" />
+
+	<TextView
+	    android:id="@+id/textView_impu"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@+id/textView_password"
+	    android:layout_alignParentRight="true"
+	    android:text="Public Identity*"
+	    android:textSize="20dp"
+	    android:visibility="invisible" />
+
+</RelativeLayout>

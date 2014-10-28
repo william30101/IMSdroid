@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/screen_linear_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+>
+
+    <Button
+        android:id="@+id/network_btn"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="14dp"
+        android:layout_toLeftOf="@+id/Button01"
+        android:scaleType="centerInside"
+        android:text="NetworkSetting" />
+
+    <Button
+        android:id="@+id/natt_btn"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/network_btn"
+        android:layout_alignBottom="@+id/network_btn"
+        android:layout_alignParentRight="true"
+        android:scaleType="centerInside"
+        android:text="NattSetting" />
+
+    <ImageButton
+        android:id="@+id/signin_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@null"
+        android:scaleType="centerInside"
+        android:src="@drawable/signin" />
+
+    <ImageButton
+        android:id="@+id/account_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@null"
+        android:scaleType="centerInside"
+        android:src="@drawable/accout" />
+	
+</RelativeLayout>
