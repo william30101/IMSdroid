@@ -10,6 +10,7 @@ import org.doubango.ngn.services.INgnSipService;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,7 @@ public class ScreenDirectionJS extends BaseScreen {
 	/* JoyStick & Menu class Declare */
 	RelativeLayout layout_joystick, layout_menu, layout_robot;
 	ScreenJoyStick js, test;
+	ScreenDraw myDraw;
 
 	/* ThreadPool declare for JoyStick operate */
 	private ExecutorService newService = Executors.newFixedThreadPool(10);
@@ -44,7 +46,6 @@ public class ScreenDirectionJS extends BaseScreen {
 	int height, width;
 	private ViewGroup viewgroup1;
 	private Context context1;
-	private Bitmap normal;
 
 	
 	/* Constructor */
@@ -100,49 +101,11 @@ public class ScreenDirectionJS extends BaseScreen {
 	}
 	
 	private void setFrameParameter(){
-		test = new ScreenJoyStick(getApplicationContext(), layout_robot,
-				R.drawable.xyzlong);
-		test.setLayoutSize(width/5, height/2);
-		test.setLayoutAlpha(255);
-		test.setStickSize(width/5, height/2);
-		test.drawStickDefault(); 
+		myDraw = new ScreenDraw(getApplicationContext(), layout_robot);
+		myDraw.setFrameSize(width/5, height/2);
+		myDraw.setBitmapSize(width/5, height/2);
+		myDraw.drawBitmap();
 		
-		/* StupidStupidStupidStupidStupidStupid */
-		test = new ScreenJoyStick(getApplicationContext(), layout_robot,
-				R.drawable.xyzshort);
-		test.setLayoutSize(width/5, height/2);
-		test.setLayoutAlpha(255);
-		test.setStickSize(width/5, height/2);
-		test.drawStickDefault(); 
-		
-		test = new ScreenJoyStick(getApplicationContext(), layout_robot,
-				R.drawable.xyzhigh);
-		test.setLayoutSize(width/5, height/2);
-		test.setLayoutAlpha(255);
-		test.setStickSize(width/5, height/2);
-		test.drawStickDefault(); 
-		
-		test = new ScreenJoyStick(getApplicationContext(), layout_robot,
-				R.drawable.xyznormal);
-		test.setLayoutSize(width/5, height/2);
-		test.setLayoutAlpha(255);
-		test.setStickSize(width/5, height/2);
-		test.drawStickDefault(); 
-		
-		test = new ScreenJoyStick(getApplicationContext(), layout_robot,
-				R.drawable.xyzlow);
-		test.setLayoutSize(width/5, height/2);
-		test.setLayoutAlpha(255);
-		test.setStickSize(width/5, height/2);
-		test.drawStickDefault(); 
-		
-		
-		
-		//normal = BitmapFactory.decodeResource(context1.getResources(), R.drawable.xyznormal);
-		//normal = Bitmap.createScaledBitmap(normal, width/5, height/2, false);
-		
-		
-
 	}
 	
 

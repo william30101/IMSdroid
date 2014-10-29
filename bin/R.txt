@@ -165,12 +165,12 @@ int drawable voice_call_25 0x7f02008f
 int drawable voice_call_48 0x7f020090
 int drawable webcam_24 0x7f020091
 int drawable xyzbackground 0x7f020092
-int drawable xyzframe 0x7f020093
-int drawable xyzhigh 0x7f020094
+int drawable xyzbowhead 0x7f020093
+int drawable xyzframe 0x7f020094
 int drawable xyzlogin 0x7f020095
 int drawable xyzlong 0x7f020096
-int drawable xyzlow 0x7f020097
-int drawable xyznormal 0x7f020098
+int drawable xyznormal 0x7f020097
+int drawable xyzrisehead 0x7f020098
 int drawable xyzshort 0x7f020099
 int id AVBtn 0x7f090064
 int id BLEBtn 0x7f090065

@@ -189,12 +189,12 @@ public final class R {
         public static final int voice_call_48=0x7f020090;
         public static final int webcam_24=0x7f020091;
         public static final int xyzbackground=0x7f020092;
-        public static final int xyzframe=0x7f020093;
-        public static final int xyzhigh=0x7f020094;
+        public static final int xyzbowhead=0x7f020093;
+        public static final int xyzframe=0x7f020094;
         public static final int xyzlogin=0x7f020095;
         public static final int xyzlong=0x7f020096;
-        public static final int xyzlow=0x7f020097;
-        public static final int xyznormal=0x7f020098;
+        public static final int xyznormal=0x7f020097;
+        public static final int xyzrisehead=0x7f020098;
         public static final int xyzshort=0x7f020099;
     }
     public static final class id {
