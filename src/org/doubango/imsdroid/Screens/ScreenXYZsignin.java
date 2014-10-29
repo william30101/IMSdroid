@@ -93,7 +93,6 @@ public class ScreenXYZsignin extends BaseScreen {
 		float desity = getResources().getDisplayMetrics().density;
 		float dpi = getResources().getDisplayMetrics().densityDpi;
 		setdisplayparams();
-		
 
 		Log.i("shinhua", "desity: "+ desity + "dpi: " + dpi);
 	}
@@ -107,19 +106,6 @@ public class ScreenXYZsignin extends BaseScreen {
 		Log.i("shinhua", "Width: "+ Screen_width + "Height: " + Screen_height);
 	}
 	
-	public void getScreenParams(Display display, Point size){
-		display.getSize(size);
-		Screen_width = size.x;
-		Screen_height = size.y;
-	}
-	
-	public int getwidth(){
-		return Screen_width;
-	}
-	
-	public int getheight(){
-		return Screen_height;
-	}
 	
 	public void setupButtonPosition(ImageButton btn, int GAP, int horizontalGAP, int verticalGAP){
 		RelativeLayout.LayoutParams loginLayoutParams = new RelativeLayout.LayoutParams(

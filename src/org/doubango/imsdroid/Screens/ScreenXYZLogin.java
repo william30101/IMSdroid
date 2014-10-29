@@ -56,10 +56,14 @@ public class ScreenXYZLogin extends BaseScreen {
 	private EditText editTextRealm, editTextImpi,  editTextImpu;
 	private CheckBox checkBoxEarlyIMS;
 	
+	private ScreenComponent screen;
+	int horizontalscope, verticalscope;	
+	
 	public ScreenXYZLogin() {
 		super(SCREEN_TYPE.HOME_T, TAG);
 		mSipService = getEngine().getSipService();
 		this.mConfigurationService = getEngine().getConfigurationService();
+		
 	}
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +71,6 @@ public class ScreenXYZLogin extends BaseScreen {
 		Log.i("shinhua","shinhua oncreate screen login here");
 		setContentView(R.layout.xyzloginpage);
 		setScreenBackground();
-		
 		getScreenSize();
 
 		enterBtn  = (Button)findViewById(R.id.loginenter);
@@ -76,10 +79,11 @@ public class ScreenXYZLogin extends BaseScreen {
 		enterBtn.setOnClickListener(ClickListener);
 		cencelBtn.setOnClickListener(ClickListener);
 
-		//setContentPosition(); // This line have an issue.
-		
-
 		editTextUsername = (EditText)findViewById(R.id.editText_username);
+		
+		// this function is not good, it needs fix
+//		setComponentPosition(editTextUsername, 2, 1, 1);	// Set screen 
+		
 		editTextPassword = (EditText)findViewById(R.id.editText_password);
 		
 		/* Maybe below can be remove*/ 
@@ -162,21 +166,23 @@ public class ScreenXYZLogin extends BaseScreen {
 	private void getScreenSize(){
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
-		ScreenXYZsignin object = new ScreenXYZsignin();
-		object.getScreenParams(display, size);
-		width = object.getwidth();
-		height = object.getheight();		
+		display.getSize(size);
+		width = size.x;
+		height = size.y;		
 	}
 	
-	private void setContentPosition(){
+	
+	public void setComponentPosition(EditText text, int GAP, int horizontalGAP, int verticalGAP){
 		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		layoutParams.setMargins(width/2 , height/2, 0, 0);	
-		editTextUsername.setLayoutParams(layoutParams);
-		editTextPassword.setLayoutParams(layoutParams);
+		horizontalscope = width / GAP; 
+		verticalscope = height / GAP;		
+		layoutParams.setMargins(horizontalscope * horizontalGAP, verticalscope * verticalGAP, 0, 0);
+		text.setLayoutParams(layoutParams);
 	}
 	
 	
+		
 	private OnClickListener ClickListener = new OnClickListener() {
 		@Override
 		public void onClick(final View v) {

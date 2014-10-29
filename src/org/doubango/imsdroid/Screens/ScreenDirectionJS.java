@@ -1,18 +1,23 @@
 package org.doubango.imsdroid.Screens;
 
-import org.doubango.imsdroid.R;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.ngn.services.INgnSipService;
 
-
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 public class ScreenDirectionJS extends BaseScreen {
@@ -28,11 +33,19 @@ public class ScreenDirectionJS extends BaseScreen {
 	private int instructor; /* Direction Instructor */
 
 	/* JoyStick & Menu class Declare */
-	RelativeLayout layout_joystick, layout_menu;
-	ScreenJoyStick js;
+	RelativeLayout layout_joystick, layout_menu, layout_robot;
+	ScreenJoyStick js, test;
 
 	/* ThreadPool declare for JoyStick operate */
 	private ExecutorService newService = Executors.newFixedThreadPool(10);
+	
+	
+	/* Test */
+	int height, width;
+	private ViewGroup viewgroup1;
+	private Context context1;
+	private Bitmap normal;
+
 	
 	/* Constructor */
 	public ScreenDirectionJS() {
@@ -43,6 +56,7 @@ public class ScreenDirectionJS extends BaseScreen {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.screen_directionjs);
+		getScreenSize();
 
 		layout_joystick = (RelativeLayout) findViewById(R.id.layout_joystick);
 		setJoyStickParameter();
@@ -52,16 +66,29 @@ public class ScreenDirectionJS extends BaseScreen {
 		layout_menu = (RelativeLayout) findViewById(R.id.screen_menu);
 		layout_menu.setOnTouchListener(menukeyListener);
 		//setMenukeyParameter();
-
+		
+		layout_robot = (RelativeLayout) findViewById(R.id.layout_robot);
+		setFrameParameter();
 		
 		XMPPSet = new XMPPSetting();
 		
 	}
+	
+	private void getScreenSize(){
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		width = size.x;
+		height = size.y;		
+	}
+	
+	
 
 	/* Set JoyStick & JoyStick Direction layout parameter */
 	private void setJoyStickParameter() {
 		js = new ScreenJoyStick(getApplicationContext(), layout_joystick,
 				R.drawable.joystick);
+
 		js.setStickSize(200, 200);
 		js.setStickAlpha(150);
 		//js.setLayoutSize(250, 250);
@@ -71,7 +98,56 @@ public class ScreenDirectionJS extends BaseScreen {
 		js.setMinimumDistance(30); /* JoyStick Sensitivity */
 		js.drawStickDefault(); /* Draw JoyStick function */
 	}
+	
+	private void setFrameParameter(){
+		test = new ScreenJoyStick(getApplicationContext(), layout_robot,
+				R.drawable.xyzlong);
+		test.setLayoutSize(width/5, height/2);
+		test.setLayoutAlpha(255);
+		test.setStickSize(width/5, height/2);
+		test.drawStickDefault(); 
+		
+		/* StupidStupidStupidStupidStupidStupid */
+		test = new ScreenJoyStick(getApplicationContext(), layout_robot,
+				R.drawable.xyzshort);
+		test.setLayoutSize(width/5, height/2);
+		test.setLayoutAlpha(255);
+		test.setStickSize(width/5, height/2);
+		test.drawStickDefault(); 
+		
+		test = new ScreenJoyStick(getApplicationContext(), layout_robot,
+				R.drawable.xyzhigh);
+		test.setLayoutSize(width/5, height/2);
+		test.setLayoutAlpha(255);
+		test.setStickSize(width/5, height/2);
+		test.drawStickDefault(); 
+		
+		test = new ScreenJoyStick(getApplicationContext(), layout_robot,
+				R.drawable.xyznormal);
+		test.setLayoutSize(width/5, height/2);
+		test.setLayoutAlpha(255);
+		test.setStickSize(width/5, height/2);
+		test.drawStickDefault(); 
+		
+		test = new ScreenJoyStick(getApplicationContext(), layout_robot,
+				R.drawable.xyzlow);
+		test.setLayoutSize(width/5, height/2);
+		test.setLayoutAlpha(255);
+		test.setStickSize(width/5, height/2);
+		test.drawStickDefault(); 
+		
+		
+		
+		//normal = BitmapFactory.decodeResource(context1.getResources(), R.drawable.xyznormal);
+		//normal = Bitmap.createScaledBitmap(normal, width/5, height/2, false);
+		
+		
 
+	}
+	
+
+	
+	
 
 	/* The OnTouchListener of Draw JoyStick */
 	OnTouchListener joystickListener = new OnTouchListener() {

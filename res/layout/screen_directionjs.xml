@@ -22,8 +22,17 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/screenmenu">
     </RelativeLayout>
-    
-    
-    
+
+     <RelativeLayout
+         android:id="@+id/layout_robot"
+         android:layout_width="80dp"
+         android:layout_height="150dp"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentLeft="true"
+         android:background="@drawable/xyzframe" >
+
+     </RelativeLayout>
+
+
 
 </RelativeLayout>
