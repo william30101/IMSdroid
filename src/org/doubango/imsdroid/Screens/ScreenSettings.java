@@ -87,7 +87,7 @@ public class ScreenSettings extends BaseScreen {
     		// new ScreenSettingsItem(R.drawable.eab_48, "Contacts", ScreenContacts.class),
     		// new ScreenSettingsItem(R.drawable.im_invisible_user_48, "Presence", ScreenPresence.class),
     		new ScreenSettingsItem(R.drawable.codecs_48, "Codecs", ScreenCodecs.class),
-    		new ScreenSettingsItem(R.drawable.messaging_48, "Messaging", ScreenMessaging.class),
+    		//new ScreenSettingsItem(R.drawable.messaging_48, "Messaging", ScreenMessaging.class),
     		new ScreenSettingsItem(R.drawable.qos_qoe_48, "QoS/QoE", ScreenQoS.class),
     		new ScreenSettingsItem(R.drawable.natt_48, "NATT", ScreenNatt.class),
 		};

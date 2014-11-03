@@ -23,7 +23,6 @@ import org.doubango.imsdroid.Screens.BaseScreen;
 import org.doubango.imsdroid.Screens.IBaseScreen;
 import org.doubango.imsdroid.Screens.ScreenAV;
 import org.doubango.imsdroid.Screens.ScreenAVQueue;
-import org.doubango.imsdroid.Screens.ScreenChatQueue;
 import org.doubango.imsdroid.Screens.ScreenFileTransferQueue;
 import org.doubango.imsdroid.Screens.ScreenFuncTest;
 import org.doubango.imsdroid.Screens.ScreenHome;
@@ -95,6 +94,7 @@ public class Main extends ActivityGroup {
 		super();
 		
 		// Sets main activity (should be done before starting services)
+		
 		mEngine = (Engine)Engine.getInstance();
 		mEngine.setMainActivity(this);
     	mScreenService = ((Engine)Engine.getInstance()).getScreenService();
@@ -298,9 +298,9 @@ public class Main extends ActivityGroup {
 				break;
 				
 			// Show Chat Queue
-			case ACTION_SHOW_CHAT_SCREEN:
-				mScreenService.show(ScreenChatQueue.class);
-				break;
+			//case ACTION_SHOW_CHAT_SCREEN:
+			//	mScreenService.show(ScreenChatQueue.class);
+			//	break;
 		}
 	}
     

@@ -1,5 +1,8 @@
 package org.doubango.imsdroid.Screens;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -9,8 +12,14 @@ import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.Utils.NetworkStatus;
+import org.doubango.imsdroid.map.GameView;
+import org.doubango.imsdroid.map.Game;
+import org.doubango.imsdroid.map.MapList;
+import org.doubango.imsdroid.map.SendCmdToBoardAlgorithm;
+
 
 import android.app.Activity;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,7 +37,15 @@ public class SetBtnFun {
 	private UartCmd uartCmd;
 	private UartReceive uartRec;
 	
+	//For map use
+	private Button runBtn;
+	GameView gameView;
+	Game game;
+	//End for Map use
+	
 	private ExecutorService service = Executors.newFixedThreadPool(10);
+	
+	SendCmdToBoardAlgorithm SendAlgo;
 	
 	
 	public void SetBtn(Activity v)
@@ -39,6 +56,13 @@ public class SetBtnFun {
 		XMPPSet = new XMPPSetting();
 		uartRec = new UartReceive();
 		uartRec.RunRecThread();
+		
+		gameView = (GameView) v.findViewById(R.id.gameView);
+		
+		game = new Game();
+		
+		SendAlgo = new SendCmdToBoardAlgorithm();
+		
 		
 		ImageButton backward= (ImageButton)v.findViewById(R.id.backward);
 		ImageButton forward= (ImageButton)v.findViewById(R.id.forward);
@@ -72,11 +96,34 @@ public class SetBtnFun {
 		angleTop.setOnClickListener(onClickListener);
 		stretchBottom.setOnClickListener(onClickListener);
 		stretchTop.setOnClickListener(onClickListener);
+		
+		//For Map use
+		Button saveBtn =  (Button)v.findViewById(R.id.saveBtn);
+		Button resetBtn =  (Button)v.findViewById(R.id.resetBtn);
+		Button stswatBtn =  (Button)v.findViewById(R.id.stswatBtn);
+		Button map1Btn =  (Button)v.findViewById(R.id.map1Change);
+		Button map2Btn =  (Button)v.findViewById(R.id.map2Change);
+		runBtn =  (Button)v.findViewById(R.id.runBtn);
+		
+		saveBtn.setOnClickListener(onClickListener);
+		resetBtn.setOnClickListener(onClickListener);
+		stswatBtn.setOnClickListener(onClickListener);
+		map1Btn.setOnClickListener(onClickListener);
+		map2Btn.setOnClickListener(onClickListener);
+		runBtn.setOnClickListener(onClickListener);
+		
+		// End for Map use
+		
+		
+		
+		
+		
+
 	}
 	
 	
 	private Button.OnTouchListener ClickListener = new OnTouchListener(){
-
+		
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			//return gestureDetector.onTouchEvent(event);
@@ -175,6 +222,108 @@ public class SetBtnFun {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				//XMPPSet.XMPPSendText("james1", "stretch top");
+				break;
+				
+			case R.id.stswatBtn:
+				
+				MapList.target[0][0] = 8;
+				MapList.target[0][1] = 1;
+
+				break;
+			case R.id.runBtn:
+				
+				synchronized (SendAlgo) {
+					try {
+						SendAlgo.RobotStart(gameView,game,XMPPSet);
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+				}
+				
+				runBtn.setEnabled(false);
+					
+
+				break;
+			case R.id.resetBtn:
+       
+				Log.i(TAG,"rest btn");
+				
+				MapList.target[0][0] = 8;
+				MapList.target[0][1] = 8;
+			
+				game.source[0] = 8;
+				game.source[1] = 1;
+				break;
+			
+			case R.id.saveBtn:
+				Log.i(TAG,"save btn");
+				/*
+				boolean sdCardExist = Environment.getExternalStorageState()   
+	                    .equals(android.os.Environment.MEDIA_MOUNTED);
+		    			
+				
+				if (sdCardExist)
+				{
+						Encoder enc = new Encoder();
+		    			alllen = 0;
+		    			
+		    			sdcard = Environment.getExternalStorageDirectory();
+
+		    			String dirc = sdcard.getParent();
+		    			dirc = dirc + "/legacy";
+		    			
+		    			file = new File(dirc,"axisData.txt");
+		    			Log.i(TAG," External storage path =" + dirc);
+		    			
+		    			 if (!file.exists())
+		    			 {
+							try {
+								file.createNewFile();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+		    			 }
+		    			 else
+		    			 {
+		    				 file.delete();
+		    				 
+		    				 try {
+								file.createNewFile();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+		    			 }
+		    			
+		    			String  x , y;
+
+		    			BufferedWriter writer;
+						try {
+
+							
+							
+							axisData = enc.GetAxisQueue();
+							for (int i=0;i<axisData.size();i++)
+							{
+								double[] da = axisData.get(i);
+								x = new Double(da[0]).toString();
+								y = new Double(da[1]).toString();
+								writer.write("index = " + i +" x = "+x +"  y = "+y + "\r\n");
+							}
+			    			writer.close();
+			    			enc.CleanAxisQueue();
+			    			
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		    			   
+				}
+				*/
 				//XMPPSet.XMPPSendText("james1", "stretch top");
 				break;
 			default:
