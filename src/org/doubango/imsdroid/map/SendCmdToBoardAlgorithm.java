@@ -12,7 +12,7 @@ public class SendCmdToBoardAlgorithm {
 	
 	//private static XMPPSetting XMPPSet;
 	
-	boolean arduinoDebug = true;
+	boolean arduinoDebug = false;
 	int nextX = 0 , nextY = 0;
 	int originalX = 0, originalY = 0;
 	MapList mapList;
