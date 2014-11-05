@@ -33,6 +33,7 @@ import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.Services.IScreenService;
 import org.doubango.imsdroid.Utils.DialerUtils;
+import org.doubango.imsdroid.cmd.SetBtnFun;
 import org.doubango.imsdroid.map.MapScreen;
 import org.doubango.ngn.events.NgnInviteEventArgs;
 import org.doubango.ngn.events.NgnInviteEventTypes;

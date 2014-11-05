@@ -4,6 +4,7 @@ import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
+import org.doubango.imsdroid.cmd.SetBtnFun;
 import org.doubango.imsdroid.map.MapScreen;
 import org.doubango.ngn.services.INgnSipService;
 import android.os.Bundle;

@@ -1,6 +1,7 @@
 package org.doubango.imsdroid.Screens;
 
 import org.doubango.imsdroid.XMPPSetting;
+import org.doubango.imsdroid.cmd.SetBtnFun;
 import org.doubango.imsdroid.map.Game;
 import org.doubango.imsdroid.map.GameView;
 import org.doubango.imsdroid.map.MapList;

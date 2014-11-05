@@ -87,14 +87,14 @@ public class MapScreen{
         game = new Game();//��l�ƺt��k���O
         //�s�طj���U�ԲM�檺�ҫ�
         adapter = new ArrayAdapter<String>(v,android.R.layout.simple_spinner_item, mySpinner_str);
-        String[] target_str = new String[MapList.target.length];
-        for(int i=0; i<MapList.target.length; i++){
-        	target_str[i] = "Target"+i;
-        }
+       // String[] target_str = new String[MapList.target.length];
+       // for(int i=0; i<MapList.target.length; i++){
+        //	target_str[i] = "Target"+i;
+       // }
 
-        adapter2 = new ArrayAdapter<String>(v,android.R.layout.simple_spinner_item, target_str);
+        //adapter2 = new ArrayAdapter<String>(v,android.R.layout.simple_spinner_item, target_str);
         mySpinner.setAdapter(adapter);
-        targetSpinner.setAdapter(adapter2);
+        //targetSpinner.setAdapter(adapter2);
         goButton.setOnClickListener(
         	new Button.OnClickListener(){
 				public void onClick(View v) {
@@ -104,7 +104,7 @@ public class MapScreen{
 				}
 	        }
         );
-        targetSpinner.setOnItemSelectedListener(
+        /*targetSpinner.setOnItemSelectedListener(
         	new Spinner.OnItemSelectedListener(){
 				public void onItemSelected(AdapterView<?> a, View v,int arg2, long arg3){
 					game.target = MapList.target[arg2];
@@ -114,7 +114,7 @@ public class MapScreen{
 				public void onNothingSelected(AdapterView<?> arg0){
 				}
         	}
-        );
+        );*/
         mySpinner.setOnItemSelectedListener(
             	new Spinner.OnItemSelectedListener(){
     				public void onItemSelected(AdapterView<?> ada, View v,int arg2, long arg3){

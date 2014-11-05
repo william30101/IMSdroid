@@ -19,7 +19,7 @@ import android.widget.TextView;//�ޤJ�������O
 public class Game {//�t��k���O
 	public int algorithmId=0;//�t��k�N�� 0--�`���u��
 	int mapId = 0;//�a�Ͻs��
-	int[][] map = MapList.customized_map2[mapId];
+	static int[][] map;// = MapList.customized_map2[mapId];
 	public int[] source = MapList.source;//�X�o�I
 	public int[] target = MapList.target[0];//�ؼ��I
 	public GameView gameView;//gameView���ޥ�
@@ -67,25 +67,34 @@ public class Game {//�t��k���O
 	{
 		Log.i("william","change map to " + number);
 		
-		
-		synchronized (map) {
-			try {
-				mapId = 1;
-				//map = MapList.customized_map3[0];
-				map = MapList.customized_map2[mapId];
-				gv.postInvalidate();
+		if (map == null) {
+			mapId = 0;
+			// map = MapList.customized_map3[0];
+			map = MapList.customized_map2[mapId];
+			gv.postInvalidate();
+		} else {
+			synchronized (map) {
+				try {
+					mapId = 0;
+					// map = MapList.customized_map3[0];
+					map = MapList.map[mapId];
+					gv.setVIEW_WIDTH(640);
+					gv.setVIEW_HEIGHT(640);
+					gv.requestLayout();
+					gv.postInvalidate();
 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				Thread.sleep(30);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
+				try {
+					Thread.sleep(30);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
 		}
 		
 		
@@ -109,29 +118,30 @@ public class Game {//�t��k���O
 			}
 		}
 	}
-	public void runAlgorithm(){//�B��t��k
+
+	public void runAlgorithm() {// �B��t��k
 		clearState();
-		switch(algorithmId){
-			case 0://�`���u��t��k
+		if (map != null) {
+			switch (algorithmId) {
+			case 0:// �`���u��t��k
 				DFS();
 				break;
-			case 1://�s���u��t��k
-				
-				
+			case 1:// �s���u��t��k
 				BFST = new BFSThread();
-		    	singleThreadExecutor.execute(BFST);
-				//BFS();
+				singleThreadExecutor.execute(BFST);
+				// BFS();
 				break;
-			case 2://�s���u�� A*�t��k
+			case 2:// �s���u�� A*�t��k
 				BFSAStar();
-				break;				
-			case 3://Dijkstra�t��k
+				break;
+			case 3:// Dijkstra�t��k
 				Dijkstra();
 				break;
 			case 4:
-				DijkstraAStar();//DijkstraA*�t��k
-				break;				
-		}		
+				DijkstraAStar();// DijkstraA*�t��k
+				break;
+			}
+		}
 	}
 	
 

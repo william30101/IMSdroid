@@ -232,8 +232,7 @@
             android:layout_height="wrap_content"
             android:layout_x="744dp"
             android:layout_y="397dp"
-            android:text="map1"
-            android:visibility="invisible" />
+            android:text="map1"/>
 
         <Button
             android:id="@+id/map2Change"

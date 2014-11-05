@@ -1,4 +1,4 @@
-package org.doubango.imsdroid.Screens;
+package org.doubango.imsdroid.cmd;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -98,18 +98,18 @@ public class SetBtnFun {
 		stretchTop.setOnClickListener(onClickListener);
 		
 		//For Map use
-		Button saveBtn =  (Button)v.findViewById(R.id.saveBtn);
+		//Button saveBtn =  (Button)v.findViewById(R.id.saveBtn);
 		Button resetBtn =  (Button)v.findViewById(R.id.resetBtn);
 		Button stswatBtn =  (Button)v.findViewById(R.id.stswatBtn);
 		Button map1Btn =  (Button)v.findViewById(R.id.map1Change);
-		Button map2Btn =  (Button)v.findViewById(R.id.map2Change);
+		//Button map2Btn =  (Button)v.findViewById(R.id.map2Change);
 		runBtn =  (Button)v.findViewById(R.id.runBtn);
 		
-		saveBtn.setOnClickListener(onClickListener);
+		//saveBtn.setOnClickListener(onClickListener);
 		resetBtn.setOnClickListener(onClickListener);
 		stswatBtn.setOnClickListener(onClickListener);
 		map1Btn.setOnClickListener(onClickListener);
-		map2Btn.setOnClickListener(onClickListener);
+		//map2Btn.setOnClickListener(onClickListener);
 		runBtn.setOnClickListener(onClickListener);
 		
 		// End for Map use
@@ -174,6 +174,11 @@ public class SetBtnFun {
 			btnMsg = v.getId();
 
 			switch (btnMsg) {
+			case R.id.map1Change:
+
+				game.reloadMap(0,gameView);
+
+				break;
 			case R.id.angleBottom:
 				Log.i(TAG,"angleBottom");
 				try {

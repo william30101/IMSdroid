@@ -27,18 +27,19 @@ import android.widget.TextView;
 public class GameView extends View{
 	
 	private String TAG = "william";
-	private static final int VIEW_WIDTH = 320;
-	private static final int VIEW_HEIGHT = 320;
- 
-	
+	private static  int VIEW_WIDTH = 320;
+	private static  int VIEW_HEIGHT = 320;
+
+
 	public Game game;
 	GameView GV;
 	public Spinner mySpinner;// Spinner���ޥ�
 	public TextView CDTextView;
 	int span = 16;
 	int theta = 0;
-	public boolean drawCircleFlag=false;
+	public boolean drawCircleFlag=false , turnToBigMap = false;
 
+	public static int mL = 0, mR = 0 , mT = 0 , mB = 0;
 	
 	Bitmap source = BitmapFactory.decodeResource(getResources(), R.drawable.source);
 	Bitmap target = BitmapFactory.decodeResource(getResources(), R.drawable.target)	;
@@ -67,7 +68,7 @@ public class GameView extends View{
     int[] old_pos;
     MapList maplist = new MapList();
     
-    public boolean refreshFlag = false  , doubleCmd = false , algorithmDone = false;
+    public boolean refreshFlag = false  , doubleCmd = false , algorithmDone = false,mapTouchSize = false;
     private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
     public static ShowThread st;
 	
@@ -317,7 +318,24 @@ public class GameView extends View{
 					//Setting net Target postion
 					MapList.target[0][0] = pos[0];
 					MapList.target[0][1] = pos[1];
+
+					mapTouchSize = !mapTouchSize;
+					if (mapTouchSize)
+					{
+						mL = 100;
+						mT = 100;
+						mR = 640;
+						mB = 640;
+					}
+					else
+					{
+						mL = 0;
+						mT = 0;
+						mR = 320;
+						mB = 320;
+					}
 					
+					requestLayout();
 					//Update Target bitmap position
 					postInvalidate();
 					
@@ -409,7 +427,8 @@ public class GameView extends View{
 						//		+ xPos + " , " + yPos + " )");
 						pos[0] = xPos;
 						pos[1] = yPos;
-					} else {
+					} else {	
+
 						//Log.i(TAG, "can't draw on map[yPos][xPos]= "
 						//		+ map[yPos][xPos] + "( xPos , yPos ) = ( "
 						//		+ xPos + " , " + yPos + " )");
@@ -465,12 +484,41 @@ public class GameView extends View{
 	}
 
 
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){//�мg����k�A��^���O��View���j�p
-        setMeasuredDimension(VIEW_WIDTH,VIEW_HEIGHT);
-    }
-	public ArrayList<int[][] > getPathQueue() {
+	@Override
+	protected void onLayout(boolean changed, int left, int top, int right,
+			int bottom) {
+		// TODO Auto-generated method stub
+
+		
+		Log.i(TAG," L T R B = " + mL +" " + mT + " " + mR + " " + mB );
+		super.onLayout(changed, mL, mT, mR, mB);
+		//this.getvi
+	}
+
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {// �мg����k�A��^���O��View���j�p
+		setMeasuredDimension(VIEW_WIDTH, VIEW_HEIGHT);
+	}
+
+	public static int getVIEW_WIDTH() {
+		return VIEW_WIDTH;
+	}
+
+	public static void setVIEW_WIDTH(int vIEW_WIDTH) {
+		VIEW_WIDTH = vIEW_WIDTH;
+	}
+
+	public static int getVIEW_HEIGHT() {
+		return VIEW_HEIGHT;
+	}
+
+	public static void setVIEW_HEIGHT(int vIEW_HEIGHT) {
+		VIEW_HEIGHT = vIEW_HEIGHT;
+	}
+
+	public ArrayList<int[][]> getPathQueue() {
 		return pathQueue;
 	}
+
 	public void setPathQueue(ArrayList<int[][] > pathQueue) {
 		this.pathQueue = pathQueue;
 	}
