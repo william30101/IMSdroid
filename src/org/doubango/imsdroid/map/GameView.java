@@ -27,8 +27,8 @@ import android.widget.TextView;
 public class GameView extends View{
 	
 	private String TAG = "william";
-	private static  int VIEW_WIDTH = 320;
-	private static  int VIEW_HEIGHT = 320;
+	private static  int VIEW_WIDTH = 640;
+	private static  int VIEW_HEIGHT = 640;
 
 
 	public Game game;
@@ -54,6 +54,7 @@ public class GameView extends View{
     String inStr = "test";
     String inStr2 = "test2";
     int fixMapData = 5;
+    int fixWidthMapData = 100 , fixHeightMapData = 20;
     int gridX = 0 , gridY = 0;
     int row = 0;
 	int col = 0;
@@ -147,8 +148,8 @@ public class GameView extends View{
 		
 		paint.setStyle(Style.FILL);
 		paint.setColor(Color.RED);
-		canvas.drawCircle(tempA[0][0] * (span + 1) + span / 2 + fixMapData,
-				tempA[0][1] * (span + 1) + span / 2 + fixMapData, span / 2,
+		canvas.drawCircle(tempA[0][0] * (span + 1) + span / 2 + fixWidthMapData,
+				tempA[0][1] * (span + 1) + span / 2 + fixHeightMapData, span / 2,
 				paint);
 
 		Log.i(TAG, "Draw Circle X , Y ( " + tempA[0][0] + " " + tempA[0][1]
@@ -172,14 +173,14 @@ public class GameView extends View{
 				if(map[i][j] == 0){							
 					paint.setColor(Color.WHITE);			
 					paint.setStyle(Style.FILL);				
-					canvas.drawRect(fixMapData+j*(span+1), fixMapData+i*(span+1), 
-							fixMapData+j*(span+1)+span,fixMapData+i*(span+1)+span, paint);
+					canvas.drawRect(fixWidthMapData+j*(span+1), fixHeightMapData+i*(span+1), 
+							fixWidthMapData+j*(span+1)+span,fixHeightMapData+i*(span+1)+span, paint);
 				}
 				else if(map[i][j] == 1){//�¦�
 					paint.setColor(Color.BLACK);
 					paint.setStyle(Style.FILL);
-					canvas.drawRect(fixMapData+j*(span+1), fixMapData+i*(span+1),
-							fixMapData+j*(span+1)+span, fixMapData+i*(span+1)+span, paint);					
+					canvas.drawRect(fixWidthMapData+j*(span+1), fixHeightMapData+i*(span+1),
+							fixWidthMapData+j*(span+1)+span, fixHeightMapData+i*(span+1)+span, paint);					
 				}
 			}
 		}
@@ -190,8 +191,8 @@ public class GameView extends View{
 			paint.setColor(Color.BLACK);
 			paint.setStrokeWidth(1);
 			canvas.drawLine(
-				edge[0][0]*(span+1)+span/2+fixMapData,edge[0][1]*(span+1)+span/2+fixMapData,
-				edge[1][0]*(span+1)+span/2+fixMapData,edge[1][1]*(span+1)+span/2+fixMapData,
+				edge[0][0]*(span+1)+span/2+fixWidthMapData,edge[0][1]*(span+1)+span/2+fixHeightMapData,
+				edge[1][0]*(span+1)+span/2+fixWidthMapData,edge[1][1]*(span+1)+span/2+fixHeightMapData,
 				paint
 			);
 		}
@@ -212,8 +213,8 @@ public class GameView extends View{
 					paint.setStyle(Style.STROKE);
 					paint.setStrokeWidth(2);
 					canvas.drawLine(	
-						tempA[0][0]*(span+1)+span/2+fixMapData,tempA[0][1]*(span+1)+span/2+fixMapData,
-						tempA[1][0]*(span+1)+span/2+fixMapData,tempA[1][1]*(span+1)+span/2+fixMapData, 
+						tempA[0][0]*(span+1)+span/2+fixWidthMapData,tempA[0][1]*(span+1)+span/2+fixHeightMapData,
+						tempA[1][0]*(span+1)+span/2+fixWidthMapData,tempA[1][1]*(span+1)+span/2+fixHeightMapData, 
 						paint
 					);
 					//William added
@@ -249,8 +250,8 @@ public class GameView extends View{
 					paint.setStyle(Style.STROKE);
 					paint.setStrokeWidth(2);				    
 					canvas.drawLine(	
-						tempA[0][0]*(span+1)+span/2+fixMapData,tempA[0][1]*(span+1)+span/2+fixMapData,
-						tempA[1][0]*(span+1)+span/2+fixMapData,tempA[1][1]*(span+1)+span/2+fixMapData, 
+						tempA[0][0]*(span+1)+span/2+fixWidthMapData,tempA[0][1]*(span+1)+span/2+fixHeightMapData,
+						tempA[1][0]*(span+1)+span/2+fixWidthMapData,tempA[1][1]*(span+1)+span/2+fixHeightMapData, 
 						paint
 					);			
 					postInvalidate();
@@ -263,9 +264,9 @@ public class GameView extends View{
 		    
 		}
 		//ø�s�X�o�I
-		canvas.drawBitmap(source, fixMapData+game.source[0]*(span+1), fixMapData+game.source[1]*(span+1), paint);
+		canvas.drawBitmap(source, fixWidthMapData+game.source[0]*(span+1), fixHeightMapData+game.source[1]*(span+1), paint);
 		//ø�s�ؼ��I
-	    canvas.drawBitmap(target, fixMapData+game.target[0]*(span+1), fixMapData+game.target[1]*(span+1), paint);
+	    canvas.drawBitmap(target, fixWidthMapData+game.target[0]*(span+1), fixHeightMapData+game.target[1]*(span+1), paint);
 		
 		//Log.i(TAG,"Draw source = "+ game.source[0] + " , " + game.source[1]);
 		//Log.i(TAG,"Draw target = "+ game.target[0] + " , " + game.target[1]);
@@ -407,15 +408,17 @@ public class GameView extends View{
 		// (row*(span+1)+fixMapData) = Y total length                //
 		///////////////////////////////////////////////////////////////
 		
-		int xGridSize = (col*(span+1)+fixMapData) / col;
-		int yGridSize = (row*(span+1)+fixMapData) / row;
+		//int xGridSize = (col*(span+1)+fixWidthMapData) / col;
+		//int yGridSize = (row*(span+1)+fixHeightMapData) / row;
+		int xGridSize = (col*(span+1)) / col;
+		int yGridSize = (row*(span+1)) / row;
 
-		if (x > fixMapData && y > fixMapData
-				&& x < (col * (span + 1) + fixMapData)
-				&& y < (row * (span + 1) + fixMapData)) {
+		if (x > fixWidthMapData && y > fixHeightMapData
+				&& x < (col * (span + 1) + fixWidthMapData)
+				&& y < (row * (span + 1) + fixHeightMapData)) {
 
-			int xPos = (int) x / xGridSize;
-			int yPos = (int) y / yGridSize;
+			int xPos = ((int) x - fixWidthMapData)  / xGridSize;
+			int yPos = ((int) y- fixHeightMapData) / yGridSize;
 			//Log.i(TAG,"( xPos , yPos ) = ( " + xPos + " , " + yPos + " )");
 			
 			//Avoid map object be used on onMyDraw function
