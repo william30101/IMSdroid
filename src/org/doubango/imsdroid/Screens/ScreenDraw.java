@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -18,13 +20,16 @@ public class ScreenDraw {
 	private ViewGroup viewGroup;
 	private LayoutParams params;
 	private Bitmap risehead, headup, bowhead, extendhead, shortenhead;
-
+	private int center_x, center_y, bitmapWidth, bitmapHeight;
+	
 	private DrawCanvas draw;
 	Paint paint;
 	
-	private int center_x, center_y;
-	private int bitmapWidth, bitmapHeight;
+	/* test */
+	private ScaleGestureDetector mScaleDetector;
+	private float mScaleFactor = 1.f;
 	
+
 
 	public ScreenDraw(Context context, ViewGroup viewGroup){
 		contextDraw = context;
@@ -34,13 +39,15 @@ public class ScreenDraw {
 		bowhead     = BitmapFactory.decodeResource(contextDraw.getResources(), R.drawable.xyzbowhead);
 		extendhead  = BitmapFactory.decodeResource(contextDraw.getResources(), R.drawable.xyzlong);
 		shortenhead = BitmapFactory.decodeResource(contextDraw.getResources(), R.drawable.xyzshort);
-		
-		
+	
 		draw = new DrawCanvas(contextDraw);
 		paint = new Paint();
 		
 		this.viewGroup = viewGroup;
+		viewGroup.setBackgroundResource(R.drawable.xyzrobot);
 		params = viewGroup.getLayoutParams();
+		
+	
 	}
 		
 	public void setFrameSize(int width, int height){
@@ -62,7 +69,6 @@ public class ScreenDraw {
 	}
 	
 	public void drawBitmap(){
-
 		draw.position(center_x, center_y);
 		draw();
 	}
@@ -94,6 +100,7 @@ public class ScreenDraw {
 			canvas.drawBitmap(bowhead, x, y, paint);
 			canvas.drawBitmap(extendhead, x, y, paint);
 			canvas.drawBitmap(shortenhead, x, y, paint);
+
 		}
 		
 		private void position(float pos_x, float pos_y){
@@ -102,22 +109,6 @@ public class ScreenDraw {
 		}
 		
 	}
-	
-	
 
-	
 
-	
-	
-	
-
-	
-	
-	
-
-	
-
-	
-	
-	
 }

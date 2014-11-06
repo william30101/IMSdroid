@@ -171,7 +171,8 @@ int drawable xyzlogin 0x7f020095
 int drawable xyzlong 0x7f020096
 int drawable xyznormal 0x7f020097
 int drawable xyzrisehead 0x7f020098
-int drawable xyzshort 0x7f020099
+int drawable xyzrobot 0x7f020099
+int drawable xyzshort 0x7f02009a
 int id AVBtn 0x7f090064
 int id BLEBtn 0x7f090065
 int id Button01 0x7f090134

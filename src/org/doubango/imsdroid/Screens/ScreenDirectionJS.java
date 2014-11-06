@@ -28,7 +28,7 @@ public class ScreenDirectionJS extends BaseScreen {
 	private XMPPSetting XMPPSet;
 	/* Parameter declare */
 	private volatile boolean isContinue = false;
-	private int joystickAction, menuAction;
+	private int joystickAction, menuAction, controlAction;
 	private String[] str = { "stop", "forward", "forRig", "right", "bacRig",
 			"backward", "bacLeft", "left", "forLeft" };
 	private int instructor; /* Direction Instructor */
@@ -44,8 +44,7 @@ public class ScreenDirectionJS extends BaseScreen {
 	
 	/* Test */
 	int height, width;
-	private ViewGroup viewgroup1;
-	private Context context1;
+
 
 	
 	/* Constructor */
@@ -70,6 +69,8 @@ public class ScreenDirectionJS extends BaseScreen {
 		
 		layout_robot = (RelativeLayout) findViewById(R.id.layout_robot);
 		setFrameParameter();
+		layout_robot.setOnTouchListener(controlListener);
+		
 		
 		XMPPSet = new XMPPSetting();
 		
@@ -101,10 +102,14 @@ public class ScreenDirectionJS extends BaseScreen {
 	}
 	
 	private void setFrameParameter(){
+		/* Version.1 */
 		myDraw = new ScreenDraw(getApplicationContext(), layout_robot);
 		myDraw.setFrameSize(width/5, height/2);
-		myDraw.setBitmapSize(width/5, height/2);
-		myDraw.drawBitmap();
+/*		myDraw.setBitmapSize(width/5, height/2);
+		myDraw.drawBitmap();*/
+
+		/* Version.2 */
+		
 		
 	}
 	
@@ -166,6 +171,32 @@ public class ScreenDirectionJS extends BaseScreen {
 		}
 
 	};
+	
+	OnTouchListener controlListener = new OnTouchListener() {
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			// TODO Auto-generated method stub
+			controlAction = event.getAction();
+
+			switch (controlAction) {
+			case MotionEvent.ACTION_DOWN:
+				break;
+			case MotionEvent.ACTION_UP:
+				break;
+			case MotionEvent.ACTION_MOVE:
+				break;
+			default:
+				break;
+			}
+
+			return true;
+		}
+
+	};
+	
+	
+	
+	
 
 	public class MyThread implements Runnable {
 		String SendMsg;
