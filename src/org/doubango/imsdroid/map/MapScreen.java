@@ -70,10 +70,12 @@ public class MapScreen{
         
 		//uartRec = new UartReceive();
 		//uartRec.RunRecThread();
-		
+    	//game.reloadMap(0,gameView);
         mySpinner = (Spinner)v.findViewById(R.id.mySpinner);
         targetSpinner = (Spinner)v.findViewById(R.id.target);
         gameView = (GameView) v.findViewById(R.id.gameView);
+        //game.reloadMap(0,gameView);
+        
         BSTextView = (TextView)v.findViewById(R.id.bushu);
         CDTextView = (TextView)v.findViewById(R.id.changdu);
         goButton = (Button) v.findViewById(R.id.go);

@@ -14,12 +14,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -29,7 +32,6 @@ public class GameView extends View{
 	private String TAG = "william";
 	private static  int VIEW_WIDTH = 640;
 	private static  int VIEW_HEIGHT = 640;
-
 
 	public Game game;
 	GameView GV;
@@ -47,19 +49,18 @@ public class GameView extends View{
 	
 	
 	// William Added
-	int touchX=0,touchY=0;
-	int x,y;
+	int touchX=0, touchY=0;
+	int x, y;
     int tempwidth=0;
     int tempheight=0;
     String inStr = "test";
     String inStr2 = "test2";
     int fixMapData = 5;
-    int fixWidthMapData = 100 , fixHeightMapData = 20;
+    int fixWidthMapData = 5 , fixHeightMapData = 5;
     int gridX = 0 , gridY = 0;
-    int row = 0;
-	int col = 0;
+    int row = 0, col = 0;
 	Game gamejava = new Game();
-	int drawBaseLine = 100 , drawIncrease = 20;
+	int drawBaseLine = 100, drawIncrease = 20;
 	
     public static int drawCount = 0; // For drawcircle position
     
@@ -69,7 +70,7 @@ public class GameView extends View{
     int[] old_pos;
     MapList maplist = new MapList();
     
-    public boolean refreshFlag = false  , doubleCmd = false , algorithmDone = false,mapTouchSize = false;
+    public boolean refreshFlag = false  , doubleCmd = false , algorithmDone = false, mapTouchSize = false;
     private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
     public static ShowThread st;
 	
@@ -82,6 +83,14 @@ public class GameView extends View{
 	private ArrayList<int[][] > pathQueue = new ArrayList<int[][] >();
 	
 	Canvas gcanvas;
+	
+	
+	/* shinhua add */
+	Context mContext;
+	int width, height, screenWidth, screenHeight, mapWidth, mapHeight;
+	int xcoordinate = 5, ycoordinate = 5;
+	private boolean touchDown = false, zoomout = false;
+	
 	
 	private Handler myHandler = new Handler(){
         public void handleMessage(Message msg) {
@@ -96,15 +105,20 @@ public class GameView extends View{
 	public GameView(Context context, AttributeSet attrs) {//�غc����
 		super(context, attrs);
 		if (isInEditMode()) { return; }
+		mContext = context;
 		st = new ShowThread();
 		
+		getScreenSize();
+
+
 		//singleThreadExecutor.execute(st);
 	}
-	protected void onDraw(Canvas canvas) {	//�мg��ø�s��k
+	protected void onDraw(Canvas canvas) {
 		try{
 			gcanvas = canvas;
-			onMyDraw(canvas);				//�I�s�ۤv��ø�s��k
-			
+			Log.i("shinhua", "OnDraw");
+			onMyDraw(canvas);				
+
 		}
 		catch(Exception e){}
 	}
@@ -226,7 +240,7 @@ public class GameView extends View{
 						getPathQueue().add(saveData);// Add correct path here.
 					}
 					count++;
-					if(tempA[1][0]==game.source[0]&&tempA[1][1]==game.source[1]){///���_��X�o�I
+					if(tempA[1][0]==game.source[0]&&tempA[1][1]==game.source[1]){
 						break;
 					}
 					temp=tempA[1];			
@@ -234,8 +248,8 @@ public class GameView extends View{
 				
 				
 
-				Message msg1 = myHandler.obtainMessage(1, count);//����TextView��r
-				myHandler.sendMessage(msg1);//�o�eHandler�T��
+				Message msg1 = myHandler.obtainMessage(1, count);
+				myHandler.sendMessage(msg1);
 			}			
 		}        	
 		else if(
@@ -263,9 +277,9 @@ public class GameView extends View{
 		    
 		    
 		}
-		//ø�s�X�o�I
+		// Canvas drawBitmap: Source
 		canvas.drawBitmap(source, fixWidthMapData+game.source[0]*(span+1), fixHeightMapData+game.source[1]*(span+1), paint);
-		//ø�s�ؼ��I
+		// Canvas drawBitmap: Target
 	    canvas.drawBitmap(target, fixWidthMapData+game.target[0]*(span+1), fixHeightMapData+game.target[1]*(span+1), paint);
 		
 		//Log.i(TAG,"Draw source = "+ game.source[0] + " , " + game.source[1]);
@@ -274,8 +288,7 @@ public class GameView extends View{
 		//William Added
 		onDrawText(canvas);
 		
-		if (drawCircleFlag == true)
-		{
+		if (drawCircleFlag == true){
 			DrawRobotPosition(canvas);
 		}
 		
@@ -287,96 +300,83 @@ public class GameView extends View{
 		//Log.i("william","test");
 		
         if (event.getAction() == MotionEvent.ACTION_DOWN  ) {
-        	
-        	int pointerCount = event.getPointerCount();
-        	
-        	//Log.i(TAG," touch down pointer count = " + pointerCount);
-        	
-        	// Avoid thread competition , when user touch 2 points at the same time
-        	// only one touch point can enter this scope.
-        	if (pointerCount > 1 )
-        		pointerCount = 1;
-        	{
-        		 for (int i = 0; i < pointerCount; i++) {
-        			
-		        	//RunThreadTouch(true);
-		        	
-		
-					touchX = (int) event.getX();
-					touchY = (int) event.getY();
-					tempwidth = touchX - x;
-					tempheight = touchY - y;
-		
-					int[] pos = getPosW(event);
+    		span = 30;    	 	
+    		getMapSize();
 
-					
-					//Log.i(TAG,"Map pos[0] pos[1] = ( " + pos[0] + " , " + pos[1] + " )");
-					
-					//Draw Grid position on canvas
-					gridX = pos[0];
-					gridY = pos[1];
-					
-					//Setting net Target postion
-					MapList.target[0][0] = pos[0];
-					MapList.target[0][1] = pos[1];
-
-					mapTouchSize = !mapTouchSize;
-					if (mapTouchSize)
-					{
-						mL = 100;
-						mT = 100;
-						mR = 640;
-						mB = 640;
-					}
-					else
-					{
-						mL = 0;
-						mT = 0;
-						mR = 320;
-						mB = 320;
-					}
-					
-					requestLayout();
-					//Update Target bitmap position
-					postInvalidate();
-					
-					//Log.i(TAG,"Thread ID = " + android.os.Process.myTid());
-					
-					// Avoid thread competition , when user touch 2 points at the same time
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} 
-        		 }
-        	}
-        	
-			//int[] pos = getPos(event);
-			//i = pos[0];
-			//j = pos[1];
-
-			/*synchronized (MapList.target) {
-				try {
-					MapList.target[0][0] = i;
-					MapList.target[0][1] = j;
-					// XMPPSet.XMPPSendText("james1", "direction left");
-					// Map.target
-					chk = true;
-// Avoid thread competition , when user touch 2 points at the same time
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-			}*/
+    		xcoordinate = (int)((screenWidth / 2) - (mapWidth / 2)); 
+    		ycoordinate = (int)((screenHeight / 2) - (mapHeight /2));
+    		fixWidthMapData = xcoordinate;
+    		fixHeightMapData = ycoordinate;
+    		
+    		requestLayout();
+    		touchDown = true;
+    		
+    		drawZoomMap(event);
         }
         else if (event.getAction() == MotionEvent.ACTION_UP) {
-        	//Log.i(TAG," touch up");
-        	//RunThreadTouch(false);
+        	if(zoomout){
+        		zoomout = false;
+            	
+        		span = 15;
+        		xcoordinate = ycoordinate = 5;
+        		fixWidthMapData = fixHeightMapData = 5;
+        		touchDown = false; 		
+        		requestLayout();
+            	drawZoomMap(event);
+        		
+        	}
         }
         return true;
 
 	}
+	
+	private void drawZoomMap(MotionEvent event){
+    	int pointerCount = event.getPointerCount();
+  
+    	// Avoid thread competition , when user touch 2 points at the same time
+    	// only one touch point can enter this scope.
+    	if (pointerCount > 1 )
+    		pointerCount = 1;
+    	{
+    		 for (int i = 0; i < pointerCount; i++) {
+				touchX = (int) event.getX();
+				touchY = (int) event.getY();
+
+				tempwidth = touchX - x;
+				tempheight = touchY - y;
+
+				int[] pos = getPosW(event);
+				// Draw Grid position on canvas
+				gridX = pos[0];
+				gridY = pos[1];
+
+				// Setting net Target postion
+				if (touchDown && pos[0] != -1 && pos[1] != -1){
+					MapList.target[0][0] = pos[0];
+					MapList.target[0][1] = pos[1];
+					zoomout = true;
+				}
+
+				// Update Target bitmap position
+				postInvalidate();
+
+				// Log.i(TAG,"Thread ID = " + android.os.Process.myTid());
+
+				// Avoid thread competition , when user touch 2 points at
+				// the same time
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		 }
+    	}
+	}
+	
+	
+	
+	
 	
 	
 	public int[] getPos(MotionEvent e){//±N®y¼Ð´«ºâ¦¨°}¦Cªººû¼Æ
@@ -455,22 +455,16 @@ public class GameView extends View{
 	// Use this thread for update canvas information frequently
 	// We don't use this now. 
 	public class ShowThread implements Runnable {
-
 		int delayTime = 50;
 
 		public ShowThread() {
 			refreshFlag = true;
-
 		}
 
 		public void run() {
-
 			while (refreshFlag) {
-				
-				
-					synchronized (inStr) {
-						
-						try {
+				synchronized (inStr) {
+					try {
 						postInvalidate();
 						//Log.i(TAG,"Thread ID = " + android.os.Process.myTid());
 						
@@ -481,9 +475,18 @@ public class GameView extends View{
 						}
 					}
 				
-
 			}
 		}
+	}
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+		if(game.map !=null){
+			getGridSize();
+		}
+		setMeasuredDimension(VIEW_WIDTH, VIEW_HEIGHT);
+		Log.i("shinhua", "OnMeasure");
+
 	}
 
 
@@ -491,29 +494,49 @@ public class GameView extends View{
 	protected void onLayout(boolean changed, int left, int top, int right,
 			int bottom) {
 		// TODO Auto-generated method stub
-
-		
-		Log.i(TAG," L T R B = " + mL +" " + mT + " " + mR + " " + mB );
-		super.onLayout(changed, mL, mT, mR, mB);
-		//this.getvi
+	
 	}
-
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {// �мg����k�A��^���O��View���j�p
-		setMeasuredDimension(VIEW_WIDTH, VIEW_HEIGHT);
+	
+	public void getScreenSize(){
+		WindowManager wm = (WindowManager) mContext.getSystemService(mContext.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		screenWidth  = size.x;
+		screenHeight = size.y;
+		Log.i("shinhua", "ScreenSize: " + screenWidth + " & " + screenHeight);
 	}
+	
+	public void getMapSize(){
+		map = game.map;
+		row = map.length;
+		col = map[0].length;
+		mapWidth = (col * (span+1));
+		mapHeight = ( row * (span + 1));
+		Log.i("shinhua", "MapSize: " + mapWidth + " & " + mapHeight);
+	}
+	
+	
+	public void getGridSize(){	
+		map = game.map;
+		row = map.length;
+		col = map[0].length;
+		width = (col * (span+1)) + xcoordinate;
+		height = ( row * (span + 1)) + ycoordinate;
+		setVIEW_WIDTH(width);
+		setVIEW_HEIGHT(height);
+	}
+	
 
 	public static int getVIEW_WIDTH() {
 		return VIEW_WIDTH;
 	}
-
 	public static void setVIEW_WIDTH(int vIEW_WIDTH) {
 		VIEW_WIDTH = vIEW_WIDTH;
 	}
-
 	public static int getVIEW_HEIGHT() {
 		return VIEW_HEIGHT;
 	}
-
 	public static void setVIEW_HEIGHT(int vIEW_HEIGHT) {
 		VIEW_HEIGHT = vIEW_HEIGHT;
 	}
@@ -525,12 +548,10 @@ public class GameView extends View{
 	public void setPathQueue(ArrayList<int[][] > pathQueue) {
 		this.pathQueue = pathQueue;
 	}
-	
-	public void PathQueueClear()
-	{
+
+	public void PathQueueClear(){
 		this.pathQueue.clear();
 	}
-	
 
 
 }

@@ -39,6 +39,7 @@ public class ScreenDirection extends BaseScreen{
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.screen_direction);
 		setBtn = new SetBtnFun();
 		setBtn.SetBtn(this);
