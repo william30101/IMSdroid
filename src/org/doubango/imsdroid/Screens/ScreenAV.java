@@ -33,6 +33,8 @@ import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.Services.IScreenService;
 import org.doubango.imsdroid.Utils.DialerUtils;
+import org.doubango.imsdroid.cmd.SetBtnFun;
+import org.doubango.imsdroid.map.MapScreen;
 import org.doubango.ngn.events.NgnInviteEventArgs;
 import org.doubango.ngn.events.NgnInviteEventTypes;
 import org.doubango.ngn.events.NgnMediaPluginEventArgs;
@@ -158,6 +160,7 @@ public class ScreenAV extends BaseScreen{
 	//private XMPPConnection connection;
 	//private XMPPSetting XMPPSet;
 	private SetBtnFun setBtn;
+	private MapScreen mapScreen;
 	
     //public Thread test = new Thread();
     //public Thread XMPPThreadv = new XMPPThread(); 
@@ -198,6 +201,8 @@ public class ScreenAV extends BaseScreen{
         //XMPPSet.XMPPStart();
 		//XMPPSet = new XMPPSetting();
 		setBtn = new SetBtnFun();
+		mapScreen = new MapScreen();
+		
 		
 		//XMPPThreadv = new XMPPThread();
 		//XMPPThreadv.start();
@@ -308,44 +313,6 @@ public class ScreenAV extends BaseScreen{
        
         setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 	}
-	
-	/*
-	class XMPPThread extends Thread {
-		 
-        @Override
-        public void run() {
-            // TODO Auto-generated method stub
-            super.run();
-            try {
-            	Log.i(TAG,"Name = "+mScreenAV.GetmName() + " Pass="+mScreenAV.GetmPass());
-            		XMPPSet.XMPPStart(mScreenAV.GetmName(),mScreenAV.GetmPass());
-
-            } catch (Exception e) {
-                 e.printStackTrace();
-            }
-        }
-    }
-	*/
-	/*
-	public void setConnection(XMPPConnection connection) {
-		this.connection = connection;
-		Log.i("XMPPClient", "Connection =  " + connection);
-		if (connection != null) {
-		    // Add a packet listener to get messages sent to us
-		    PacketFilter filter = new MessageTypeFilter(Message.Type.chat);
-		    connection.addPacketListener(new PacketListener() {
-		        public void processPacket(Packet packet) {
-		            Message message = (Message) packet;
-		            if (message.getBody() != null) {
-		                String fromName = StringUtils.parseBareAddress(message.getFrom());
-		                Log.i("XMPPClient", "Got text [" + message.getBody() + "] from [" + fromName + "]");
-		                //We receive message here.
-		                
-		            }
-		        }
-		    }, filter);
-		}
-    }*/
 	
 	@Override
 	protected void onStart() {
@@ -1078,6 +1045,7 @@ public class ScreenAV extends BaseScreen{
 			mViewLocalVideoPreview = (FrameLayout)mViewInCallVideo.findViewById(R.id.view_call_incall_video_FrameLayout_local_video);
 			mViewRemoteVideoPreview = (FrameLayout)mViewInCallVideo.findViewById(R.id.view_call_incall_video_FrameLayout_remote_video);
 			mViewButton = mInflater.inflate(R.layout.screen_direction, null);
+			
 		}
 		if(mTvDuration != null){
 			synchronized(mTvDuration){
@@ -1097,7 +1065,8 @@ public class ScreenAV extends BaseScreen{
 		// Video Consumer
 		loadVideoPreview();
 		Activity host = (Activity) mMainLayout.getContext();
-		setBtn.SetBtn(host );
+		setBtn.SetBtn(host);
+		mapScreen.MapScreen(host);
 		// Video Producer
 		startStopVideo(mAVSession.isSendingVideo());
 		

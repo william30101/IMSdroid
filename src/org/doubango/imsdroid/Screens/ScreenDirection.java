@@ -4,6 +4,8 @@ import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
+import org.doubango.imsdroid.cmd.SetBtnFun;
+import org.doubango.imsdroid.map.MapScreen;
 import org.doubango.ngn.services.INgnSipService;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,13 +20,13 @@ public class ScreenDirection extends BaseScreen{
 
 	
 	private final INgnSipService mSipService;
-	private static String TAG = ScreenTabDialer.class.getCanonicalName();
+	private static String TAG = ScreenDirection.class.getCanonicalName();
 	
 	//private XMPPSetting XMPPSet;
 	private UartReceive uartRec;
 	private SetBtnFun setBtn;
+	private MapScreen mapScreen;
 	
-	public Thread test = new Thread();
 	//private boolean isNeedAdd = false;
 	
 	public ScreenDirection() {
@@ -40,6 +42,10 @@ public class ScreenDirection extends BaseScreen{
 		setContentView(R.layout.screen_direction);
 		setBtn = new SetBtnFun();
 		setBtn.SetBtn(this);
+		
+		mapScreen = new MapScreen();
+		mapScreen.MapScreen(this);
+		
 		/*
 		ImageButton backward= (ImageButton)findViewById(R.id.backward);
 		ImageButton forward= (ImageButton)findViewById(R.id.forward);

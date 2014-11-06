@@ -109,7 +109,7 @@ public class ScreenTabHistory extends BaseScreen {
 		
 		mAItemChat = new ActionItem();
 		mAItemChat.setTitle("Chat");
-		mAItemChat.setOnClickListener(new View.OnClickListener() {
+		/*mAItemChat.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if(mSelectedEvent != null){
@@ -119,11 +119,11 @@ public class ScreenTabHistory extends BaseScreen {
 					}
 				}
 			}
-		});
+		});*/
 		
 		mAItemSMS = new ActionItem();
 		mAItemSMS.setTitle("SMS");
-		mAItemSMS.setOnClickListener(new View.OnClickListener() {
+		/*mAItemSMS.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if(mSelectedEvent != null){
@@ -133,7 +133,7 @@ public class ScreenTabHistory extends BaseScreen {
 					}
 				}
 			}
-		});
+		});*/
 		
 		mAItemShare = new ActionItem();
 		mAItemShare.setTitle("Share");

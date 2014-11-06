@@ -111,7 +111,7 @@ public class ScreenTabContacts extends BaseScreen {
 		
 		mAItemChat = new ActionItem();
 		mAItemChat.setTitle("Chat");
-		mAItemChat.setOnClickListener(new View.OnClickListener() {
+		/*mAItemChat.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				ScreenChat.startChat(mSelectedContact.getPrimaryNumber(), false);
@@ -119,11 +119,11 @@ public class ScreenTabContacts extends BaseScreen {
 					mLasQuickAction.dismiss();
 				}
 			}
-		});
+		});*/
 		
 		mAItemSMS = new ActionItem();
 		mAItemSMS.setTitle("SMS");
-		mAItemSMS.setOnClickListener(new View.OnClickListener() {
+		/*mAItemSMS.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				ScreenChat.startChat(mSelectedContact.getPrimaryNumber(), true);
@@ -131,7 +131,7 @@ public class ScreenTabContacts extends BaseScreen {
 					mLasQuickAction.dismiss();
 				}
 			}
-		});
+		});*/
 		
 		mAItemShare = new ActionItem();
 		mAItemShare.setTitle("Share");

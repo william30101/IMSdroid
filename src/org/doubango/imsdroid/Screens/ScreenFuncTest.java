@@ -52,7 +52,6 @@ public class ScreenFuncTest extends BaseScreen {
 	    	switch(v.getId()){
 	    		case R.id.DirectionBtn : 
 	    			mScreenService.show(ScreenDirection.class, "Direction");
-	    			//mScreenService.show(ScreenXYZsignin.class, "Direction");
 	    		break;
 	    		case R.id.AVBtn : 
 	    			mScreenService.show(ScreenTabDialer.class, "Dial");

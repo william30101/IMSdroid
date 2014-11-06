@@ -23,7 +23,6 @@ import org.doubango.imsdroid.Screens.BaseScreen;
 import org.doubango.imsdroid.Screens.IBaseScreen;
 import org.doubango.imsdroid.Screens.ScreenAV;
 import org.doubango.imsdroid.Screens.ScreenAVQueue;
-import org.doubango.imsdroid.Screens.ScreenChatQueue;
 import org.doubango.imsdroid.Screens.ScreenFileTransferQueue;
 import org.doubango.imsdroid.Screens.ScreenFuncTest;
 import org.doubango.imsdroid.Screens.ScreenHome;
@@ -126,8 +125,8 @@ public class Main extends ActivityGroup {
         }
         else if(mScreenService != null){
         	//mScreenService.show(ScreenHome.class);
-        	//mScreenService.show(ScreenWLogin.class);
-        	mScreenService.show(ScreenXYZsignin.class);
+        	mScreenService.show(ScreenWLogin.class);
+        	//mScreenService.show(ScreenXYZsignin.class);
         }
     }
     
@@ -241,8 +240,8 @@ public class Main extends ActivityGroup {
 						break;
 					default:
 						if(!mScreenService.show(id)){
-							//mScreenService.show(ScreenWLogin.class);
-							mScreenService.show(ScreenXYZsignin.class);
+							mScreenService.show(ScreenWLogin.class);
+							//mScreenService.show(ScreenXYZsignin.class);
 						}
 						break;
 				}
@@ -301,9 +300,9 @@ public class Main extends ActivityGroup {
 				break;
 				
 			// Show Chat Queue
-			case ACTION_SHOW_CHAT_SCREEN:
+/*			case ACTION_SHOW_CHAT_SCREEN:
 				mScreenService.show(ScreenChatQueue.class);
-				break;
+				break;*/
 		}
 	}
     

@@ -3,6 +3,13 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent" >
 
+     <org.doubango.imsdroid.map.GameView
+         android:id="@+id/gameView"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignParentLeft="true"
+         android:layout_alignParentTop="true" />
+    
     <Button
         android:id="@+id/uartWriteBtn"
         android:layout_width="wrap_content"
@@ -10,22 +17,6 @@
         android:layout_alignParentRight="true"
         android:text="WriteUart"
         android:visibility="invisible" />
-
-    <Button
-        android:id="@+id/btn3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/uartReadBtn"
-        android:layout_alignRight="@+id/uartWriteBtn"
-        android:text="SendEncoder" />
-
-    <ImageButton
-        android:id="@+id/backward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/stop"
-        android:layout_below="@+id/stop"
-        android:src="@drawable/back" />
 
     <ImageButton
         android:id="@+id/forRig"
@@ -36,71 +27,12 @@
         android:src="@drawable/forrig" />
 
     <ImageButton
-        android:id="@+id/bacLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/backward"
-        android:layout_toLeftOf="@+id/backward"
-        android:src="@drawable/backleft" />
-
-    <ImageButton
         android:id="@+id/bacRig"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/backward"
         android:layout_alignLeft="@+id/forRig"
         android:src="@drawable/backrig" />
-
-    <Button
-        android:id="@+id/uartBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/statusText"
-        android:minHeight="32dp"
-        android:text="Open Uart" />
-
-    <Button
-        android:id="@+id/uartReadBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/uartBtn"
-        android:minHeight="32dip"
-        android:text="1.INIT 2.MODE" />
-
-    <Button
-        android:id="@+id/btn1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/uartReadBtn"
-        android:minHeight="32dip"
-        android:text="3.START" />
-
-    <Button
-        android:id="@+id/thrbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/uartBtn"
-        android:layout_below="@+id/btn1"
-        android:text="startThread" />
-
-    <ImageButton
-        android:id="@+id/forLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/uartReadBtn"
-        android:layout_toLeftOf="@+id/stop"
-        android:src="@drawable/fordleft" />
-
-    <ImageButton
-        android:id="@+id/left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thrbtn"
-        android:layout_toLeftOf="@+id/forward"
-        android:src="@drawable/left" />
 
     <Button
         android:id="@+id/stretchBottom"
@@ -118,16 +50,6 @@
         android:layout_alignBottom="@+id/stretchBottom"
         android:layout_alignLeft="@+id/angleMiddle"
         android:text="Bottom" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn1"
-        android:layout_marginRight="22dp"
-        android:layout_toLeftOf="@+id/forLeft"
-        android:text="Stretch"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
         android:id="@+id/stretchTop"
@@ -155,31 +77,6 @@
         android:layout_alignLeft="@+id/angleMiddle"
         android:text="Top" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn1"
-        android:layout_alignLeft="@+id/angleTop"
-        android:text="Angle"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <ImageButton
-        android:id="@+id/stop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/right"
-        android:layout_toLeftOf="@+id/bacRig"
-        android:src="@drawable/stop" />
-
-    <ImageButton
-        android:id="@+id/right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/left"
-        android:layout_toRightOf="@+id/stop"
-        android:src="@drawable/right" />
-
     <ImageButton
         android:id="@+id/forward"
         android:layout_width="wrap_content"
@@ -188,20 +85,250 @@
         android:layout_toLeftOf="@+id/forRig"
         android:src="@drawable/forward" />
 
+    <Button
+        android:id="@+id/uartBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/uartWriteBtn"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="131dp"
+        android:layout_toLeftOf="@+id/angleTop"
+        android:minHeight="32dp"
+        android:text="Open Uart" />
+
+    <Button
+        android:id="@+id/uartReadBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/uartBtn"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@+id/angleTop"
+        android:minHeight="32dip"
+        android:text="1.INIT 2.MODE" />
+
+    <Button
+        android:id="@+id/btn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/uartReadBtn"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@+id/angleTop"
+        android:minHeight="32dip"
+        android:text="3.START" />
+
+    <Button
+        android:id="@+id/thrbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn1"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@+id/angleTop"
+        android:text="startThread" />
+
+    <Button
+        android:id="@+id/btn3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp"
+        android:text="SendEncoder" />
+
     <TextView
         android:id="@+id/nanoStatusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_alignTop="@+id/uartBtn"
+        android:layout_above="@+id/uartBtn"
+        android:layout_alignRight="@+id/textView2"
         android:text="Nano mxc2 Disconnect" />
+
+    <ImageButton
+        android:id="@+id/left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/forLeft"
+        android:layout_below="@+id/btn3"
+        android:src="@drawable/left" />
 
     <TextView
         android:id="@+id/drivingStatusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/uartReadBtn"
-        android:layout_alignLeft="@+id/nanoStatusText"
+        android:layout_alignTop="@+id/left"
+        android:layout_toRightOf="@+id/uartBtn"
         android:text="Driving mxc4 Disconnect" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView2"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignLeft="@+id/nanoStatusText"
+        android:text="Angle"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageButton
+        android:id="@+id/backward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/angleMiddle"
+        android:layout_toRightOf="@+id/bacLeft"
+        android:src="@drawable/back" />
+
+    <ImageButton
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/forLeft"
+        android:layout_toLeftOf="@+id/bacRig"
+        android:src="@drawable/stop" />
+
+    <ImageButton
+        android:id="@+id/right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/stop"
+        android:layout_toRightOf="@+id/stop"
+        android:src="@drawable/right" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/drivingStatusText"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="23dp"
+        android:layout_toLeftOf="@+id/left"
+        android:text="Stretch"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageButton
+        android:id="@+id/forLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bacLeft"
+        android:layout_below="@+id/left"
+        android:src="@drawable/fordleft" />
+
+    <ImageButton
+        android:id="@+id/bacLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stop"
+        android:layout_toLeftOf="@+id/stop"
+        android:src="@drawable/backleft" />
+
+    <AbsoluteLayout
+        android:id="@+id/AbsoluteLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" >
+
+        <Button
+            android:id="@+id/map1Change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="744dp"
+            android:layout_y="397dp"
+            android:text="map1"/>
+
+        <Button
+            android:id="@+id/map2Change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="813dp"
+            android:layout_y="397dp"
+            android:text="map2"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/changdu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="374dp"
+            android:layout_y="9dp"
+            android:text="Path:" />
+
+        <TextView
+            android:id="@+id/bushu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="431dp"
+            android:layout_y="12dp"
+            android:text="Step:" />
+
+        <Button
+            android:id="@+id/williamSignBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="788dp"
+            android:layout_y="446dp"
+            android:text="williamSign" />
+
+        <Button
+            android:id="@+id/jamesSignBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="790dp"
+            android:layout_y="378dp"
+            android:text="jamesSign" />
+
+        <Button
+            android:id="@+id/stswatBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="679dp"
+            android:layout_y="443dp"
+            android:text="sTswatBtn" />
+
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="691dp"
+            android:layout_y="381dp"
+            android:text="Save" />
+
+        <Spinner
+            android:id="@+id/target"
+            android:layout_width="161dp"
+            android:layout_height="53dp"
+            android:layout_x="503dp"
+            android:layout_y="437dp" />
+
+        <Spinner
+            android:id="@+id/mySpinner"
+            android:layout_width="150px"
+            android:layout_height="45dp"
+            android:layout_x="498dp"
+            android:layout_y="374dp" />
+
+        <Button
+            android:id="@+id/resetBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="397dp"
+            android:layout_y="446dp"
+            android:text="Reset" />
+
+        <Button
+            android:id="@+id/go"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="909dp"
+            android:layout_y="383dp"
+            android:text="Start" />
+
+        <Button
+            android:id="@+id/runBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="907dp"
+            android:layout_y="441dp"
+            android:text="Run" />
+
+    </AbsoluteLayout>
 
 </RelativeLayout>

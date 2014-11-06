@@ -56,7 +56,7 @@ public class ScreenXYZLogin extends BaseScreen {
 	private EditText editTextRealm, editTextImpi,  editTextImpu;
 	private CheckBox checkBoxEarlyIMS;
 	
-	private ScreenComponent screen;
+
 	int horizontalscope, verticalscope;	
 	
 	public ScreenXYZLogin() {

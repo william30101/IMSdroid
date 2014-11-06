@@ -122,7 +122,7 @@ public class ScreenTabMessages extends BaseScreen {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			final NgnHistoryEvent event = (NgnHistoryEvent)parent.getItemAtPosition(position);
 			if(event != null){
-				ScreenChat.startChat(event.getRemoteParty(), true);
+				//ScreenChat.startChat(event.getRemoteParty(), true);
 			}
 		}
 	};
