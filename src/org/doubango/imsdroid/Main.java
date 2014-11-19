@@ -126,7 +126,7 @@ public class Main extends ActivityGroup {
         else if(mScreenService != null){
         	//mScreenService.show(ScreenHome.class);
         	mScreenService.show(ScreenWLogin.class);
-        	//mScreenService.show(ScreenXYZsignin.class);
+//        	mScreenService.show(ScreenXYZsignin.class);
         }
     }
     
@@ -240,8 +240,8 @@ public class Main extends ActivityGroup {
 						break;
 					default:
 						if(!mScreenService.show(id)){
-							mScreenService.show(ScreenWLogin.class);
-							//mScreenService.show(ScreenXYZsignin.class);
+//							mScreenService.show(ScreenWLogin.class);
+							mScreenService.show(ScreenXYZsignin.class);
 						}
 						break;
 				}

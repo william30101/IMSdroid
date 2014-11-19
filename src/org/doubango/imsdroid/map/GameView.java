@@ -109,7 +109,7 @@ public class GameView extends View{
 		st = new ShowThread();
 		
 		getScreenSize();
-
+		Log.i("shinhua", "GameView Constructor");
 
 		//singleThreadExecutor.execute(st);
 	}
@@ -174,7 +174,7 @@ public class GameView extends View{
 	protected void onMyDraw(Canvas canvas){
 		super.onDraw(canvas);
 		
-		canvas.drawColor(Color.GRAY);
+		canvas.drawColor(Color.GRAY);	// annotate this line, the view don't show gray background 
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Style.STROKE);
 		//canvas.drawRect(5, 55, 325, 376, paint);
@@ -200,7 +200,7 @@ public class GameView extends View{
 		}
 
 		ArrayList<int[][]> searchProcess=game.getSearchProcess();
-		for(int k=0;k<searchProcess.size();k++){//ø�s�M��L�{
+		for(int k=0;k<searchProcess.size();k++){
 			int[][] edge=searchProcess.get(k);  
 			paint.setColor(Color.BLACK);
 			paint.setStrokeWidth(1);
@@ -211,72 +211,44 @@ public class GameView extends View{
 			);
 		}
 
-		if(
-			mySpinner.getSelectedItemId()==0||
-			mySpinner.getSelectedItemId()==1||
-			mySpinner.getSelectedItemId()==2
-		){
-			if(game.isPathFlag()){
-				HashMap<String,int[][]> hm=game.hm;
-				int[] temp=game.target;
-				int count=0;
-				
-				while(true){
-					int[][] tempA=hm.get(temp[0]+":"+temp[1]);
-					paint.setColor(Color.BLACK);
-					paint.setStyle(Style.STROKE);
-					paint.setStrokeWidth(2);
-					canvas.drawLine(	
-						tempA[0][0]*(span+1)+span/2+fixWidthMapData,tempA[0][1]*(span+1)+span/2+fixHeightMapData,
-						tempA[1][0]*(span+1)+span/2+fixWidthMapData,tempA[1][1]*(span+1)+span/2+fixHeightMapData, 
-						paint
-					);
-					//William added
-					if (algorithmDone == false)
-					{
-						
-						int[][] saveData = {{tempA[0][0],tempA[0][1]},
-										{tempA[1][0],tempA[1][1]}};
-						getPathQueue().add(saveData);// Add correct path here.
-					}
-					count++;
-					if(tempA[1][0]==game.source[0]&&tempA[1][1]==game.source[1]){
-						break;
-					}
-					temp=tempA[1];			
+
+		if(game.isPathFlag()){
+			HashMap<String,int[][]> hm=game.hm;
+			int[] temp=game.target;
+			int count=0;
+			
+			while(true){
+				int[][] tempA=hm.get(temp[0]+":"+temp[1]);
+				paint.setColor(Color.BLACK);
+				paint.setStyle(Style.STROKE);
+				paint.setStrokeWidth(2);
+				canvas.drawLine(	
+					tempA[0][0]*(span+1)+span/2+fixWidthMapData,tempA[0][1]*(span+1)+span/2+fixHeightMapData,
+					tempA[1][0]*(span+1)+span/2+fixWidthMapData,tempA[1][1]*(span+1)+span/2+fixHeightMapData, 
+					paint
+				);
+				//William added
+				if (algorithmDone == false)
+				{
+					
+					int[][] saveData = {{tempA[0][0],tempA[0][1]},
+									{tempA[1][0],tempA[1][1]}};
+					getPathQueue().add(saveData);// Add correct path here.
 				}
+				count++;
+				if(tempA[1][0]==game.source[0]&&tempA[1][1]==game.source[1]){
+					break;
+				}
+				temp=tempA[1];			
+			}
 				
 				
 
 				Message msg1 = myHandler.obtainMessage(1, count);
 				myHandler.sendMessage(msg1);
 			}			
-		}        	
-		else if(
-			mySpinner.getSelectedItemId()==3||
-			mySpinner.getSelectedItemId()==4
-		){//"Dijkstra"ø�s
-		    if(game.isPathFlag()){
-		    	HashMap<String,ArrayList<int[][]>> hmPath=game.hmPath;
-		    	ArrayList<int[][]> alPath=hmPath.get(game.target[0]+":"+game.target[1]);
-				for(int[][] tempA:alPath){
-					paint.setColor(Color.BLACK);
-					paint.setStyle(Style.STROKE);
-					paint.setStrokeWidth(2);				    
-					canvas.drawLine(	
-						tempA[0][0]*(span+1)+span/2+fixWidthMapData,tempA[0][1]*(span+1)+span/2+fixHeightMapData,
-						tempA[1][0]*(span+1)+span/2+fixWidthMapData,tempA[1][1]*(span+1)+span/2+fixHeightMapData, 
-						paint
-					);			
-					postInvalidate();
-				}
+		        	
 
-				Message msg1 = myHandler.obtainMessage(1, alPath.size());//����TextView��r
-				myHandler.sendMessage(msg1);
-		    }
-		    
-		    
-		}
 		// Canvas drawBitmap: Source
 		canvas.drawBitmap(source, fixWidthMapData+game.source[0]*(span+1), fixHeightMapData+game.source[1]*(span+1), paint);
 		// Canvas drawBitmap: Target
@@ -402,7 +374,6 @@ public class GameView extends View{
 		double x = e.getX();
 		double y = e.getY();
 
-		
 		///////////////////////////////////////////////////////////////
 		// (col*(span+1)+fixMapData) = X total length                //
 		// (row*(span+1)+fixMapData) = Y total length                //
@@ -482,21 +453,25 @@ public class GameView extends View{
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
 		if(game.map !=null){
-			getGridSize();
+			setGridSize();
 		}
-		setMeasuredDimension(VIEW_WIDTH, VIEW_HEIGHT);
+		else{
+			setVIEW_WIDTH( (int)(screenWidth / 2));
+			setVIEW_HEIGHT((int)(screenHeight / 2));
+		}
+		
 		Log.i("shinhua", "OnMeasure");
-
+		setMeasuredDimension(VIEW_WIDTH, VIEW_HEIGHT);
 	}
 
 
-	@Override
+/*	@Override
 	protected void onLayout(boolean changed, int left, int top, int right,
 			int bottom) {
 		// TODO Auto-generated method stub
 	
-	}
-	
+	}*/
+
 	public void getScreenSize(){
 		WindowManager wm = (WindowManager) mContext.getSystemService(mContext.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
@@ -517,7 +492,7 @@ public class GameView extends View{
 	}
 	
 	
-	public void getGridSize(){	
+	public void setGridSize(){	
 		map = game.map;
 		row = map.length;
 		col = map[0].length;

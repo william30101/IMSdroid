@@ -41,11 +41,17 @@ public class ScreenDirection extends BaseScreen{
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.screen_direction);
+		//setContentView(R.layout.screen_directionjs);
+		
+		
 		setBtn = new SetBtnFun();
 		setBtn.SetBtn(this);
 		
 		mapScreen = new MapScreen();
 		mapScreen.MapScreen(this);
+		
+		
+		
 		
 		/*
 		ImageButton backward= (ImageButton)findViewById(R.id.backward);

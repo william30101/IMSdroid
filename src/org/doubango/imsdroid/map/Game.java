@@ -77,7 +77,7 @@ public class Game {//�t��k���O
 				try {
 					mapId = 0;
 					// map = MapList.customized_map3[0];
-					map = MapList.map[mapId];
+					map = MapList.customized_map2[mapId];
 					gv.setVIEW_WIDTH(640);
 					gv.setVIEW_HEIGHT(640);
 					gv.requestLayout();

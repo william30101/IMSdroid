@@ -55,11 +55,7 @@ public class MapScreen{
 	private XMPPSetting XMPPSet;
 	//public Thread XMPPThreadv = new XMPPThread(); 
 	
-
-	
 	EditText nameText;
-	
-	
 	
 	private ArrayAdapter<String> adapter;
 	private ArrayAdapter<String> adapter2;

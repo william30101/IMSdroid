@@ -5,6 +5,9 @@ import java.util.concurrent.Executors;
 
 import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.XMPPSetting;
+import org.doubango.imsdroid.cmd.SetBtnFun;
+import org.doubango.imsdroid.map.MapScreen;
+import org.doubango.imsdroid.map.MapScreenView;
 import org.doubango.ngn.services.INgnSipService;
 
 import android.content.Context;
@@ -45,7 +48,11 @@ public class ScreenDirectionJS extends BaseScreen {
 	/* Test */
 	int height, width;
 
-
+	private SetBtnFun setBtn;
+	private MapScreenView mapScreenView;
+	
+	
+	
 	
 	/* Constructor */
 	public ScreenDirectionJS() {
@@ -67,10 +74,14 @@ public class ScreenDirectionJS extends BaseScreen {
 		layout_menu.setOnTouchListener(menukeyListener);
 		//setMenukeyParameter();
 		
-		layout_robot = (RelativeLayout) findViewById(R.id.layout_robot);
-		setFrameParameter();
-		layout_robot.setOnTouchListener(controlListener);
+//		layout_robot = (RelativeLayout) findViewById(R.id.layout_robot);
+//		setFrameParameter();
+//		layout_robot.setOnTouchListener(controlListener);
+//		
 		
+
+		mapScreenView = new MapScreenView();
+		mapScreenView.MapScreenView(this);
 		
 		XMPPSet = new XMPPSetting();
 		

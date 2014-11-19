@@ -3,6 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     
+    
+    <org.doubango.imsdroid.map.GameView
+        android:id="@+id/gameView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+    
     <RelativeLayout
         android:id="@+id/layout_joystick"
         android:layout_width="100dp"

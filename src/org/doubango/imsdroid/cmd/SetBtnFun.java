@@ -175,7 +175,6 @@ public class SetBtnFun {
 
 			switch (btnMsg) {
 			case R.id.map1Change:
-
 				game.reloadMap(0,gameView);
 
 				break;
