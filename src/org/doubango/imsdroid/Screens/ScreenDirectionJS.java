@@ -6,14 +6,12 @@ import java.util.concurrent.Executors;
 import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.cmd.SetBtnFun;
-import org.doubango.imsdroid.map.MapScreen;
+import org.doubango.imsdroid.map.Game;
 import org.doubango.imsdroid.map.MapScreenView;
+import org.doubango.imsdroid.map.SendCmdToBoardAlgorithm;
 import org.doubango.ngn.services.INgnSipService;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
+import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +19,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 public class ScreenDirectionJS extends BaseScreen {
@@ -31,7 +29,7 @@ public class ScreenDirectionJS extends BaseScreen {
 	private XMPPSetting XMPPSet;
 	/* Parameter declare */
 	private volatile boolean isContinue = false;
-	private int joystickAction, menuAction, controlAction;
+	private int joystickAction, menuAction, navigationAction;
 	private String[] str = { "stop", "forward", "forRig", "right", "bacRig",
 			"backward", "bacLeft", "left", "forLeft" };
 	private int instructor; /* Direction Instructor */
@@ -50,15 +48,17 @@ public class ScreenDirectionJS extends BaseScreen {
 
 	private SetBtnFun setBtn;
 	private MapScreenView mapScreenView;
+	SendCmdToBoardAlgorithm SendAlgo;
 	
-	
+	public Game game;
 	
 	
 	/* Constructor */
 	public ScreenDirectionJS() {
 		super(SCREEN_TYPE.DIALER_T, TAG);
 		mSipService = getEngine().getSipService();
-	}
+	}	
+	
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,7 +68,7 @@ public class ScreenDirectionJS extends BaseScreen {
 		layout_joystick = (RelativeLayout) findViewById(R.id.layout_joystick);
 		setJoyStickParameter();
 		layout_joystick.setOnTouchListener(joystickListener);
-		
+	
 
 		layout_menu = (RelativeLayout) findViewById(R.id.screen_menu);
 		layout_menu.setOnTouchListener(menukeyListener);
@@ -78,14 +78,22 @@ public class ScreenDirectionJS extends BaseScreen {
 //		setFrameParameter();
 //		layout_robot.setOnTouchListener(controlListener);
 //		
+
+		
 		
 
 		mapScreenView = new MapScreenView();
 		mapScreenView.MapScreenView(this);
+
+
 		
 		XMPPSet = new XMPPSetting();
 		
 	}
+	
+	
+	
+
 	
 	private void getScreenSize(){
 		Display display = getWindowManager().getDefaultDisplay();
@@ -123,10 +131,6 @@ public class ScreenDirectionJS extends BaseScreen {
 		
 		
 	}
-	
-
-	
-	
 
 	/* The OnTouchListener of Draw JoyStick */
 	OnTouchListener joystickListener = new OnTouchListener() {
@@ -182,32 +186,10 @@ public class ScreenDirectionJS extends BaseScreen {
 		}
 
 	};
-	
-	OnTouchListener controlListener = new OnTouchListener() {
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			// TODO Auto-generated method stub
-			controlAction = event.getAction();
 
-			switch (controlAction) {
-			case MotionEvent.ACTION_DOWN:
-				break;
-			case MotionEvent.ACTION_UP:
-				break;
-			case MotionEvent.ACTION_MOVE:
-				break;
-			default:
-				break;
-			}
+	
+	
 
-			return true;
-		}
-
-	};
-	
-	
-	
-	
 
 	public class MyThread implements Runnable {
 		String SendMsg;

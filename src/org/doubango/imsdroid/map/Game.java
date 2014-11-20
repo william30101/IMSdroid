@@ -52,12 +52,12 @@ public class Game {//�t��k���O
 	private Handler myHandler = new Handler(){//�Ψӧ�sUI�����
         public void handleMessage(Message msg){
         	if(msg.what == 1){//���ܫ��s���A
-        		goButton.setEnabled(true);
-        		runButton.setEnabled(true);
+        		//goButton.setEnabled(true);
+        		//runButton.setEnabled(true);
         	}
         	else if(msg.what == 2){//���ܨB�ƪ�TextView����
-        		BSTextView.setText("" +
-        				"Count= " + (Integer)msg.obj);
+        		//BSTextView.setText("" +
+        		//		"Count= " + (Integer)msg.obj);
         	}
         }
 	};
@@ -121,6 +121,7 @@ public class Game {//�t��k���O
 
 	public void runAlgorithm() {// �B��t��k
 		clearState();
+		algorithmId = 1;
 		if (map != null) {
 			switch (algorithmId) {
 			case 0:// �`���u��t��k

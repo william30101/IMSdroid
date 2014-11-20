@@ -34,7 +34,9 @@ import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.Services.IScreenService;
 import org.doubango.imsdroid.Utils.DialerUtils;
 import org.doubango.imsdroid.cmd.SetBtnFun;
+import org.doubango.imsdroid.cmd.SetJSFunction;
 import org.doubango.imsdroid.map.MapScreen;
+import org.doubango.imsdroid.map.MapScreenView;
 import org.doubango.ngn.events.NgnInviteEventArgs;
 import org.doubango.ngn.events.NgnInviteEventTypes;
 import org.doubango.ngn.events.NgnMediaPluginEventArgs;
@@ -162,6 +164,10 @@ public class ScreenAV extends BaseScreen{
 	private SetBtnFun setBtn;
 	private MapScreen mapScreen;
 	
+	private SetJSFunction setJS;
+	private MapScreenView mapScreenView;
+
+	
     //public Thread test = new Thread();
     //public Thread XMPPThreadv = new XMPPThread(); 
     //private boolean isNeedAdd = false;
@@ -203,6 +209,8 @@ public class ScreenAV extends BaseScreen{
 		setBtn = new SetBtnFun();
 		mapScreen = new MapScreen();
 		
+		setJS = new SetJSFunction();
+		mapScreenView = new MapScreenView();
 		
 		//XMPPThreadv = new XMPPThread();
 		//XMPPThreadv.start();
@@ -217,6 +225,8 @@ public class ScreenAV extends BaseScreen{
 			Log.e(TAG, "Invalid audio/video session");
 			finish(); 
 			mScreenService.show(ScreenFuncTest.class);
+			//mScreenService.show(ScreenDirectionJS.class);
+			
 			return;
 		}
 		mAVSession = NgnAVSession.getSession(NgnStringUtils.parseLong(super.mId, -1));
@@ -224,6 +234,7 @@ public class ScreenAV extends BaseScreen{
 			Log.e(TAG, String.format("Cannot find audio/video session with id=%s", super.mId));
 			finish(); 
 			mScreenService.show(ScreenFuncTest.class);
+			//mScreenService.show(ScreenDirectionJS.class);
 			return;
 		}
 		mAVSession.incRef();
@@ -593,6 +604,8 @@ public class ScreenAV extends BaseScreen{
 	@Override
 	public boolean back(){
 		boolean ret =  mScreenService.show(ScreenFuncTest.class);
+//		boolean ret =  mScreenService.show(ScreenDirectionJS.class);
+		
 		if(ret){
 			mScreenService.destroy(getId());
 		}
@@ -1044,7 +1057,8 @@ public class ScreenAV extends BaseScreen{
 			mViewInCallVideo = mInflater.inflate(R.layout.view_call_incall_video, null);
 			mViewLocalVideoPreview = (FrameLayout)mViewInCallVideo.findViewById(R.id.view_call_incall_video_FrameLayout_local_video);
 			mViewRemoteVideoPreview = (FrameLayout)mViewInCallVideo.findViewById(R.id.view_call_incall_video_FrameLayout_remote_video);
-			mViewButton = mInflater.inflate(R.layout.screen_direction, null);
+			//mViewButton = mInflater.inflate(R.layout.screen_direction, null);
+			mViewButton = mInflater.inflate(R.layout.screen_directionjs, null);
 			
 		}
 		if(mTvDuration != null){
@@ -1065,8 +1079,13 @@ public class ScreenAV extends BaseScreen{
 		// Video Consumer
 		loadVideoPreview();
 		Activity host = (Activity) mMainLayout.getContext();
-		setBtn.SetBtn(host);
-		mapScreen.MapScreen(host);
+//		setBtn.SetBtn(host);
+//		mapScreen.MapScreen(host);
+		
+		setJS.SetJSFunction(host);
+
+		mapScreenView.MapScreenView(host);
+		
 		// Video Producer
 		startStopVideo(mAVSession.isSendingVideo());
 		
@@ -1203,6 +1222,7 @@ public class ScreenAV extends BaseScreen{
 					boolean gotoHome = (currentScreen != null && currentScreen.getId() == getId());
 					if(gotoHome){
 						mScreenService.show(ScreenFuncTest.class);
+//						mScreenService.show(ScreenDirectionJS.class);
 					}
 					mScreenService.destroy(getId());
 				}});

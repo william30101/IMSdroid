@@ -144,8 +144,9 @@ public class ScreenXYZLogin extends BaseScreen {
 						case UNREGISTRATION_NOK:
 						default:
 							Log.i(TAG,"Show main view here");
-							//mScreenService.show(ScreenFuncTest.class, "FuncTest");
-							mScreenService.show(ScreenDirectionJS.class, "ScreenDirectionJS");
+							mScreenService.show(ScreenFuncTest.class, "FuncTest");
+							//mScreenService.show(ScreenDirectionJS.class, "ScreenDirectionJS");
+							
 							break;
 					}
 				}

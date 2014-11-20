@@ -22,15 +22,6 @@
         android:background="@drawable/joystickbg" >
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/screen_menu"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignRight="@+id/layout_joystick"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/screenmenu">
-    </RelativeLayout>
-
      <RelativeLayout
          android:id="@+id/layout_robot"
          android:layout_width="80dp"
@@ -40,8 +31,24 @@
          android:layout_alignParentTop="true" >
 
      </RelativeLayout>
-     
 
+     <RelativeLayout
+         android:id="@+id/screen_menu"
+         android:layout_width="100dp"
+         android:layout_height="100dp"
+         android:layout_alignParentLeft="true"
+         android:layout_alignTop="@+id/layout_joystick"
+         android:layout_marginLeft="48dp"
+         android:background="@drawable/screenmenu" >
+     </RelativeLayout>
 
+     <Button
+         android:id="@+id/navigation"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_above="@+id/layout_joystick"
+         android:layout_alignRight="@+id/layout_joystick"
+         android:layout_marginBottom="26dp"
+         android:text="Navigation" />
 
 </RelativeLayout>
