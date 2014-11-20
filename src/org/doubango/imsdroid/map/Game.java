@@ -53,7 +53,7 @@ public class Game {//�t��k���O
         public void handleMessage(Message msg){
         	if(msg.what == 1){//���ܫ��s���A
         		//goButton.setEnabled(true);
-        		//runButton.setEnabled(true);
+        		runButton.setEnabled(true);
         	}
         	else if(msg.what == 2){//���ܨB�ƪ�TextView����
         		//BSTextView.setText("" +

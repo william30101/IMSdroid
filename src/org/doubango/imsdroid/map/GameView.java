@@ -56,6 +56,8 @@ public class GameView extends View {
 	String inStr = "test";
 	String inStr2 = "test2";
 	int fixMapData = 5;
+	
+	/* Edit */
 	int fixWidthMapData = 5, fixHeightMapData = 5;
 	int gridX = 0, gridY = 0;
 	int row = 0, col = 0;
@@ -87,7 +89,7 @@ public class GameView extends View {
 	Context mContext;
 	int width, height, screenWidth, screenHeight, mapWidth, mapHeight;
 	int xcoordinate = 5, ycoordinate = 5;
-	private boolean touchDown = false, zoomout = false;
+	private boolean touchDown = false, zoomout = false, isZoom = false;
 
 	private Handler myHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -278,11 +280,13 @@ public class GameView extends View {
 		// Log.i("william","test");
 
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			isZoom = true;
 			span = 30;
 			getMapSize();
 
 			xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2));
 			ycoordinate = (int) ((screenHeight / 2) - (mapHeight / 2));
+			
 			fixWidthMapData = xcoordinate;
 			fixHeightMapData = ycoordinate;
 
@@ -292,6 +296,7 @@ public class GameView extends View {
 			drawZoomMap(event);
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
 			if (zoomout) {
+				isZoom = !isZoom;
 				zoomout = false;
 
 				span = 15;
@@ -459,8 +464,6 @@ public class GameView extends View {
 			setVIEW_WIDTH((int) (screenWidth / 2));
 			setVIEW_HEIGHT((int) (screenHeight / 2));
 		}
-
-		Log.i("shinhua", "OnMeasure");
 		setMeasuredDimension(VIEW_WIDTH, VIEW_HEIGHT);
 	}
 
@@ -479,7 +482,6 @@ public class GameView extends View {
 		display.getSize(size);
 		screenWidth = size.x;
 		screenHeight = size.y;
-		Log.i("shinhua", "ScreenSize: " + screenWidth + " & " + screenHeight);
 	}
 
 	public void getMapSize() {
@@ -492,14 +494,38 @@ public class GameView extends View {
 	}
 
 	public void setGridSize() {
+		/* The setGridSize 
+		/* Draw Map position on the upper left */
+
 		map = game.map;
 		row = map.length;
 		col = map[0].length;
+		
+		if(isZoom){
 		width = (col * (span + 1)) + xcoordinate;
 		height = (row * (span + 1)) + ycoordinate;
 		setVIEW_WIDTH(width);
 		setVIEW_HEIGHT(height);
+		}
+/*		setVIEW_WIDTH(width);
+		setVIEW_HEIGHT(height);*/
+		
+		/* Draw Map position on the upper right */
+		else{
+		fixWidthMapData = screenWidth - (col * (span + 1));
+		height = (row * (span + 1)) + ycoordinate;
+		setVIEW_WIDTH(screenWidth);
+		setVIEW_HEIGHT(height);
+		
+		}
+
 	}
+	
+	public void setZoomMap(){
+		
+	}
+	
+	
 
 	public static int getVIEW_WIDTH() {
 		return VIEW_WIDTH;

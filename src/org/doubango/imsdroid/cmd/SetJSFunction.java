@@ -1,9 +1,5 @@
 package org.doubango.imsdroid.cmd;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,17 +9,13 @@ import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.Screens.ScreenDraw;
 import org.doubango.imsdroid.Screens.ScreenJoyStick;
-import org.doubango.imsdroid.Screens.ScreenDirectionJS.MyThread;
 import org.doubango.imsdroid.Utils.NetworkStatus;
-import org.doubango.imsdroid.map.GameView;
 import org.doubango.imsdroid.map.Game;
-import org.doubango.imsdroid.map.MapList;
+import org.doubango.imsdroid.map.GameView;
 import org.doubango.imsdroid.map.SendCmdToBoardAlgorithm;
-
 
 import android.app.Activity;
 import android.graphics.Point;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -31,7 +23,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 public class SetJSFunction {
@@ -44,7 +35,7 @@ public class SetJSFunction {
 	private UartReceive uartRec;
 	
 	//For map use
-	private Button runBtn;
+	private Button jsRunBtn;
 	GameView gameView;
 	Game game;
 	//End for Map use
@@ -67,10 +58,9 @@ public class SetJSFunction {
 	RelativeLayout layout_joystick, layout_menu, layout_robot;
 	ScreenJoyStick js, test;
 	ScreenDraw myDraw;
-	Button setbtn;
 	
 	
-	int test1;
+
 
 	public void SetJSFunction(Activity v) {
 		uartCmd = new UartCmd();
@@ -92,9 +82,11 @@ public class SetJSFunction {
 		layout_joystick = (RelativeLayout) v.findViewById(R.id.layout_joystick);
 		setJoyStickParameter(v);
 		layout_joystick.setOnTouchListener(joystickListener);
+		
+		
+		jsRunBtn = (Button) v.findViewById(R.id.runjs);
+		jsRunBtn.setOnClickListener(onClickListener);
 
-//		setbtn = (Button)v.findViewById(R.id.navigation);
-//		setbtn.setOnTouchListener(keylistener);
 
 
 	}
@@ -156,30 +148,37 @@ public class SetJSFunction {
 
 	};
 	
+	/* Set Button onClickListener */
+	private	Button.OnClickListener onClickListener = new OnClickListener(){
+		int indicator;
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			indicator = v.getId();
 
-//	OnTouchListener keylistener = new OnTouchListener() {
-//		@Override
-//		public boolean onTouch(View v, MotionEvent event) {
-//			// TODO Auto-generated method stub
-//			test1 = event.getAction();
-//
-//			switch(test1){
-//			case MotionEvent.ACTION_DOWN:
-//				game.runAlgorithm();
-//				break;
-//			case MotionEvent.ACTION_MOVE:
-//
-//			case MotionEvent.ACTION_UP:
-//				break;
-//			default:
-//
-//		}
-//			
-//			return true;
-//		}
-//
-//	};
-//	
+			switch (indicator) {
+			case R.id.runjs:
+				synchronized (SendAlgo) {
+					try {
+						SendAlgo.RobotStart(gameView,game,XMPPSet);
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+				}
+				
+				jsRunBtn.setEnabled(false);
+				
+				break;
+			default:
+				break;
+
+			}
+		}
+		
+	};
 
 
 	public class MyThread implements Runnable {

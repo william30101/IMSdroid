@@ -50,7 +50,8 @@ public class MapScreenView{
 	private ArrayAdapter<String> adapter2;
 	
 	
-	Button navigationBtn;
+	Button navigationBtn, jsRunBtn;
+	
 	
 	public void MapScreenView(Activity v) {
 		Log.i("shinhua", "New Map Screen View");
@@ -62,35 +63,26 @@ public class MapScreenView{
 		
 		game = new Game();
 		game.reloadMap(0,gameView);
-		
-//		game.clearState();
-//		game.algorithmId = 1;
-//		//gameView.postInvalidate();
-//		
-//		
-//		
-//		
-		navigationBtn = (Button) v.findViewById(R.id.navigation);
 
+		/* Navigation way display */
+		navigationBtn = (Button) v.findViewById(R.id.navigation);
 		navigationBtn.setOnClickListener(
         	new Button.OnClickListener(){
 				public void onClick(View v) {
 					game.runAlgorithm();
-			
 					navigationBtn.setEnabled(false);
 				}
 	        }
         );
 		
-		
+		jsRunBtn = (Button) v.findViewById(R.id.runjs);
+		jsRunBtn.setEnabled(false);
 
+		
 		initIoc();
 	}
 	
 
-	
-	
-	
 	
 
 	public void signin(String name) {
@@ -107,5 +99,6 @@ public class MapScreenView{
     public void initIoc(){
     	gameView.game = this.game;
     	game.gameView = this.gameView;
+    	game.runButton = this.jsRunBtn;
     }
 }
