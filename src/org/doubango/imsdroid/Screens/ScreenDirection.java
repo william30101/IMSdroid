@@ -5,7 +5,7 @@ import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.cmd.SetBtnFun;
-import org.doubango.imsdroid.cmd.SetJSFunction;
+import org.doubango.imsdroid.cmd.SetUIFunction;
 import org.doubango.imsdroid.map.MapScreen;
 import org.doubango.imsdroid.map.MapScreenView;
 import org.doubango.ngn.services.INgnSipService;
@@ -29,8 +29,10 @@ public class ScreenDirection extends BaseScreen{
 	private SetBtnFun setBtn;
 	private MapScreen mapScreen;
 
-	private SetJSFunction setJS;
+
+	private SetUIFunction setUI;
 	private MapScreenView mapScreenView;
+
 	
 	public ScreenDirection() {
 		super(SCREEN_TYPE.DIALER_T, TAG);
@@ -56,12 +58,13 @@ public class ScreenDirection extends BaseScreen{
 		
 		/* Screen JayStick function of shinhua's code */
 		setContentView(R.layout.screen_directionjs);
-		setJS = new SetJSFunction();
-		setJS.SetJSFunction(this);
+		setUI = new SetUIFunction();
+		setUI.SetUIFunction(this);
 	
 		mapScreenView = new MapScreenView();
 		mapScreenView.MapScreenView(this);
 		
+
 		
 	
 		uartRec = new UartReceive();

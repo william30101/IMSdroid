@@ -112,7 +112,6 @@ public class GameView extends View {
 		getScreenSize();
 		Log.i("shinhua", "GameView Constructor");
 
-		// singleThreadExecutor.execute(st);
 	}
 
 	protected void onDraw(Canvas canvas) {
@@ -178,8 +177,8 @@ public class GameView extends View {
 	protected void onMyDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		canvas.drawColor(Color.GRAY); // annotate this line, the view don't show
-										// gray background
+		//canvas.drawColor(Color.GRAY); // gray background, annotate this line, the view don't show
+									
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Style.STROKE);
 		// canvas.drawRect(5, 55, 325, 376, paint);
@@ -278,8 +277,11 @@ public class GameView extends View {
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
 		// Log.i("william","test");
+		
 
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			
+			Log.i("shinhua", "x: " + event.getX() + " y: " + event.getY());
 			isZoom = true;
 			span = 30;
 			getMapSize();
@@ -290,10 +292,16 @@ public class GameView extends View {
 			fixWidthMapData = xcoordinate;
 			fixHeightMapData = ycoordinate;
 
+			Log.i("shinhua", "fixWidthMapData: " + fixWidthMapData + " fixHeightMapData: " + fixHeightMapData);
+			
+			//if(( event.getX() > (screenWidth -fixWidthMapData)) && ((event.getY() > (screenHeight -fixHeightMapData)))){
+			
 			requestLayout();
+			
 			touchDown = true;
-
 			drawZoomMap(event);
+			//}
+			
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
 			if (zoomout) {
 				isZoom = !isZoom;
@@ -494,37 +502,28 @@ public class GameView extends View {
 	}
 
 	public void setGridSize() {
-		/* The setGridSize 
-		/* Draw Map position on the upper left */
-
+		/* The setGridSize */
 		map = game.map;
 		row = map.length;
 		col = map[0].length;
 		
+		/* Draw Map position on the upper left */
 		if(isZoom){
-		width = (col * (span + 1)) + xcoordinate;
-		height = (row * (span + 1)) + ycoordinate;
-		setVIEW_WIDTH(width);
-		setVIEW_HEIGHT(height);
-		}
-/*		setVIEW_WIDTH(width);
-		setVIEW_HEIGHT(height);*/
-		
+			width = (col * (span + 1)) + xcoordinate;
+			height = (row * (span + 1)) + ycoordinate;
+			setVIEW_WIDTH(width);
+			setVIEW_HEIGHT(height);
+		}	
 		/* Draw Map position on the upper right */
-		else{
-		fixWidthMapData = screenWidth - (col * (span + 1));
-		height = (row * (span + 1)) + ycoordinate;
-		setVIEW_WIDTH(screenWidth);
-		setVIEW_HEIGHT(height);
+		else{ 
+			fixWidthMapData = screenWidth - (col * (span + 1));
+			height = (row * (span + 1)) + ycoordinate;
+			setVIEW_WIDTH(screenWidth);
+			setVIEW_HEIGHT(height);
 		
 		}
 
 	}
-	
-	public void setZoomMap(){
-		
-	}
-	
 	
 
 	public static int getVIEW_WIDTH() {

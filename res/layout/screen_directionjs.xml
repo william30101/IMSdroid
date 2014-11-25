@@ -28,7 +28,31 @@
          android:layout_height="150dp"
          android:layout_alignParentBottom="true"
          android:layout_alignParentLeft="true"
-         android:layout_alignParentTop="true" >
+         android:layout_alignParentTop="true"
+         android:layout_toLeftOf="@+id/screen_menu" >
+         <com.capricorn.ArcMenu
+            android:id="@+id/arc_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </com.capricorn.ArcMenu>
+
+         <Button
+             android:id="@+id/runjs"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentBottom="true"
+             android:layout_marginBottom="23dp"
+             android:layout_toRightOf="@+id/arc_menu"
+             android:text="run" />
+
+         <Button
+             android:id="@+id/navigation"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignBaseline="@+id/runjs"
+             android:layout_alignBottom="@+id/runjs"
+             android:layout_toRightOf="@+id/runjs"
+             android:text="Navigation" />
 
      </RelativeLayout>
 
@@ -36,29 +60,9 @@
          android:id="@+id/screen_menu"
          android:layout_width="100dp"
          android:layout_height="100dp"
-         android:layout_alignParentLeft="true"
-         android:layout_alignTop="@+id/layout_joystick"
-         android:layout_marginLeft="48dp"
+         android:layout_above="@+id/layout_joystick"
+         android:layout_alignLeft="@+id/layout_joystick"
          android:background="@drawable/screenmenu" >
      </RelativeLayout>
-
-     <Button
-         android:id="@+id/navigation"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignBottom="@+id/layout_joystick"
-         android:layout_marginRight="42dp"
-         android:layout_toLeftOf="@+id/layout_joystick"
-         android:text="Navigation" />
-
-     <Button
-         android:id="@+id/runjs"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignBaseline="@+id/navigation"
-         android:layout_alignBottom="@+id/navigation"
-         android:layout_marginRight="22dp"
-         android:layout_toLeftOf="@+id/navigation"
-         android:text="run" />
 
 </RelativeLayout>

@@ -34,7 +34,7 @@ import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.Services.IScreenService;
 import org.doubango.imsdroid.Utils.DialerUtils;
 import org.doubango.imsdroid.cmd.SetBtnFun;
-import org.doubango.imsdroid.cmd.SetJSFunction;
+import org.doubango.imsdroid.cmd.SetUIFunction;
 import org.doubango.imsdroid.map.MapScreen;
 import org.doubango.imsdroid.map.MapScreenView;
 import org.doubango.ngn.events.NgnInviteEventArgs;
@@ -164,7 +164,8 @@ public class ScreenAV extends BaseScreen{
 	private SetBtnFun setBtn;
 	private MapScreen mapScreen;
 	
-	private SetJSFunction setJS;
+
+	private SetUIFunction setUI;
 	private MapScreenView mapScreenView;
 
 	
@@ -208,8 +209,8 @@ public class ScreenAV extends BaseScreen{
 		//XMPPSet = new XMPPSetting();
 		setBtn = new SetBtnFun();
 		mapScreen = new MapScreen();
-		
-		setJS = new SetJSFunction();
+
+		setUI = new SetUIFunction();
 		mapScreenView = new MapScreenView();
 		
 		//XMPPThreadv = new XMPPThread();
@@ -1082,8 +1083,8 @@ public class ScreenAV extends BaseScreen{
 //		setBtn.SetBtn(host);
 //		mapScreen.MapScreen(host);
 		
-		setJS.SetJSFunction(host);
-
+	
+		setUI.SetUIFunction(host);
 		mapScreenView.MapScreenView(host);
 		
 		// Video Producer

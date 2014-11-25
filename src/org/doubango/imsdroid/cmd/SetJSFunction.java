@@ -111,7 +111,7 @@ public class SetJSFunction {
 		js.setLayoutSize(300, 300);
 		js.setLayoutAlpha(150);
 		js.setoffset(70);
-		js.setMinimumDistance(30); /* JoyStick Sensitivity */
+		js.setMinimumDistance(70); /* JoyStick Sensitivity */
 		js.drawStickDefault(); /* Draw JoyStick function */
 	}
 
@@ -131,7 +131,11 @@ public class SetJSFunction {
 			case MotionEvent.ACTION_MOVE:
 				isContinue = true;
 				instructor = js.get8Direction();
-				useThreadPool(newService, str[instructor]);
+				
+				if(instructor != 0){
+					useThreadPool(newService, str[instructor]);
+				}
+				
 				break;
 			case MotionEvent.ACTION_UP:
 				isContinue = true;
