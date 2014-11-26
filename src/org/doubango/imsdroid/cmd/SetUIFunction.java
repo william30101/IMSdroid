@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsoluteLayout;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -79,8 +80,8 @@ public class SetUIFunction {
 	ScreenUIVerticalSeekBar seekbar = null;
 /*	TextView vsProgress;*/
 	RelativeLayout seekbarlayout;
-	LayoutParams seekBarparams;
-	
+	LayoutParams seekbarparams, seekBarlayoutparams;
+	AbsoluteLayout test;
 
 	public void SetUIFunction(Activity v) {
 		uartCmd = new UartCmd();
@@ -126,13 +127,14 @@ public class SetUIFunction {
 /*	    seekBarparams = seekbar.getLayoutParams();
 	    seekBarparams.height = 500;*/
 
-	    
-	    
 	    seekbarlayout = (RelativeLayout) v.findViewById(R.id.layout_seekbar);
-	    seekBarparams = seekbarlayout.getLayoutParams();
-	    seekBarparams.height = 500;
-	    seekBarparams.width = width / 6;
+	    seekBarlayoutparams = seekbarlayout.getLayoutParams();
+	    seekBarlayoutparams.height = (int)((width/6)*1.5);
+	    seekBarlayoutparams.width = width / 6;
 	    
+	    seekbarparams = seekbar.getLayoutParams();
+	    seekbarparams.height = (int)((width/6)*2);
+
 	    
 	    
 	    seekbar.setMax(1);
@@ -176,8 +178,8 @@ public class SetUIFunction {
 	
 	
 	private void setSeekbarParameter(SeekBar seekbar){
-		seekBarparams = seekbar.getLayoutParams();
-		seekBarparams.height = 500;
+		seekBarlayoutparams = seekbar.getLayoutParams();
+		seekBarlayoutparams.height = 500;
 		
 	}
 	
