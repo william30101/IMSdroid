@@ -36,7 +36,7 @@ public class ScreenDirectionJS extends BaseScreen {
 
 	/* JoyStick & Menu class Declare */
 	RelativeLayout layout_joystick, layout_menu, layout_robot;
-	ScreenJoyStick js, test;
+	ScreenUIJoyStick js, test;
 	ScreenDraw myDraw;
 
 	/* ThreadPool declare for JoyStick operate */
@@ -70,8 +70,8 @@ public class ScreenDirectionJS extends BaseScreen {
 		layout_joystick.setOnTouchListener(joystickListener);
 	
 
-		layout_menu = (RelativeLayout) findViewById(R.id.screen_menu);
-		layout_menu.setOnTouchListener(menukeyListener);
+//		layout_menu = (RelativeLayout) findViewById(R.id.screen_menu);
+//		layout_menu.setOnTouchListener(menukeyListener);
 		//setMenukeyParameter();
 		
 //		layout_robot = (RelativeLayout) findViewById(R.id.layout_robot);
@@ -107,7 +107,7 @@ public class ScreenDirectionJS extends BaseScreen {
 
 	/* Set JoyStick & JoyStick Direction layout parameter */
 	private void setJoyStickParameter() {
-		js = new ScreenJoyStick(getApplicationContext(), layout_joystick,
+		js = new ScreenUIJoyStick(getApplicationContext(), layout_joystick,
 				R.drawable.joystick);
 
 		js.setStickSize(200, 200);

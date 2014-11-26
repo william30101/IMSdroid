@@ -9,14 +9,12 @@ import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.Screens.ScreenDraw;
-import org.doubango.imsdroid.Screens.ScreenJoyStick;
+import org.doubango.imsdroid.Screens.ScreenUIJoyStick;
+import org.doubango.imsdroid.Screens.ScreenUIVerticalSeekBar;
 import org.doubango.imsdroid.Utils.NetworkStatus;
 import org.doubango.imsdroid.map.Game;
 import org.doubango.imsdroid.map.GameView;
 import org.doubango.imsdroid.map.SendCmdToBoardAlgorithm;
-
-import com.capricorn.ArcMenu;
-
 
 import android.app.Activity;
 import android.graphics.Point;
@@ -29,9 +27,12 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+
+import com.capricorn.ArcMenu;
 
 public class SetUIFunction {
 
@@ -65,16 +66,21 @@ public class SetUIFunction {
 	
 	/* JoyStick object declare */
 	RelativeLayout layout_joystick, layout_menu, layout_robot;
-	ScreenJoyStick js, test;
+	ScreenUIJoyStick js;
 	ScreenDraw myDraw;
 	
-	/* Arc Menu object declare */
+	/* ARC Menu object declare */
 	ArcMenu arcMenu;
-	int arcLayoutsize;
-	
+	int arcLayoutsize;	
 	private static final int[] ITEM_DRAWABLES = { R.drawable.robot_bowhead, R.drawable.robot_normal , R.drawable.robot_headup};
 	private static final String[] message = { "Head up", "Normal", "Bow head"};
 
+	/* Robot vertical seekbar object declare */
+	ScreenUIVerticalSeekBar seekbar = null;
+/*	TextView vsProgress;*/
+	RelativeLayout seekbarlayout;
+	LayoutParams seekBarparams;
+	
 
 	public void SetUIFunction(Activity v) {
 		uartCmd = new UartCmd();
@@ -113,6 +119,28 @@ public class SetUIFunction {
 		arcMenu.setLayoutParams(params);
 		initArcMenu(arcMenu, ITEM_DRAWABLES, v);
 
+		/* Robot seekbar */
+		seekbar = (ScreenUIVerticalSeekBar) v.findViewById(R.id.robotseekbar);
+	    //vsProgress=(TextView)v.findViewById(R.id.vertical_sb_progresstext);
+	    
+/*	    seekBarparams = seekbar.getLayoutParams();
+	    seekBarparams.height = 500;*/
+
+	    
+	    
+	    seekbarlayout = (RelativeLayout) v.findViewById(R.id.layout_seekbar);
+	    seekBarparams = seekbarlayout.getLayoutParams();
+	    seekBarparams.height = 500;
+	    seekBarparams.width = width / 6;
+	    
+	    
+	    
+	    seekbar.setMax(1);
+	    seekbar.setProgress(0);
+		seekbar.setOnSeekBarChangeListener(seekbarListener);
+        
+		
+		
 
 	}
 	
@@ -133,7 +161,7 @@ public class SetUIFunction {
 	
 	private void setJoyStickParameter(Activity v) {
 		// TODO Auto-generated method stub
-		js = new ScreenJoyStick(v.getApplicationContext(), layout_joystick,
+		js = new ScreenUIJoyStick(v.getApplicationContext(), layout_joystick,
 				R.drawable.joystick);
 
 		js.setStickSize(200, 200);
@@ -144,8 +172,14 @@ public class SetUIFunction {
 		js.setoffset(70);
 		js.setMinimumDistance(70); /* JoyStick Sensitivity */
 		js.drawStickDefault(); /* Draw JoyStick function */
+	}	
+	
+	
+	private void setSeekbarParameter(SeekBar seekbar){
+		seekBarparams = seekbar.getLayoutParams();
+		seekBarparams.height = 500;
+		
 	}
-
 	
 	/* The OnTouchListener of Draw JoyStick */
 	OnTouchListener joystickListener = new OnTouchListener() {
@@ -214,6 +248,10 @@ public class SetUIFunction {
 		
 	};
 	
+	
+	
+	
+	
 	/* Arc Menu */
 	private void initArcMenu(final ArcMenu menu, int[] itemDrawables, Activity v) {
         final int itemCount = itemDrawables.length;
@@ -267,6 +305,52 @@ public class SetUIFunction {
 			break;
 		}
 	}
+	
+	
+	/* Robot Seekbar Listener */
+	SeekBar.OnSeekBarChangeListener seekbarListener = new OnSeekBarChangeListener(){
+
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress,
+				boolean fromUser) {
+			// TODO Auto-generated method stub
+	
+			switch(progress){
+			case 0:
+				//vsProgress.setText(progress+"");
+				try {
+					SendToBoard("stretch bottom");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case 1:
+				//vsProgress.setText(progress+"");
+				try {
+					SendToBoard("stretch top");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+				
+			}
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	};
 	
 	
 	
