@@ -24,13 +24,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.AbsoluteLayout;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.capricorn.ArcMenu;
@@ -78,10 +80,19 @@ public class SetUIFunction {
 
 	/* Robot vertical seekbar object declare */
 	ScreenUIVerticalSeekBar seekbar = null;
-/*	TextView vsProgress;*/
+	/*	TextView vsProgress;*/
 	RelativeLayout seekbarlayout;
 	LayoutParams seekbarparams, seekBarlayoutparams;
-	AbsoluteLayout test;
+
+	
+	/* DrogMenu */
+	ViewGroup dragMenu;
+	private View selected_item = null;
+	private int offset_x = 0;
+	private int offset_y = 0;
+	ImageView img;
+	
+	
 
 	public void SetUIFunction(Activity v) {
 		uartCmd = new UartCmd();
@@ -122,26 +133,15 @@ public class SetUIFunction {
 
 		/* Robot seekbar */
 		seekbar = (ScreenUIVerticalSeekBar) v.findViewById(R.id.robotseekbar);
-	    //vsProgress=(TextView)v.findViewById(R.id.vertical_sb_progresstext);
-	    
-/*	    seekBarparams = seekbar.getLayoutParams();
-	    seekBarparams.height = 500;*/
-
 	    seekbarlayout = (RelativeLayout) v.findViewById(R.id.layout_seekbar);
-	    seekBarlayoutparams = seekbarlayout.getLayoutParams();
-	    seekBarlayoutparams.height = (int)((width/6)*1.5);
-	    seekBarlayoutparams.width = width / 6;
-	    
-	    seekbarparams = seekbar.getLayoutParams();
-	    seekbarparams.height = (int)((width/6)*2);
-
-	    
-	    
-	    seekbar.setMax(1);
-	    seekbar.setProgress(0);
-		seekbar.setOnSeekBarChangeListener(seekbarListener);
+	    setSeekbarParameter();
         
-		
+		/* DragDrop menu */
+	    dragMenu = (ViewGroup)v.findViewById(R.id.mainlayout);
+	    img = (ImageView) v.findViewById(R.id.screenmenu);
+	    
+	    dragMenu.setOnTouchListener(dragListener);
+	    img.setOnTouchListener(imgListener);
 		
 
 	}
@@ -177,9 +177,16 @@ public class SetUIFunction {
 	}	
 	
 	
-	private void setSeekbarParameter(SeekBar seekbar){
-		seekBarlayoutparams = seekbar.getLayoutParams();
-		seekBarlayoutparams.height = 500;
+	private void setSeekbarParameter(){
+	    seekBarlayoutparams = seekbarlayout.getLayoutParams();
+	    seekBarlayoutparams.height = (int)((width/6)*1.5);
+	    seekBarlayoutparams.width = width / 6;
+	    
+	    seekbarparams = seekbar.getLayoutParams();
+	    seekbarparams.height = (int)((width/6)*2);
+	    seekbar.setMax(1);
+	    seekbar.setProgress(0);
+		seekbar.setOnSeekBarChangeListener(seekbarListener);
 		
 	}
 	
@@ -249,10 +256,6 @@ public class SetUIFunction {
 		}
 		
 	};
-	
-	
-	
-	
 	
 	/* Arc Menu */
 	private void initArcMenu(final ArcMenu menu, int[] itemDrawables, Activity v) {
@@ -354,10 +357,76 @@ public class SetUIFunction {
 		
 	};
 	
+	/* DragDrap Menu Listener */
+	View.OnTouchListener dragListener = new OnTouchListener(){
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			// TODO Auto-generated method stub
+			switch(event.getActionMasked()){
+			case MotionEvent.ACTION_MOVE:
+				int x = (int) event.getX() - offset_x;
+				int y = (int) event.getY() - offset_y;
+
+
+				int w = width - 100;
+				int h = height - 100;
+				int w1 = width - w;
+				int h1 = height - h;
+				
+				if(x < w1) x = x - w1 ;
+				if(y < h1) y = y - h1 ;
+				
+				if (x > w) x = w;
+				if (y > h) y = h;
+				
+/*				LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+						new ViewGroup.MarginLayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT));*/
+	/*			FrameLayout.LayoutParams fp = new FrameLayout.LayoutParams(
+						new ViewGroup.MarginLayoutParams(
+								FrameLayout.LayoutParams.WRAP_CONTENT, 
+								FrameLayout.LayoutParams.WRAP_CONTENT));
+						*/
+				RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+						new ViewGroup.MarginLayoutParams(
+								RelativeLayout.LayoutParams.WRAP_CONTENT,
+								RelativeLayout.LayoutParams.WRAP_CONTENT));
+
+			    lp.setMargins(x, y, 0, 0);
+				//lp.setMargins(left, top, right, bottom)
+				
+				
+				selected_item.setLayoutParams(lp);
+				break;
+			default:
+				break;
+			}
+			return true;
+		}
+
+		
+	};
 	
-	
-	
-	
+	View.OnTouchListener imgListener = new OnTouchListener() {
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			switch (event.getActionMasked()) {
+			case MotionEvent.ACTION_DOWN:
+				offset_x = (int) event.getX();
+				offset_y = (int) event.getY();
+				selected_item = v;
+				break;
+			default:
+				break;
+			}
+
+			return false;
+		}
+
+	};
 	
 	/* XMPP Sendfunction */
 	private void SendToBoard(String inStr) throws IOException {

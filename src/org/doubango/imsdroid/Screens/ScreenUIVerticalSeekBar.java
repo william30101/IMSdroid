@@ -22,10 +22,7 @@ public class ScreenUIVerticalSeekBar extends SeekBar {
     public ScreenUIVerticalSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-    
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(h, w, oldh, oldw);
-    }
+
 
     @Override
     protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

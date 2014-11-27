@@ -100,5 +100,6 @@ public class MapScreenView{
     	gameView.game = this.game;
     	game.gameView = this.gameView;
     	game.runButton = this.jsRunBtn;
+    	game.goButton = this.navigationBtn;
     }
 }

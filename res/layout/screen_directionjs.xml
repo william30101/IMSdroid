@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainlayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -43,9 +44,8 @@
         android:layout_toLeftOf="@+id/navigation"
         android:text="run" />
 
-    
-
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -59,7 +59,7 @@
             <com.capricorn.ArcMenu
                 android:id="@+id/arc_menu"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
             </com.capricorn.ArcMenu>
         </RelativeLayout>
 
@@ -89,9 +89,16 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/robotbody" />
-
         </RelativeLayout>
-
     </LinearLayout>
+
+        <ImageView
+            android:id="@+id/screenmenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="273dp"
+            android:layout_toRightOf="@+id/linearLayout1"
+            android:src="@drawable/screenmenu" />
 
 </RelativeLayout>

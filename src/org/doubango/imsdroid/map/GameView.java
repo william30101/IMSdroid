@@ -177,7 +177,7 @@ public class GameView extends View {
 	protected void onMyDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		canvas.drawColor(Color.GRAY); // gray background, annotate this line, the view don't show
+		//canvas.drawColor(Color.GRAY); // gray background, annotate this line, the view don't show
 									
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Style.STROKE);
