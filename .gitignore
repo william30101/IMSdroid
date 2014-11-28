@@ -1,2 +1,12 @@
+.*
 *.class
 *.apk
+*.o
+*.o.*
+*.jar
+*.dex
+*.so
+*.launch
+
+!.gitignore
+!*/

@@ -371,11 +371,10 @@ public class SetUIFunction {
 
 				int w = width - 100;
 				int h = height - 100;
-				int w1 = width - w;
-				int h1 = height - h;
 				
-				if(x < w1) x = x - w1 ;
-				if(y < h1) y = y - h1 ;
+				if(x < 250) x = 250 ;
+				if(y < 80) y = 80 ;
+				
 				
 				if (x > w) x = w;
 				if (y > h) y = h;

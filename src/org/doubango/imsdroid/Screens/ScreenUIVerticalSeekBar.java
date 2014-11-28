@@ -19,6 +19,10 @@ public class ScreenUIVerticalSeekBar extends SeekBar {
         super(context, attrs, defStyle);
     }
 
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    	super.onSizeChanged(h, w, oldh, oldw);
+    }
+    
     public ScreenUIVerticalSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
