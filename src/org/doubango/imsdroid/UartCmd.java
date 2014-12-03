@@ -128,7 +128,7 @@ public class UartCmd extends BaseCmd{
 		
 		// mxc0 for driving board , 19200
 		// mxc2 for nanoPan , Baudrate 115200
-		if (portName.equals("ttymxc4")) {
+		if (portName.equals("ttymxc3")) {
 			
 			driFd = OpenUart(portName, 1 );
 			if (driFd > 0) {
