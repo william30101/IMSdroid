@@ -9,6 +9,7 @@
     <string name="day_today">Today</string>
     <string name="day_yesterday">Yesterday</string>
     <string formatted="false" name="copyright">
+
     IMSDroid/v%s (doubango r%s), Copyright © 2010-2014 Doubango Telecom. All rights reserved.\n\n
     IMSDroid is free software: you can redistribute it and/or modify it under the terms of
     the GNU General Public License as published by the Free Software Foundation, either version 3
@@ -25,6 +26,15 @@
     For more information about the project: http://code.google.com/p/imsdroid/.\n
     Addition copyright information: http://code.google.com/p/imsdroid/wiki/Copyrigths. \n
   </string>
+    <string name="unknown_device">Unknown device</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+
+    <!-- Menu items -->
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
     <string name="string_answer">Answer</string>
     <string name="string_endcall">End Call</string>
     <string name="string_speaker_on">Speaker ON</string>

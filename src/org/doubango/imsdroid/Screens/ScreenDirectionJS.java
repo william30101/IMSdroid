@@ -5,6 +5,8 @@ import java.util.concurrent.Executors;
 
 import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.XMPPSetting;
+import org.doubango.imsdroid.BLE.BLEDeviceControlActivity;
+import org.doubango.imsdroid.BLE.BLEDeviceScanActivity;
 import org.doubango.imsdroid.cmd.SetBtnFun;
 import org.doubango.imsdroid.map.Game;
 import org.doubango.imsdroid.map.MapScreenView;
@@ -14,6 +16,8 @@ import org.doubango.ngn.services.INgnSipService;
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -21,6 +25,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class ScreenDirectionJS extends BaseScreen {
 	private final INgnSipService mSipService;
@@ -49,16 +54,18 @@ public class ScreenDirectionJS extends BaseScreen {
 	private SetBtnFun setBtn;
 	private MapScreenView mapScreenView;
 	SendCmdToBoardAlgorithm SendAlgo;
+	private BLEDeviceScanActivity BLEActivity;
+	private BLEDeviceControlActivity BLEDevCon;
 	
 	public Game game;
-	
+	public static TextView mConnectionState;
 	
 	/* Constructor */
 	public ScreenDirectionJS() {
 		super(SCREEN_TYPE.DIALER_T, TAG);
 		mSipService = getEngine().getSipService();
 	}	
-	
+
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,8 +91,6 @@ public class ScreenDirectionJS extends BaseScreen {
 
 		mapScreenView = new MapScreenView();
 		mapScreenView.MapScreenView(this);
-
-
 		
 		XMPPSet = new XMPPSetting();
 		
@@ -221,5 +226,17 @@ public class ScreenDirectionJS extends BaseScreen {
 	private void useThreadPool(ExecutorService service, String Msg) {
 		service.execute(new MyThread(Msg));
 	}
+
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+
+		 unbindService(BLEDevCon.getmServiceConnection());
+		 BLEDeviceControlActivity.setmBluetoothLeService(null);
+	        //mBluetoothLeService = null;
+	}
+
 
 }

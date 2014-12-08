@@ -1,4 +1,4 @@
-#include <jni.h>
+//#include <jni.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -13,6 +13,7 @@
 #include <sys/ioctl.h>
 #include "example.h"
 #include "MyClient.h"
+#include "hello-uart.h"
 
 #undef	TCSAFLUSH
 #define	TCSAFLUSH	TCSETSF
@@ -164,7 +165,7 @@ extern "C"
 		  return 0;
 	}
 
-	JNIEXPORT jint JNICALL Native_OpenUart(JNIEnv *env,jobject mc, jstring s , jint fdnum)
+	JNIEXPORT jint JNICALL Native_OpenUart(JNIEnv *env,jobject mc, jstring s )
 	{
 
 		const char *str1 = "/dev/";
@@ -174,19 +175,31 @@ extern "C"
 		strcpy(sall, str1);
 		strcat(sall, str2);
 
-		LOGI("open uart port device node = %s , fdnum=%d \n",sall,fdnum);
+		//scrcmp if true , return 0.
+		bool ismxc3 = !strcmp(str2, "ttymxc3");
+		bool ismxc2 = !strcmp(str2, "ttymxc2");
 
-		if (fdnum == 1)
+		LOGI("open uart port device node = %s , ismxc2=%d ismxc3=%d\n",sall,ismxc2,ismxc3);
+
+		if (ismxc3)
 		{
 			driveFd = open(sall, O_RDWR | O_NOCTTY | O_NDELAY);
 			if (driveFd > 0)
+			{
+				// 0 => 19200
+				Native_SetUart(env,mc,driveFd,0);
 				fd = driveFd;
+			}
 		}
-		else if (fdnum == 2)
+		else if (ismxc2)
 		{
 			nanoFd = open(sall, O_RDWR | O_NOCTTY | O_NDELAY);
 			if (nanoFd > 0)
+			{
+				// 1 => 115200
+				Native_SetUart(env,mc,nanoFd,1);
 				fd = nanoFd;
+			}
 		}
 		else
 		{
@@ -206,21 +219,18 @@ extern "C"
 		close(fdnum);
 	}
 
-	JNIEXPORT jint JNICALL Native_SetUart(JNIEnv *env,jobject mc, jint i,jint fdnum)
+	JNIEXPORT jint JNICALL Native_SetUart(JNIEnv *env,jobject mc, jint fdnum, jint baudrate)
 	{
 		int Baud_rate[] = { B19200, B115200};
-		LOGI("Native_SetUart %d", i);
+		LOGI("Native_SetUart %d", baudrate);
 
-		if (fdnum == 1)
-		{
-
-		tcgetattr(driveFd, &oldtio);
-		tcgetattr(driveFd, &newtio);
-		cfsetispeed(&newtio, Baud_rate[i]);
-		cfsetospeed(&newtio, Baud_rate[i]);
+		tcgetattr(fdnum, &oldtio);
+		tcgetattr(fdnum, &newtio);
+		cfsetispeed(&newtio, Baud_rate[baudrate]);
+		cfsetospeed(&newtio, Baud_rate[baudrate]);
 
 		newtio.c_lflag = 0;
-		newtio.c_cflag = Baud_rate[i] | CS8 | CREAD | CLOCAL;
+		newtio.c_cflag = Baud_rate[baudrate] | CS8 | CREAD | CLOCAL;
 		newtio.c_iflag = BRKINT | IGNPAR | IXON | IXOFF | IXANY;
 		newtio.c_oflag = 02;
 		newtio.c_line = 0;
@@ -228,39 +238,13 @@ extern "C"
 		newtio.c_cc[4] = 0;
 		newtio.c_cc[5] = 0;
 
-			if (tcsetattr(driveFd, TCSANOW, &newtio) < 0)
-			{
-				LOGE("tcsetattr2 fail !\n");
-				exit(1);
-			}
-
-			return driveFd;
-		}
-		else if (fdnum == 2)
+		if (tcsetattr(fdnum, TCSANOW, &newtio) < 0)
 		{
-			tcgetattr(nanoFd, &oldtio);
-			tcgetattr(nanoFd, &newtio);
-			cfsetispeed(&newtio, Baud_rate[i]);
-			cfsetospeed(&newtio, Baud_rate[i]);
-
-			newtio.c_lflag = 0;
-			newtio.c_cflag = Baud_rate[i] | CS8 | CREAD | CLOCAL;
-			newtio.c_iflag = BRKINT | IGNPAR | IXON | IXOFF | IXANY;
-			newtio.c_oflag = 02;
-			newtio.c_line = 0;
-			newtio.c_cc[7] = 255;
-			newtio.c_cc[4] = 0;
-			newtio.c_cc[5] = 0;
-
-				if (tcsetattr(nanoFd, TCSANOW, &newtio) < 0)
-				{
-					LOGE("tcsetattr2 fail !\n");
-					exit(1);
-				}
-
-				return nanoFd;
+			LOGE("tcsetattr2 fail !\n");
+			exit(1);
 		}
-			return -1;
+
+		return fdnum;
 	}
 
 	JNIEXPORT jint JNICALL Native_SendMsgUart(JNIEnv *env,jobject mc, jstring str, jint fdnum , jbyteArray inByte)
@@ -399,7 +383,7 @@ extern "C"
 		{"ReceiveByteMsgUart",   "(I)[B",(void *)Native_ReceiveByteMsgUart},
 		{"SendMsgUart",   "(Ljava/lang/String;I[B)I",  (void *)Native_SendMsgUart},
 		{"SetUart",   "(II)I",   					(void *)Native_SetUart},
-		{"OpenUart",   "(Ljava/lang/String;I)I",   	(void *)Native_OpenUart},
+		{"OpenUart",   "(Ljava/lang/String;)I",   	(void *)Native_OpenUart},
 		{"WriteDemoData",   "([II)I",   	(void *)Native_WriteDemoData},
 		{"StartCal",   "()I",   	(void *)Native_StartCal},
 		{"CloseUart",   "(I)I",   	(void *)Native_CloseUart},

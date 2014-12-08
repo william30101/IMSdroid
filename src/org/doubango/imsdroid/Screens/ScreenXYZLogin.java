@@ -116,9 +116,12 @@ public class ScreenXYZLogin extends BaseScreen {
         super.SetmName(editTextUsername.getText().toString().trim());
         super.SetmPass(editTextPassword.getText().toString().trim());
         
+        if (UartCmd.driFd == 0 || UartCmd.nanoFd == 0)
+        {
 		uartCmd.OpenSetUartPort("ttymxc3");
 		uartCmd.OpenSetUartPort("ttymxc2");
-		
+        }
+
 		mSipBroadCastRecv = new BroadcastReceiver(){
 
 			@Override

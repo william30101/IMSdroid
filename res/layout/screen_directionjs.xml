@@ -101,4 +101,32 @@
             android:layout_toRightOf="@+id/linearLayout1"
             android:src="@drawable/screenmenu" />
 
+        <Button
+            android:id="@+id/BLEWriteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/linearLayout1"
+            android:text="BLEwrite" />
+
+        <EditText
+            android:id="@+id/BLEDataText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/BLEWriteBtn"
+            android:layout_alignLeft="@+id/BLEWriteBtn"
+            android:ems="2" >
+
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/BLEconnectStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/layout_joystick"
+            android:layout_alignLeft="@+id/BLEDataText"
+            android:text="BLE disconnected"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </RelativeLayout>

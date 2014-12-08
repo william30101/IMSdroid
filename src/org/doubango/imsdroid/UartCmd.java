@@ -126,32 +126,20 @@ public class UartCmd extends BaseCmd{
 	public int OpenSetUartPort(String portName)
 	{
 		
-		// mxc0 for driving board , 19200
-		// mxc2 for nanoPan , Baudrate 115200
+		// mxc3 for driving board , Baudrate 19200
+		// mxc2 for DW1000 , 		Baudrate 115200
 		if (portName.equals("ttymxc3")) {
-			
-			driFd = OpenUart(portName, 1 );
+			driFd = OpenUart(portName );
 			if (driFd > 0) {
-				Baud_rate = 0; // 19200
-				SetUart(Baud_rate, 1);
-				fd = driFd;
-				
-				Log.i(TAG,"Driving Board fd = " + driFd);
+				Log.i(TAG,"Driving Board portname = "  + portName + " fd = " + driFd);
+				return driFd;
 			}
 			
 		} else if (portName.equals("ttymxc2")) {
-
-			//portName = "ttymxc2";
-			nanoFd = OpenUart(portName, 2 );
-			//driFd = OpenUart(portName, 1 );
-			
+			nanoFd = OpenUart(portName);
 			if (nanoFd > 0) {
-			//if (driFd > 0) {
-				Baud_rate = 1; // 115200
-				SetUart(Baud_rate, 2);
-				fd = nanoFd;
-				//fd = driFd;
-				Log.i(TAG,"Nano Board fd = " + nanoFd);
+				Log.i(TAG,"DW1000 portname = "  + portName + " fd = " + nanoFd);
+				return nanoFd;
 			}
 		}
 		else
@@ -159,11 +147,7 @@ public class UartCmd extends BaseCmd{
 			fd = 0;
 		}
 		
-		
-		Log.i(TAG, functionName + " portname = "  + portName +" fd = " + fd);
-		
-
-		return fd;
+		return 0;
 		
 	}
 	
@@ -191,9 +175,9 @@ public class UartCmd extends BaseCmd{
 	}
 	
 	public static native int WriteDemoData(int[] data, int size);
-	public static native int OpenUart(String str, int fdNum);
+	public static native int OpenUart(String str);
 	public static native int CloseUart(int fdNum);
-	public static native int SetUart(int i , int fdNum);
+	public static native int SetUart(int fdNum , int baudrate);
 	public static native int SendMsgUart(String msg,int fdNum,byte[] inByte);
 	public static native String ReceiveMsgUart(int fdNum);
 	public static native byte[] ReceiveByteMsgUart(int fdNum);

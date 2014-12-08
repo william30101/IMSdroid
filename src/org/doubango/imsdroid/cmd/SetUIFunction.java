@@ -8,6 +8,7 @@ import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
+import org.doubango.imsdroid.BLE.BLEDeviceControlActivity;
 import org.doubango.imsdroid.Screens.ScreenDraw;
 import org.doubango.imsdroid.Screens.ScreenUIJoyStick;
 import org.doubango.imsdroid.Screens.ScreenUIVerticalSeekBar;
@@ -27,6 +28,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,7 +47,9 @@ public class SetUIFunction {
 	private NetworkStatus loggin;
 	private UartCmd uartCmd;
 	private UartReceive uartRec;
-	
+
+	private BLEDeviceControlActivity BLEDevCon;
+
 	//For map use
 	private Button jsRunBtn;
 	GameView gameView;
@@ -92,6 +96,8 @@ public class SetUIFunction {
 	private int offset_y = 0;
 	ImageView img;
 	
+    private Button BLEWrite;
+    public static EditText BLEDataText;
 	
 
 	public void SetUIFunction(Activity v) {
@@ -143,6 +149,11 @@ public class SetUIFunction {
 	    dragMenu.setOnTouchListener(dragListener);
 	    img.setOnTouchListener(imgListener);
 		
+
+	BLEWrite = (Button) v.findViewById(R.id.BLEWriteBtn);
+        BLEDataText = (EditText) v.findViewById(R.id.BLEDataText);
+
+        BLEWrite.setOnClickListener(onClickListener);
 
 	}
 	
@@ -249,6 +260,13 @@ public class SetUIFunction {
 				jsRunBtn.setEnabled(false);
 				
 				break;
+			case R.id.BLEWriteBtn:
+				if (BLEDevCon == null)
+			    // Add BLE control
+					BLEDevCon = BLEDeviceControlActivity.getBLEDevCon();
+				//Parent , Child selected item , mode 0 = write
+				BLEDevCon.CharacteristicWRN(2, 1, 0, BLEDataText.getText().toString());
+            break;
 			default:
 				break;
 
@@ -395,7 +413,6 @@ public class SetUIFunction {
 
 			    lp.setMargins(x, y, 0, 0);
 				//lp.setMargins(left, top, right, bottom)
-				
 				
 				selected_item.setLayoutParams(lp);
 				break;
