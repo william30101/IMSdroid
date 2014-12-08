@@ -54,7 +54,7 @@ public class BLEDeviceScanActivity extends ListActivity {
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
-
+    
     public void BLEDeviceScanStart(Activity v)
     {
     	mHandler = new Handler();
@@ -70,8 +70,13 @@ public class BLEDeviceScanActivity extends ListActivity {
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
     	
+    	
     	 final BluetoothManager bluetoothManager =
                  (BluetoothManager) v.getSystemService(v.BLUETOOTH_SERVICE);
+    	 
+    	 if (bluetoothManager == null)
+    		 return;
+    	 
          mBluetoothAdapter = bluetoothManager.getAdapter();
 
          // Checks if Bluetooth is supported on the device.

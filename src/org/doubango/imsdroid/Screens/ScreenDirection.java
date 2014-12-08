@@ -11,6 +11,8 @@ import org.doubango.imsdroid.cmd.SetUIFunction;
 import org.doubango.imsdroid.map.MapScreen;
 import org.doubango.imsdroid.map.MapScreenView;
 import org.doubango.ngn.services.INgnSipService;
+
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -83,8 +85,16 @@ public class ScreenDirection extends BaseScreen{
 		mapScreenView = new MapScreenView();
 		mapScreenView.MapScreenView(this);
 		
-		BLEActivity = new BLEDeviceScanActivity();
-		BLEActivity.BLEDeviceScanStart(this);
+		if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+		    //Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+		    Log.i(TAG,"support BT 4.0");
+		    BLEActivity = new BLEDeviceScanActivity();
+			BLEActivity.BLEDeviceScanStart(this);
+		}
+		else
+			Log.i(TAG,"not support BT 4.0");
+		
+		
 		
 
 		mConnectionState = (TextView) findViewById(R.id.BLEconnectStatus);
