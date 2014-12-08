@@ -150,11 +150,13 @@ public class SetUIFunction {
 	    img.setOnTouchListener(imgListener);
 		
 
-	BLEWrite = (Button) v.findViewById(R.id.BLEWriteBtn);
+        BLEWrite = (Button) v.findViewById(R.id.BLEWriteBtn);
         BLEDataText = (EditText) v.findViewById(R.id.BLEDataText);
 
         BLEWrite.setOnClickListener(onClickListener);
 
+        selected_item = (View)v.findViewById(R.id.screenmenu);
+        
 	}
 	
 
@@ -433,7 +435,7 @@ public class SetUIFunction {
 			case MotionEvent.ACTION_DOWN:
 				offset_x = (int) event.getX();
 				offset_y = (int) event.getY();
-				selected_item = v;
+				//selected_item = v;
 				break;
 			default:
 				break;

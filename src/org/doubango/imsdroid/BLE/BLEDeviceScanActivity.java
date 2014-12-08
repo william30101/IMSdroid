@@ -69,16 +69,27 @@ public class BLEDeviceScanActivity extends ListActivity {
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) v.getSystemService(v.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = bluetoothManager.getAdapter();
+    	
+    	 final BluetoothManager bluetoothManager =
+                 (BluetoothManager) v.getSystemService(v.BLUETOOTH_SERVICE);
+         mBluetoothAdapter = bluetoothManager.getAdapter();
 
-        // Checks if Bluetooth is supported on the device.
-        if (mBluetoothAdapter == null) {
-        //    Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+         // Checks if Bluetooth is supported on the device.
+         if (mBluetoothAdapter == null) {
+         //    Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+             finish();
+             return;
+         }
+    	
+    	 if (!mBluetoothAdapter.isEnabled()) {
+             if (!mBluetoothAdapter.isEnabled()) {
+                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                 v.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+             }
+         }
+        // scanLeDevice(false);
+    	
+       
         
         BLEDeviceControl = new BLEDeviceControlActivity();
         //Auto Scan BLE device
