@@ -54,10 +54,6 @@ public class MapScreenView{
 	
 	
 	public void MapScreenView(Activity v) {
-		Log.i("shinhua", "New Map Screen View");
-		
-	    //gameView = (GameView) v.findViewById(R.id.gameView1);
-		
 
 		gameView = (GameView) v.findViewById(R.id.gameView1);
 		
@@ -91,11 +87,8 @@ public class MapScreenView{
 
 		loggin = NetworkStatus.getInstance();
 		XMPPSet = new XMPPSetting();
-		// XMPPThreadv.start();
 	}
     
-
-
     public void initIoc(){
     	gameView.game = this.game;
     	game.gameView = this.gameView;

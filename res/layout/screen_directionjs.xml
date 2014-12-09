@@ -120,12 +120,20 @@
             <requestFocus />
         </EditText>
 
+        <Button
+            android:id="@+id/testMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/navigation"
+            android:layout_alignLeft="@+id/runjs"
+            android:text="Test Menu" />
+
         <TextView
             android:id="@+id/BLEconnectStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/layout_joystick"
-            android:layout_alignLeft="@+id/BLEDataText"
+            android:layout_below="@+id/BLEDataText"
+            android:layout_toRightOf="@+id/BLEWriteBtn"
             android:text="BLE disconnected"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 

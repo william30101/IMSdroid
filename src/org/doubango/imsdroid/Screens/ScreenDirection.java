@@ -85,6 +85,8 @@ public class ScreenDirection extends BaseScreen{
 		mapScreenView = new MapScreenView();
 		mapScreenView.MapScreenView(this);
 		
+		
+		/* Judge device support BlueTooth 4.0 */
 		if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
 		    //Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
 		    Log.i(TAG,"support BT 4.0");

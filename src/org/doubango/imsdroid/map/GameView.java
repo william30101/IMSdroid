@@ -1,4 +1,4 @@
-package org.doubango.imsdroid.map;
+   package org.doubango.imsdroid.map;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -149,7 +149,7 @@ public class SetUIFunction {
 	    dragMenu.setOnTouchListener(dragListener);
 	    img.setOnTouchListener(imgListener);
 		
-
+	    
         BLEWrite = (Button) v.findViewById(R.id.BLEWriteBtn);
         BLEDataText = (EditText) v.findViewById(R.id.BLEDataText);
 
