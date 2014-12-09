@@ -92,8 +92,8 @@ public class XMPPSetting {
 							byte[] cmdByte = UCmd.GetAllByte(inM);
 							Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" + " Func num = " + cmdByte[1] + " Direc = " + cmdByte[2]);
 							//Do JNI here , We got correct data format here.
-							String decoded = new String(cmdByte, "ISO-8859-1");
-							UCmd.SendMsgUart(decoded,1,cmdByte);
+							//String decoded = new String(cmdByte, "ISO-8859-1");
+							UCmd.SendMsgUart(1,cmdByte);
 
 							
 							

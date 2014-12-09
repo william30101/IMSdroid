@@ -178,10 +178,11 @@ public class UartCmd extends BaseCmd{
 	public static native int OpenUart(String str);
 	public static native int CloseUart(int fdNum);
 	public static native int SetUart(int fdNum , int baudrate);
-	public static native int SendMsgUart(String msg,int fdNum,byte[] inByte);
+	public static native int SendMsgUart(int fdNum,byte[] inByte);
 	public static native String ReceiveMsgUart(int fdNum);
 	public static native byte[] ReceiveByteMsgUart(int fdNum);
 	public static native int StartCal();
 	public static native byte[] Combine(ArrayList<float[]> nanoq , ArrayList<byte[]> encoq);
-	
+	public static native int WeightSet(float dwWeight , float encoderWeight);
+	public static native float[] EKF(float a,float b,float c,int left,int right,int degree);
 }

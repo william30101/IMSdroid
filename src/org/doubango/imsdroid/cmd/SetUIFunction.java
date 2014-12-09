@@ -106,7 +106,7 @@ public class SetUIFunction {
 
 		XMPPSet = new XMPPSetting();
 		uartRec = new UartReceive();
-		uartRec.RunRecThread();
+		//uartRec.RunRecThread();
 
 		gameView = (GameView) v.findViewById(R.id.gameView1);
 		game = new Game();
@@ -156,6 +156,9 @@ public class SetUIFunction {
         BLEWrite.setOnClickListener(onClickListener);
 
         selected_item = (View)v.findViewById(R.id.screenmenu);
+        
+        Button getAxisBtn = (Button)v.findViewById(R.id.getAxisBtn);
+        getAxisBtn.setOnClickListener(onClickListener);
         
 	}
 	
@@ -249,6 +252,10 @@ public class SetUIFunction {
 			indicator = v.getId();
 
 			switch (indicator) {
+			case R.id.getAxisBtn:
+				uartRec.RunRecThread();
+
+				break;
 			case R.id.runjs:
 				synchronized (SendAlgo) {
 					try {
@@ -455,8 +462,8 @@ public class SetUIFunction {
 		else {
 			String[] inM = inStr.split("\\s+");
 			byte[] cmdByte = uartCmd.GetAllByte(inM);
-			String decoded = new String(cmdByte, "ISO-8859-1");
-			UartCmd.SendMsgUart(decoded, 1, cmdByte);
+			//String decoded = new String(cmdByte, "ISO-8859-1");
+			UartCmd.SendMsgUart( 1, cmdByte);
 		}
 	}
 

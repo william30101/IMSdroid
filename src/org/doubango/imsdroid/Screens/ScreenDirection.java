@@ -100,7 +100,7 @@ public class ScreenDirection extends BaseScreen{
 		mConnectionState = (TextView) findViewById(R.id.BLEconnectStatus);
 	
 		uartRec = new UartReceive();
-		uartRec.RunRecThread();
+		//uartRec.RunRecThread();
 		
 	}
 	

@@ -4,9 +4,14 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.doubango.imsdroid.cmd.EncoderCmd;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
@@ -14,30 +19,33 @@ import android.util.Log;
 
 public class UartReceive {
 	
-	
+	private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
 	boolean debugNanoQueue = true , debugEncoderQueue = false;
 
 	private int nanoCount = 0 , encoderCount = 0;  
-	private String nanoTestData[] = {"#-001.27:017:001:015","#-001.21:017:002:015",
-	"#-001.10:017:003:015"};
+	private String nanoTestData[] = {
+			"#-001.27:017:001:015","#-001.21:017:002:015","#-001.10:017:003:015",
+			"#-002.27:017:001:015","#-003.21:017:002:015","#-004.10:017:003:015",
+			"#-006.27:017:001:015","#-007.21:017:002:015"};
+			
 	private byte[] encoderTestData = {0x53,0x0d,(byte)0x02,0x30,0x03,0x15,0x01,(byte)0xff,0x00,0x00,0x45};
-	
-	private byte[] askEncoderData = {0x53,0x06,0x08,0x00,0x00,0x45};
+	private byte[] encoderTestData2 = {0x53,0x0d,(byte)0x01,0x50,0x03,0x1,0x01,(byte)0xff,0x00,0x00,0x45};
+
+	private byte[] askEncoderData = {0x53,0x06,0x0d,0x00,0x00,0x45};
 	private String ReStrEnco,ReStrNano;
 	
 	// We could modify here , to chage how many data should we get from queue.
 	private int getNanoDataSize = 3 , getEncoderDataSize = 2 , beSentMessage = 13;
-	private int nanoInterval = 100 , encoderWriteInterval = 80 , encoderReadInterval = 100 , combineInterval = 200;
+	private int nanoInterval = 100 , encoderWriteWiatInterval = 50 , 
+				encoderReadWaitInterval = 300 , encoderWaitInterval = 350, combineInterval = 400;
 	public static int fd,nanoFd,encFd;
 	private int minusNumber = 0 ;
-	private boolean writerFirst = true; // Write First
-	private static int writingWriters = 0;
-	private static int waitingWriters = 0;
-	private static int readingReaders = 0;
+	private boolean writerFirst = true , encoderDataChange = false; // Write First
 	
 	byte [] ReByteEnco = new byte[11];
 	
 	float[] nanoFloat = new float[getNanoDataSize];
+	float[] nanoFloat_1 = new float[getNanoDataSize];
 	
 	private static ArrayList<float[]> nanoQueue = new ArrayList<float[]>();
 	private static ArrayList<byte[]> encoderQueue = new ArrayList<byte[]>();
@@ -50,22 +58,36 @@ public class UartReceive {
 	Runnable rWEncoder = new EncoderWriteThread();
 	Runnable rREncoder = new EncoderReadThread();
 	Runnable rCombine = new CombineThread();
+	Runnable rEncoder = new EncoderThreadPool();
 
 	UartCmd uartCmd = new UartCmd();
 	
 	EncoderCmd encoderCmd = new EncoderCmd();
 	
+	
+	// for DBG , save X Y data to file
+	boolean nanoStart = false , 
+			 encoderStart = false , 
+			 combineStart = false;
+	List<Point> AxisPointData = new ArrayList<Point>();
+	
+	long  encoderLSum = 0;
+	long  encoderRSum = 0;
+	
 	private static String TAG = "App";
 	
 	public void RunRecThread() {
 		
-		//handler.postDelayed(rnano, nanoInterval);
+		nanoStart = true;
+		encoderStart = true;
+		combineStart = true;
+	
+		handler.postDelayed(rNano, nanoInterval);
+	
+		handler.postDelayed(rEncoder, encoderReadWaitInterval);
 
-		//handler.postDelayed(rWEncoder, encoderWriteInterval);
+       	handler.postDelayed(rCombine, combineInterval);
 		
-		//handler.postDelayed(rREncoder, encoderReadInterval);
-
-		//handler.postDelayed(rcombine, combineInterval);
 	}
 	
 	public class NanoThread implements Runnable {
@@ -123,14 +145,26 @@ public class UartReceive {
 							{
 								String[] daf = line20[i].split(":");
 
-							
-								float[] myflot = {Float.parseFloat(daf[0].substring(2, daf[0].length())),0};
-								//Add receive message from nanopan
-								Log.i(TAG,"Nano my float distance = " + myflot[0]);
-								nanoQueue.add(myflot);
-								//view.append(ReStr);
-								//scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-								ReStrNano = null;
+								if (daf.length == 4)
+								{
+									float[] myflot = {
+											Float.parseFloat(daf[2]),
+											Float.parseFloat(daf[0].substring(
+													2, daf[0].length())) };
+
+									
+									
+									// If data > 0 , we use it , else ignore it.
+									if (myflot[1] > 0) 				
+									{
+										//Log.i(TAG, "Nano my float distance = "
+										//		+ myflot[1]);
+										nanoQueue.add(myflot);
+									}
+									// view.append(ReStr);
+									// scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+									ReStrNano = null;
+								}
 							}
 						}
 					}
@@ -143,34 +177,54 @@ public class UartReceive {
 		}
  }
 
+	public class EncoderThreadPool implements Runnable {
+
+		public void run() {
+
+			Log.i(TAG, "EncoderThreadPool");
+			singleThreadExecutor.execute(rWEncoder);
+
+			singleThreadExecutor.execute(rREncoder);
+
+			if (encoderStart)
+				//handler.postDelayed(rEncoder, 350);
+				handler.postDelayed(rEncoder, encoderWaitInterval);
+		}
+
+	}
+	
 	public class EncoderWriteThread implements Runnable {
 
 		public void run() {
 
 			if (debugEncoderQueue) {
-				writeLock();
+				//writeLock();
 				//MainActivity.SendMsgUart("test",2,askEncoderData);
 				Log.i(TAG,"Write ask data");
-				writeUnLock();
-				handler.postDelayed(rWEncoder, encoderWriteInterval);
+				//writeUnLock();
+				//handler.postDelayed(rWEncoder, encoderWriteWiatInterval);
 			} else {
 				
 				//Log.i(TAG,"opend fd = " + uartCmd.GetDrivingOpend());
-				if (uartCmd.GetDrivingOpend()) {
-					writeLock();
+
+				if (uartCmd.GetDrivingOpend() == true) {
+					//writeLock();
 					Log.i(TAG,"Send Ask to Driving board");
 					String ReStrEnco = null;
 					try {
 						ReStrEnco = new String(askEncoderData, "ISO-8859-1");
 					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					uartCmd.SendMsgUart(ReStrEnco,1,askEncoderData);
-					writeUnLock();
-				}
+					UartCmd.SendMsgUart(1,askEncoderData);
 
-				handler.postDelayed(rWEncoder, encoderWriteInterval);
+				}
+				//try {
+				//	Thread.sleep(encoderWriteWiatInterval);
+				//} catch (InterruptedException e) {
+				//	e.printStackTrace();
+				//}
+				//handler.postDelayed(rWEncoder, encoderWriteInterval);
 			}
 
 		}
@@ -179,32 +233,34 @@ public class UartReceive {
 	
 	public class EncoderReadThread implements Runnable {
 
-		public void run() {
+		@TargetApi(Build.VERSION_CODES.GINGERBREAD) public void run() {
 
 			if (debugEncoderQueue) {
 				
-				readLock();
+				//readLock();
 				int dataSize = 8;
 				byte[] dataByte = new byte[dataSize];
 				
 				Log.i(TAG, "EncoderThread running count = " + encoderCount);
 				// ReStrEnco = "12345";
 				//ReStrEnco = new String(endoerTestData, "ISO-8859-1");;
-				// ReStr = "abcde";
+				// ReStr = "abcde";6
 				Arrays.fill(dataByte, (byte)0x00);
 				// dataByte[0]  is xPolarity
 				// dataByte[1] -> [2] is X axis
 				// dataByte[3]  is yPolarity
 				// dataByte[4] -> [5] is Y axis
 				// dataByte[6] -> [7] CRC 16 , 0x00 = not used
-
-				dataByte = Arrays.copyOfRange(encoderTestData, 2, 10);
+				if (encoderDataChange)
+					dataByte = Arrays.copyOfRange(encoderTestData, 2, 10);
+				else
+					dataByte = Arrays.copyOfRange(encoderTestData2, 2, 10);
 				
+				encoderDataChange = !encoderDataChange;
 				/*
 				try {
 					encoderDataByteArr = ReStrEnco.getBytes("ISO-8859-1");
 				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}*/
 				
@@ -213,9 +269,9 @@ public class UartReceive {
 				encoderQueue.add(dataByte);
 				encoderCount++;
 				
-				readUnLock();
+				//readUnLock();
 				
-				handler.postDelayed(rREncoder, encoderReadInterval);
+				//handler.postDelayed(rREncoder, encoderReadWaitInterval);
 
 				// byte[] encoderBy = ReceiveMsgUart(1);
 
@@ -232,110 +288,283 @@ public class UartReceive {
 				
 				
 				//Log.i(TAG,"encoder fd = " + encoderOpend);
-				if (uartCmd.GetDrivingOpend()) {
+
+				if (uartCmd.GetDrivingOpend() == true) {
 					
-					readLock();
+					Log.i(TAG,"Encoder ReadThread ");
+					//readLock();
 					//ReStrEnco = ReceiveMsgUart(1);
-
-					ReByteEnco = uartCmd.ReceiveByteMsgUart(1);
-
-					//Log.i(TAG,"receive msg = " + ReByteEnco);
-					
-					
-					if (ReByteEnco.length == 11)
-					{
-
-						//Log.i(TAG,"Receive message = "+ ReStrEnco);
-						//encoderCmd.SetByte(ReStrEnco);
-						//byte [] test = encoderCmd.GetDataByte();
-						Log.i(TAG,"Receive test[0] = "+ReByteEnco[0] + "test1 = "+ ReByteEnco[1] + "test2 = "+ ReByteEnco[2]+ "test3 = "+ ReByteEnco[3]+ 
-								"test4 = "+ ReByteEnco[4] + "test5 = "+ ReByteEnco[5]);
-						// Add receive message from Driving Board
-						//encoderQueue.add(encoderCmd.GetDataByte());
-						
-						 
-						 //Log.i(TAG,"receive Data byte = " + Arrays.copyOfRange(ReByteEnco, 2, 10));
-						 //encoderQueue.add(Arrays.copyOfRange(ReByteEnco, 2, 10));
-						
-						//Log.i(TAG,"receive msg = " + ReStrEnco);
-
-						// view.append(ReStr);
-						// scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-						// Arrays.fill(ReByteEnco, (byte)0x00);
-						// ReStrEnco = null;
+					//Log.i(TAG,"encoder read running");
+					//while(true);
+					//handler.postDelayed(rREncoder, encoderReadInterval);
+					try {
+						Thread.sleep(encoderReadWaitInterval);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+					ReByteEnco = UartCmd.ReceiveByteMsgUart(1);
+
 					
-					readUnLock();
+					
+					//Log.i(TAG,"Length="+ReByteEnco.length+",0="+ ReByteEnco[0]+",1="+ReByteEnco[1]);
+						//Log.i(TAG,"encoder rec msg = " + ReByteEnco + " leng = " + ReByteEnco.length);
+						//for(int i=0;i<ReByteEnco.length;i++)
+						//	Log.i("wr","encoder data[ " + i + "] = " + ReByteEnco[i]);
+						if (  ReByteEnco.length  ==  11 && ReByteEnco[0] == 0x53 &&  ReByteEnco[1] == 0x0d)
+						{
+							
+							//Log.i(TAG,"Receive message = "+ ReStrEnco);
+							//encoderCmd.SetByte(ReStrEnco);
+							//byte [] test = encoderCmd.GetDataByte();
+							Log.i(TAG,"Encoder Receive test[0] = "+ReByteEnco[0] + " test1 = "+ ReByteEnco[1] + " test2 = "+ ReByteEnco[2]+ " test3 = "+ ReByteEnco[3]+ 
+									" test4 = "+ ReByteEnco[4] + " test5 = "+ ReByteEnco[5] +  " test6 = "+ ReByteEnco[6] + " test7 = "+ ReByteEnco[7]);
+							//Log.i("123", "test6 = "+ ReByteEnco[6]);
+							// Add receive message from Driving Board
+							
+							encoderCmd.SetDataByte(ReByteEnco);
+							//byte [] test = encoderCmd.GetDataByte();
+							
+							encoderQueue.add(encoderCmd.GetDataByte());
+							
+							 
+							 //Log.i(TAG,"receive Data byte = " + Arrays.copyOfRange(ReByteEnco, 2, 10));
+							 //encoderQueue.add(Arrays.copyOfRange(ReByteEnco, 2, 10));
+							
+							//Log.i(TAG,"receive msg = " + ReStrEnco);
+	
+							// view.append(ReStr);
+							// scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+							// Arrays.fill(ReByteEnco, (byte)0x00);
+							// ReStrEnco = null;
+							
+							//try {
+							//	Thread.sleep(encoderReadWaitInterval);
+							//} catch (InterruptedException e) {
+							//	e.printStackTrace();
+							//}
+						}
+						
+						//readUnLock();
+					
 				}
 
-				handler.postDelayed(rREncoder, encoderReadInterval);
+				//handler.postDelayed(rREncoder, encoderReadWaitInterval);
 			}
 
 		}
 	}
+	
 
-	public class CombineThread implements Runnable {
+	public class CombineThread implements 
+	Runnable {
 
 		public void run() {
 
-			// Log.i(TAG,"encoderOpend = " + encoderOpend + "  nanoOpend = "
-			// + nanoOpend );
-			if ( (uartCmd.GetDrivingOpend() == true || debugNanoQueue == true) 
-					&& ( uartCmd.GetNanoPanOpend() == true || debugEncoderQueue == true ) ) {
-				// byte[] beSendMsg = new byte[beSentMessage];;
-
-				Log.i(TAG, "nanoQueue.size() = " + nanoQueue.size()
-						+ " encoderQueue.size() = " + encoderQueue.size());
-
-				if (nanoQueue.size() >= getNanoDataSize
-						&& encoderQueue.size() >= getEncoderDataSize) {
-
-					// Arrays.fill(beSendMsg, (byte)0x00);
-
-					minusNumber = nanoQueue.size() - getNanoDataSize;
-					// Two input here.
-
-					if (nanoQueue.size() % 3 != 0) {
-
-						minusNumber = nanoQueue.size() - getNanoDataSize
-								- (nanoQueue.size() % 3);
+			if (combineStart )
+			{
+			
+				// Log.i(TAG,"encoderOpend = " + encoderOpend + "  nanoOpend = "
+				// + nanoOpend );
+				//Log.i(TAG, "nanoQueue.size() = " + nanoQueue.size()
+				//		+ " encoderQueue.size() = " + encoderQueue.size());
+				
+				if ( ( uartCmd.GetNanoPanOpend()== true || debugNanoQueue == true) 
+						&& ( uartCmd.GetDrivingOpend() == true || debugEncoderQueue == true ) ) {
+					// byte[] beSendMsg = new byte[beSentMessage];;
+	
+					Log.i(TAG, "nanoQueue.size() = " + nanoQueue.size()
+							+ " encoderQueue.size() = " + encoderQueue.size());
+	
+					if (nanoQueue.size() >= getNanoDataSize + 4
+							&& encoderQueue.size() >= getEncoderDataSize) {
+	
+						// Arrays.fill(beSendMsg, (byte)0x00);
+	
+						minusNumber = nanoQueue.size() - getNanoDataSize;
+						// Two input here.
+	
+						if (nanoQueue.size() % 3 != 0) {
+	
+							minusNumber = nanoQueue.size() - getNanoDataSize
+									- (nanoQueue.size() % 3);
+						}
+	
+						// Two input here.
+						ArrayList<float[]> nanoData = getNanoRange(nanoQueue,
+								minusNumber, nanoQueue.size()
+										- (nanoQueue.size() % 3));
+						ArrayList<byte[]> encoderData = getEncoderRange(encoderQueue,
+								encoderQueue.size() - getEncoderDataSize,
+								encoderQueue.size());
+	
+	
+						
+						
+						
+						// Calculate nanopan data and encoder data here (java
+						// layer).
+						// Encoder data format
+						// [L Polarity] [L2] [L1] [R polarity] [R2] [R1] [COM2] [COM1] [0x45]
+						// Save to byte array beSendMsg[11]
+						// ....................
+						for (int i = 0; i < nanoData.size(); i++) {
+							nanoFloat = nanoData.get(i);
+							nanoFloat_1[i]=nanoFloat[1];
+							Log.i(TAG, "combine nanoFloat [" + i + " ] = "
+									+ nanoFloat_1[i]);
+							
+						}
+	
+						ArrayList<int[]> encoderDataQueue = new ArrayList<int[]>();
+						byte[] encoByte = encoderData.get(0);
+						int[] tempInt = new int[3]; // L Wheel , R Wheel , Compass
+						
+						for (int i=0;i<encoderData.size();i++)
+						{
+							tempInt[0]  = ( (encoByte[1] << 8) & 0xff00 | (encoByte[2] & 0xff));
+							if (encoByte[0] == 2)
+								tempInt[0] = -tempInt[0];
+							 
+							encoderLSum = encoderLSum + tempInt[0];
+							
+							tempInt[1]  = ( (encoByte[4] << 8) & 0xff00 | (encoByte[5] & 0xff));
+							if (encoByte[3] == 2)
+								tempInt[1] = -tempInt[1];
+							
+							encoderRSum = encoderRSum + tempInt[1];
+							
+							tempInt[2]  = ( (encoByte[6] << 8) & 0xff00 | (encoByte[7] & 0xff));
+							
+							
+							//Log.i("toEKF","encoder size = " + encoderData.size() +"  encoder data L=" + tempInt[0] + " R=" + tempInt[1] + " com = " + tempInt[2]);
+							
+							encoderDataQueue.add(tempInt);
+						}
+						
+						//thetaView.setText("theta : " + tempInt[2]);
+						
+						 
+						Log.i("toEKF","encoder size = " + encoderData.size() +" L Sum =" + encoderLSum + " R Sum =" + encoderLSum+ " com =" + tempInt[2]);
+						//WeightSet(Float.parseFloat(dwWeight.getText( ).toString())
+						//		,Float.parseFloat(encoderWeight.getText().toString()));
+						
+			///監看nanopan輸入值
+						Log.i("toEKF","Nano1=" + nanoFloat_1[0] + " Nano2=" + nanoFloat_1[1] + " Nano3= " + nanoFloat_1[2]);
+			///------EKF-----------------------------------------------------------------------------------------
+						float robotLocation[] = uartCmd.EKF((float)nanoFloat_1[0],(float)nanoFloat_1[1],(float)nanoFloat_1[2],(int) encoderLSum ,(int) encoderRSum,(int) tempInt[2]);
+			///--------------------------------------------------------------------------------------------------
+						
+						Log.i(TAG,"Send axis to Driving board");
+						byte[] sendAxisToDriving = new byte[11];
+						
+						if (robotLocation[0] < 0  )
+							sendAxisToDriving[2] = 2;
+						else
+							sendAxisToDriving[2] = 1;
+						
+						
+						if (robotLocation[1] < 0  )
+							sendAxisToDriving[5] = 2;
+						else
+							sendAxisToDriving[5] = 1;
+						
+						sendAxisToDriving[0] = 0x53;
+						sendAxisToDriving[1] = 0x09;
+						
+						int LX = Math.abs(Math.round(robotLocation[0]));
+						int LY = Math.abs(Math.round(robotLocation[1]));
+						
+						sendAxisToDriving[3] = (byte) (LX & 0xff00);
+						sendAxisToDriving[4] = (byte) (LX & 0x00ff);
+						
+						
+						sendAxisToDriving[6] = (byte) (LY & 0xff00);
+						sendAxisToDriving[7] = (byte) (LY & 0x00ff);
+						
+						sendAxisToDriving[8] = 0x00;
+						sendAxisToDriving[9] = 0x00;
+						sendAxisToDriving[10] = 0x45;
+						
+						String ReStrLocation = null;
+						try {
+							ReStrLocation = new String(sendAxisToDriving, "ISO-8859-1");
+						} catch (UnsupportedEncodingException e) {
+							e.printStackTrace();
+						}
+						/*for (int i=0;i<10;i++)
+						{
+							drivingaxisData[4] = (byte) (i *10);
+							//MainActivity.SendMsgUart(1,sendAxisToDriving);
+							MainActivity.SendMsgUart(1,drivingaxisData);
+						}*/
+						
+						//MainActivity.SendMsgUart(1,sendAxisToDriving);
+						
+						Point point = new Point();
+						Point pointOriginal = new Point();
+						// Calibration to center
+						//xCoordinateOri.setText(" State X  : " + Float.toString(robotLocation[2]));
+						//yCoordinateOri.setText(" State Y : " + Float.toString(robotLocation[3]));
+						
+						pointOriginal.x = robotLocation[2];
+						pointOriginal.y = robotLocation[3];
+						
+						AxisPointData.add(pointOriginal);
+						
+						point.x = (float) (robotLocation[0]*5 + 150);
+						point.y = (float) (robotLocation[1]*5 + 150);
+						
+						//xCoordinate.setText(" Measure X : " + Float.toString(robotLocation[0]));
+						//yCoordinate.setText(" Measure Y : " + Float.toString(robotLocation[1]));
+						
+						
+						Log.i("toEKF","X = " + robotLocation[2] + "  Y = " + robotLocation[3]);
+						//add for test
+						//point.x = 200;
+						//point.y = 300;				
+						
+				        /*if (count == 0){
+				        	drawView.firsttouchX = pointOriginal.x;
+				        	drawView.firsttouchY = pointOriginal.y;
+	//			        	path.moveTo(firsttouchX, firsttouchY);
+							count++;
+				        }
+				     
+				        drawView.current_TouchX = point.x;
+				        drawView.current_TouchY = point.y;
+				        
+				        
+				        drawView.points.add(point);
+				        */
+	//			        
+	//			    	paint.setStyle(Paint.Style.STROKE);
+	//			        path.lineTo(current_TouchX, current_TouchY);					|| list.get(i*3)[0] == 1 && list.get(i*3 + 1)[0] == 3 && list.get(i*3 + 2)[0] == 2
+	//					path.moveTo(current_TouchX, current_TouchY);
+	//			        canvas.drawPath(path, paint);
+				        
+						//drawView.postInvalidate();
+						/*
+						try {
+							Thread.sleep(50);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}*/
+						// End
+						
+						encoderCount = 0;
+						nanoCount = 0;
+						nanoQueue.clear();
+						encoderQueue.clear();
+						
+						encoderLSum = 0;
+						encoderRSum = 0;
+						// One Output Here
+						// SendMsgUart(beSendMsg.toString(),1);
 					}
-
-					// Two input here.
-					ArrayList<float[]> nanoData = getNanoRange(nanoQueue,
-							minusNumber, nanoQueue.size()
-									- (nanoQueue.size() % 3));
-					ArrayList<byte[]> encoderData = getEncoderRange(encoderQueue,
-							encoderQueue.size() - getEncoderDataSize,
-							encoderQueue.size());
-
-					// Calculate nanopan data and encoder data here (java
-					// layer).
-					// Output Data format 11 bytes 
-					// [0x53] [0x09] [X Polarity] [X2] [X1] [Y polarity] [Y2] [Y1] [CRC2] [CRC1] [0x45]
-					// Save to byte array beSendMsg[11]
-					// ....................
-
-					for (int i = 0; i < nanoData.size(); i++) {
-						nanoFloat = nanoData.get(i);
-						Log.i(TAG, "combine nanoFloat [" + i + " ] = "
-								+ nanoFloat[0]);
-					}
-
-					byte[] encoByte = encoderData.get(0);
-
-					uartCmd.Combine(nanoData, encoderData);
-					// .................
-
-					// End
-					encoderCount = 0;
-					nanoCount = 0;
-					nanoQueue.clear();
-					encoderQueue.clear();
-					// One Output Here
-					// SendMsgUart(beSendMsg.toString(),1);
+	
+					
 				}
-
 				handler.postDelayed(rCombine, combineInterval);
 			}
 		}
@@ -355,54 +584,30 @@ public class UartReceive {
 	public static ArrayList<float[]> getNanoRange(ArrayList<float[]> list, int start, int last) {
 
 		ArrayList<float[]> temp = new ArrayList<float[]>();
-		Log.i(TAG,"nano start = " + start + " last = " + last);
+		
+		/*****************************************/
+		// example : arr{1,2,3,1,2,3,1,2}        //
+		// We need 2nd {1,2,3} , so we clear arraylist , and add newest
+		/*****************************************/
+		
+		for (int i=0;i< (list.size() / 3 );i++)
+		{
+			if (list.get(i*3)[0] == 1 && list.get(i*3 + 1)[0] == 2 && list.get(i*3 + 2)[0] == 3 
+					|| list.get(i*3)[0] == 1 && list.get(i*3 + 1)[0] == 3 && list.get(i*3 + 2)[0] == 2)
+			{
+				temp.clear();	// If we got newest data , clear old data .
+				temp.add(list.get(i*3));
+				temp.add(list.get(i*3 + 1));
+				temp.add(list.get(i*3 + 2));
+			}
+		}
+		
+		/*Log.i(TAG,"start = " + start + " last = " + last);
 		for (int x = start; x < last; x++) {
 			temp.add(list.get(x));
 			}
-
+		 */
 		return temp;
 	}
-	
-	
-	public synchronized void readLock() {
-	    try {
-	        while(writingWriters > 0 || (writerFirst && waitingWriters > 0)) {
-	            wait();
-	        }
-	    }
-	    catch(InterruptedException e) {
-	        e.printStackTrace();
-	    }
 
-	    readingReaders++;
-	 }
-	 
-	 public synchronized void readUnLock() {
-	    readingReaders--;
-	    writerFirst = true;
-	    notifyAll();
-	 }
-	 
-	 public synchronized void writeLock() {
-	    waitingWriters++;
-	    try {
-	        while(readingReaders > 0 || writingWriters > 0) {
-	            wait();
-	        }
-	    }
-	    catch(InterruptedException e) {
-	        e.printStackTrace();
-	    }
-	    finally {
-	        waitingWriters--;
-	    }
-
-	    writingWriters++;
-	 }
-	 
-	 public synchronized void writeUnLock() {
-	    writingWriters--;
-	    writerFirst = false;
-	    notifyAll();
-	 } 
 }
