@@ -96,10 +96,15 @@ public class SetUIFunction {
 	private int offset_y = 0;
 	ImageView img;
 	
+	
+	/* BlueTooth temporary declare */ 
     private Button BLEWrite;
     public static EditText BLEDataText;
 	
-
+    /* Temporary declare */
+    private Button tempMenu;
+    
+    
 	public void SetUIFunction(Activity v) {
 		uartCmd = new UartCmd();
 		loggin = NetworkStatus.getInstance();
@@ -149,16 +154,22 @@ public class SetUIFunction {
 	    dragMenu.setOnTouchListener(dragListener);
 	    img.setOnTouchListener(imgListener);
 		
+        selected_item = (View)v.findViewById(R.id.screenmenu);
 	    
+	    
+	    
+	    /*--------------------------------------------------*/
+	    /* Temporary */
         BLEWrite = (Button) v.findViewById(R.id.BLEWriteBtn);
         BLEDataText = (EditText) v.findViewById(R.id.BLEDataText);
 
         BLEWrite.setOnClickListener(onClickListener);
-
-        selected_item = (View)v.findViewById(R.id.screenmenu);
         
         Button getAxisBtn = (Button)v.findViewById(R.id.getAxisBtn);
         getAxisBtn.setOnClickListener(onClickListener);
+        
+        tempMenu = (Button) v.findViewById(R.id.testMenu);
+        tempMenu.setOnClickListener(onClickListener);
         
 	}
 	
@@ -242,7 +253,7 @@ public class SetUIFunction {
 
 	};
 	
-	/* Set Navigation Button onClickListener */
+	/* Set Navigation & others Button onClickListener */
 	private	Button.OnClickListener onClickListener = new OnClickListener(){
 		int indicator;
 		
@@ -252,10 +263,17 @@ public class SetUIFunction {
 			indicator = v.getId();
 
 			switch (indicator) {
+			case R.id.testMenu:
+				
+				break;
+			
+			
+			
+			
 			case R.id.getAxisBtn:
 				uartRec.RunRecThread();
-
 				break;
+				
 			case R.id.runjs:
 				synchronized (SendAlgo) {
 					try {
