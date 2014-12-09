@@ -252,7 +252,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int BLEBtn=0x7f090084;
         public static final int BLEDataText=0x7f090071;
         public static final int BLEWriteBtn=0x7f090070;
+<<<<<<< HEAD
         public static final int BLEconnectStatus=0x7f090073;
+=======
+        public static final int BLEconnectStatus=0x7f090072;
+>>>>>>> a14f4e5218fc4ccf48b9e21321f957225980110b
         public static final int Button01=0x7f090153;
         public static final int DirectionBtn=0x7f090082;
         public static final int NattBtn=0x7f090086;
@@ -292,6 +296,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int forward=0x7f09003f;
         public static final int gameView=0x7f09003c;
         public static final int gameView1=0x7f090065;
+        public static final int getAxisBtn=0x7f090073;
         public static final int go=0x7f090061;
         public static final int handle=0x7f090130;
         public static final int header2=0x7f090009;

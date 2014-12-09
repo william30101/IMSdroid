@@ -55,7 +55,7 @@ public class SetBtnFun {
 		
 		XMPPSet = new XMPPSetting();
 		uartRec = new UartReceive();
-		uartRec.RunRecThread();
+		
 		
 		gameView = (GameView) v.findViewById(R.id.gameView);
 		
@@ -347,8 +347,8 @@ public class SetBtnFun {
 		{
 			String[] inM = inStr.split("\\s+");
 			byte[] cmdByte = uartCmd.GetAllByte(inM);
-			String decoded = new String(cmdByte, "ISO-8859-1");
-			UartCmd.SendMsgUart(decoded, 1, cmdByte);
+			//String decoded = new String(cmdByte, "ISO-8859-1");
+			UartCmd.SendMsgUart( 1, cmdByte);
 		}
 	}
 	

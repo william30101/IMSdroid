@@ -203,7 +203,11 @@ int id AbsoluteLayout1 0x7f090055
 int id BLEBtn 0x7f090084
 int id BLEDataText 0x7f090071
 int id BLEWriteBtn 0x7f090070
+<<<<<<< HEAD
 int id BLEconnectStatus 0x7f090073
+=======
+int id BLEconnectStatus 0x7f090072
+>>>>>>> a14f4e5218fc4ccf48b9e21321f957225980110b
 int id Button01 0x7f090153
 int id DirectionBtn 0x7f090082
 int id NattBtn 0x7f090086
@@ -243,6 +247,7 @@ int id forRig 0x7f09003e
 int id forward 0x7f09003f
 int id gameView 0x7f09003c
 int id gameView1 0x7f090065
+int id getAxisBtn 0x7f090073
 int id go 0x7f090061
 int id handle 0x7f090130
 int id header2 0x7f090009
