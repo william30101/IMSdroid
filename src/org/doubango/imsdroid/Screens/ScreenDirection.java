@@ -79,8 +79,10 @@ public class ScreenDirection extends BaseScreen{
 		
 		/* Screen JayStick function of shinhua's code */
 		setContentView(R.layout.screen_directionjs);
-		setUI = new SetUIFunction();
-		setUI.SetUIFunction(this);
+
+		setUI = new SetUIFunction(this);
+		setUI.StartUIFunction();
+		
 	
 		mapScreenView = new MapScreenView();
 		mapScreenView.MapScreenView(this);

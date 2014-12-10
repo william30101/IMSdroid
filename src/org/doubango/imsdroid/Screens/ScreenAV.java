@@ -210,7 +210,7 @@ public class ScreenAV extends BaseScreen{
 		setBtn = new SetBtnFun();
 		mapScreen = new MapScreen();
 
-		setUI = new SetUIFunction();
+		setUI = new SetUIFunction(this);
 		mapScreenView = new MapScreenView();
 		
 		//XMPPThreadv = new XMPPThread();
@@ -1084,7 +1084,7 @@ public class ScreenAV extends BaseScreen{
 //		mapScreen.MapScreen(host);
 		
 	
-		setUI.SetUIFunction(host);
+		setUI.StartUIFunction();
 		mapScreenView.MapScreenView(host);
 		
 		// Video Producer

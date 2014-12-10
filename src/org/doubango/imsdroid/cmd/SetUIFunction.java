@@ -112,8 +112,17 @@ public class SetUIFunction{
     /* Temporary declare */
     private Button tempMenu;
     
+    Context mContext;
+    Activity globalActivity;
     
-	public void SetUIFunction(Activity v) {
+    public SetUIFunction(Activity activity )
+    {
+    	globalActivity = activity;
+    	mContext = activity.getWindow().getDecorView().getContext();
+    }
+    
+	public void StartUIFunction() {
+
 		uartCmd = new UartCmd();
 		loggin = NetworkStatus.getInstance();
 
@@ -121,21 +130,21 @@ public class SetUIFunction{
 		uartRec = new UartReceive();
 		//uartRec.RunRecThread();
 
-		gameView = (GameView) v.findViewById(R.id.gameView1);
+		gameView = (GameView) globalActivity.findViewById(R.id.gameView1);
 		game = new Game();
 
 		SendAlgo = new SendCmdToBoardAlgorithm();
 
-		getScreenSize(v);
+		getScreenSize(globalActivity);
 
 		/* Joy Stick */
-		layout_joystick = (RelativeLayout) v.findViewById(R.id.layout_joystick);
-		setJoyStickParameter(v);
+		layout_joystick = (RelativeLayout) globalActivity.findViewById(R.id.layout_joystick);
+		setJoyStickParameter(globalActivity);
 		layout_joystick.setOnTouchListener(joystickListener);
 
 		
 		/* Button declare */
-		jsRunBtn = (Button) v.findViewById(R.id.runjs);
+		jsRunBtn = (Button) globalActivity.findViewById(R.id.runjs);
 		jsRunBtn.setOnClickListener(onClickListener);
 		
 		
@@ -144,39 +153,39 @@ public class SetUIFunction{
 		setARClayoutSize(width);
 		LayoutParams params = new RelativeLayout.LayoutParams(arcLayoutsize, arcLayoutsize);
 		Log.i("shinhua", "params width " + params.width + "params height" + params.height );
-		RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.layout_robot);
+		RelativeLayout layout = (RelativeLayout) globalActivity.findViewById(R.id.layout_robot);
 
-		arcMenu = (ArcMenu) v.findViewById(R.id.arc_menu);
+		arcMenu = (ArcMenu) globalActivity.findViewById(R.id.arc_menu);
 		arcMenu.setLayoutParams(params);
-		initArcMenu(arcMenu, ITEM_DRAWABLES, v);
+		initArcMenu(arcMenu, ITEM_DRAWABLES, globalActivity);
 
 		/* Robot seekbar */
-		seekbar = (ScreenUIVerticalSeekBar) v.findViewById(R.id.robotseekbar);
-	    seekbarlayout = (RelativeLayout) v.findViewById(R.id.layout_seekbar);
+		seekbar = (ScreenUIVerticalSeekBar) globalActivity.findViewById(R.id.robotseekbar);
+	    seekbarlayout = (RelativeLayout) globalActivity.findViewById(R.id.layout_seekbar);
 	    setSeekbarParameter();
         
 		/* DragDrop menu */
-	    dragMenu = (ViewGroup)v.findViewById(R.id.mainlayout);
-	    img = (ImageView) v.findViewById(R.id.screenmenu);
+	    dragMenu = (ViewGroup)globalActivity.findViewById(R.id.mainlayout);
+	    img = (ImageView) globalActivity.findViewById(R.id.screenmenu);
 	    
 	    dragMenu.setOnTouchListener(dragListener);
 	    img.setOnTouchListener(imgListener);
 		
-        selected_item = (View)v.findViewById(R.id.screenmenu);
+        selected_item = (View)globalActivity.findViewById(R.id.screenmenu);
 	    
 	    
 	    
 	    /*--------------------------------------------------*/
 	    /* Temporary */
-        BLEWrite = (Button) v.findViewById(R.id.BLEWriteBtn);
-        BLEDataText = (EditText) v.findViewById(R.id.BLEDataText);
+        BLEWrite = (Button) globalActivity.findViewById(R.id.BLEWriteBtn);
+        BLEDataText = (EditText) globalActivity.findViewById(R.id.BLEDataText);
 
         BLEWrite.setOnClickListener(onClickListener);
         
-        Button getAxisBtn = (Button)v.findViewById(R.id.getAxisBtn);
+        Button getAxisBtn = (Button)globalActivity.findViewById(R.id.getAxisBtn);
         getAxisBtn.setOnClickListener(onClickListener);
         
-        tempMenu = (Button) v.findViewById(R.id.testMenu);
+        tempMenu = (Button) globalActivity.findViewById(R.id.testMenu);
         tempMenu.setOnClickListener(onClickListener);
         
 	}
@@ -480,7 +489,7 @@ public class SetUIFunction{
 	
 	private void executeColorPicker(View v){
  
-		Context mContext = v.getContext();
+		//Context mContext = v.getContext();
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 	    //Create color picker view
