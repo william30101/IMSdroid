@@ -93,12 +93,9 @@ public class ScreenDirection extends BaseScreen{
 		    BLEActivity = new BLEDeviceScanActivity();
 			BLEActivity.BLEDeviceScanStart(this);
 		}
-		else
+		else{
 			Log.i(TAG,"not support BT 4.0");
-		
-		
-		
-
+		}
 		mConnectionState = (TextView) findViewById(R.id.BLEconnectStatus);
 	
 		uartRec = new UartReceive();

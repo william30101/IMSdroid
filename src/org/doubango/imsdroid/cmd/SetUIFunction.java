@@ -3,6 +3,7 @@ package org.doubango.imsdroid.cmd;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.zip.Inflater;
 
 import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.UartCmd;
@@ -18,9 +19,14 @@ import org.doubango.imsdroid.map.GameView;
 import org.doubango.imsdroid.map.SendCmdToBoardAlgorithm;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,17 +35,19 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 import com.capricorn.ArcMenu;
+import com.larswerkman.holocolorpicker.ColorPicker;
+import com.larswerkman.holocolorpicker.OpacityBar;
+import com.larswerkman.holocolorpicker.SVBar;
 
-public class SetUIFunction {
+public class SetUIFunction{
+//public class SetUIFunction{
 
 	private String TAG = "App";
 	private boolean isNeedAdd = false;
@@ -253,6 +261,7 @@ public class SetUIFunction {
 
 	};
 	
+	
 	/* Set Navigation & others Button onClickListener */
 	private	Button.OnClickListener onClickListener = new OnClickListener(){
 		int indicator;
@@ -264,12 +273,9 @@ public class SetUIFunction {
 
 			switch (indicator) {
 			case R.id.testMenu:
-				
+				executeColorPicker(v);
 				break;
-			
-			
-			
-			
+
 			case R.id.getAxisBtn:
 				uartRec.RunRecThread();
 				break;
@@ -287,6 +293,7 @@ public class SetUIFunction {
 				jsRunBtn.setEnabled(false);
 				
 				break;
+				
 			case R.id.BLEWriteBtn:
 				if (BLEDevCon == null)
 			    // Add BLE control
@@ -470,6 +477,48 @@ public class SetUIFunction {
 		}
 
 	};
+	
+	private void executeColorPicker(View v){
+ 
+		Context mContext = v.getContext();
+		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+	    //Create color picker view
+		View view = inflater.inflate(R.layout.color_picker_dialog, null);
+		if (v == null) return;
+		
+		final ColorPicker picker = (ColorPicker) view.findViewById(R.id.picker);
+		SVBar svBar = (SVBar) view.findViewById(R.id.svbar);
+        OpacityBar opacityBar = (OpacityBar) view.findViewById(R.id.opacitybar);
+        final TextView hexCode = (TextView) view.findViewById(R.id.hex_code);
+		
+        picker.addSVBar(svBar);
+        picker.addOpacityBar(opacityBar);
+        picker.setOnColorChangedListener(new ColorPicker.OnColorChangedListener() {
+            @Override
+            public void onColorChanged(int intColor) {
+                String hexColor = Integer.toHexString(intColor).toUpperCase();
+                hexCode.setText("#" + hexColor);
+            }
+        });
+
+        //Config dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setView(view);
+        builder.setTitle("Choose Smart Lighting color");
+        builder.setCancelable(true);
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Update color
+               
+            }
+        });
+        builder.create().show();
+	}
+	
+	
 	
 	/* XMPP Sendfunction */
 	private void SendToBoard(String inStr) throws IOException {
