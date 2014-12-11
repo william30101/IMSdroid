@@ -46,7 +46,6 @@ public class ScreenXYZsignin extends BaseScreen {
 	private BroadcastReceiver mSipBroadCastRecv;
 	
 	private ImageButton signinBtn, createAccountBtn;
-	private Button NetworkBtn, NattBtn;
 	int Screen_width, Screen_height;
 	int horizontalscope, verticalscope;	
 
@@ -74,14 +73,8 @@ public class ScreenXYZsignin extends BaseScreen {
 		createAccountBtn = (ImageButton) findViewById(R.id.account_btn);
 		setupButtonPosition(createAccountBtn, 10, 6, 3);
 
-		NetworkBtn = (Button) findViewById(R.id.network_btn);
-		NattBtn = (Button) findViewById(R.id.natt_btn);
-	
 		signinBtn.setOnClickListener(ClickListener);
 		createAccountBtn.setOnClickListener(ClickListener);
-		NetworkBtn.setOnClickListener(ClickListener);
-		NattBtn.setOnClickListener(ClickListener);
-	
 	}
 	
 	private void setScreenBackground(){
@@ -130,13 +123,6 @@ public class ScreenXYZsignin extends BaseScreen {
 	 		
 	    		case R.id.account_btn:
 	    			
-	    			break;
-	    		case R.id.network_btn: 
-	    			mScreenService.show(ScreenNetwork.class, "NetworkSetting");
-	    			break;
-	    		
-	    		case R.id.natt_btn: 
-	    			mScreenService.show(ScreenNatt.class, "NattSetting");
 	    			break;
 	    		default:
 	    			Log.i(TAG,"Invaild Button function");

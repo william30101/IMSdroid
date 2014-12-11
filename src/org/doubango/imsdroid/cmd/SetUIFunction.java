@@ -48,8 +48,10 @@ import com.larswerkman.holocolorpicker.SVBar;
 import com.larswerkman.holocolorpicker.ValueBar;
 
 public class SetUIFunction {
-	// public class SetUIFunction{
-
+	
+	Activity globalActivity;
+	Context mContext;
+	
 	private String TAG = "App";
 	private boolean isNeedAdd = false;
 	private XMPPSetting XMPPSet;
@@ -112,8 +114,6 @@ public class SetUIFunction {
 	/* Temporary declare */
 	private Button tempMenu;
 
-	Context mContext;
-	Activity globalActivity;
 
 	public SetUIFunction(Activity activity) {
 		globalActivity = activity;
@@ -548,8 +548,7 @@ public class SetUIFunction {
 		int white = mode;
 		int yellow = 14 - mode;
 
-		Log.i("shinhua1",
-				Integer.toHexString(white) + "***"
+		Log.i("shinhua1", Integer.toHexString(white) + "***"
 						+ Integer.toHexString(yellow));
 
 	}

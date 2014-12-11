@@ -5,26 +5,6 @@
     android:layout_height="match_parent" 
 >
 
-    <Button
-        android:id="@+id/network_btn"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="14dp"
-        android:layout_toLeftOf="@+id/Button01"
-        android:scaleType="centerInside"
-        android:text="NetworkSetting" />
-
-    <Button
-        android:id="@+id/natt_btn"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/network_btn"
-        android:layout_alignBottom="@+id/network_btn"
-        android:layout_alignParentRight="true"
-        android:scaleType="centerInside"
-        android:text="NattSetting" />
-
     <ImageButton
         android:id="@+id/signin_btn"
         android:layout_width="wrap_content"
