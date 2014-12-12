@@ -50,7 +50,7 @@ public class SetBtnFun {
 	
 	public void SetBtn(Activity v)
 	{
-		uartCmd = new UartCmd();
+		uartCmd = UartCmd.getInstance();
 		loggin = NetworkStatus.getInstance();
 		
 		XMPPSet = new XMPPSetting();

@@ -60,7 +60,7 @@ public class UartReceive {
 	Runnable rCombine = new CombineThread();
 	Runnable rEncoder = new EncoderThreadPool();
 
-	UartCmd uartCmd = new UartCmd();
+	UartCmd uartCmd = UartCmd.getInstance();
 	
 	EncoderCmd encoderCmd = new EncoderCmd();
 	
@@ -132,8 +132,8 @@ public class UartReceive {
 				}*/
 				
 				
-				if (uartCmd.GetNanoPanOpend()) {
-					ReStrNano = uartCmd.ReceiveMsgUart(2);
+				if (uartCmd.GetDW1000Opend()) {
+					ReStrNano = uartCmd.ReceiveDW1000Uart(2);
 					if ( ReStrNano != null) {
 						//Log.i(TAG,"Nano Receive message = "+ ReStrNano + " leng= " + ReStrNano.length());
 						String[] line20 =  ReStrNano.split("\r\n");
@@ -369,7 +369,7 @@ public class UartReceive {
 				//Log.i(TAG, "nanoQueue.size() = " + nanoQueue.size()
 				//		+ " encoderQueue.size() = " + encoderQueue.size());
 				
-				if ( ( uartCmd.GetNanoPanOpend()== true || debugNanoQueue == true) 
+				if ( ( uartCmd.GetDW1000Opend()== true || debugNanoQueue == true) 
 						&& ( uartCmd.GetDrivingOpend() == true || debugEncoderQueue == true ) ) {
 					// byte[] beSendMsg = new byte[beSentMessage];;
 	
@@ -452,7 +452,7 @@ public class UartReceive {
 			///監看nanopan輸入值
 						Log.i("toEKF","Nano1=" + nanoFloat_1[0] + " Nano2=" + nanoFloat_1[1] + " Nano3= " + nanoFloat_1[2]);
 			///------EKF-----------------------------------------------------------------------------------------
-						float robotLocation[] = uartCmd.EKF((float)nanoFloat_1[0],(float)nanoFloat_1[1],(float)nanoFloat_1[2],(int) encoderLSum ,(int) encoderRSum,(int) tempInt[2]);
+						float robotLocation[] = uartCmd.EKF((float)nanoFloat_1[0],(float)nanoFloat_1[1],(float)nanoFloat_1[2],(int) tempInt[0] ,(int) tempInt[1],(int) tempInt[2]);
 			///--------------------------------------------------------------------------------------------------
 						
 						Log.i(TAG,"Send axis to Driving board");

@@ -46,7 +46,7 @@ public class ScreenXYZLogin extends BaseScreen {
 	
 	private NetworkStatus loggin;
 	
-	private UartCmd uartCmd = new UartCmd();
+	private UartCmd uartCmd = UartCmd.getInstance();
 	
 	private String xmppUsername, xmppPassword; 	//For XMPP thread user name & password
 	private XMPPSetting XMPPSet;
@@ -116,7 +116,7 @@ public class ScreenXYZLogin extends BaseScreen {
         super.SetmName(editTextUsername.getText().toString().trim());
         super.SetmPass(editTextPassword.getText().toString().trim());
         
-        if (UartCmd.driFd == 0 || UartCmd.nanoFd == 0)
+        if (UartCmd.driFd == 0 || UartCmd.dw1000Fd == 0)
         {
 		uartCmd.OpenSetUartPort("ttymxc3");
 		uartCmd.OpenSetUartPort("ttymxc2");
@@ -203,7 +203,7 @@ public class ScreenXYZLogin extends BaseScreen {
 				editTextImpu.setText(editTextImpu.getText().toString().trim());
 				editTextImpi.setText(editTextImpi.getText().toString().trim());
 				editTextPassword.setText(editTextPassword.getText().toString().trim());
-				editTextRealm.setText("sip:61.222.245.149");
+				editTextRealm.setText("sip:doubango.org");
 				checkBoxEarlyIMS.setChecked(false);
 				
 				mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_DISPLAY_NAME, 
