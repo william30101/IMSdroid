@@ -48,10 +48,10 @@ import com.larswerkman.holocolorpicker.SVBar;
 import com.larswerkman.holocolorpicker.ValueBar;
 
 public class SetUIFunction {
-	
+
 	Activity globalActivity;
 	Context mContext;
-	
+
 	private String TAG = "App";
 	private boolean isNeedAdd = false;
 	private XMPPSetting XMPPSet;
@@ -113,7 +113,6 @@ public class SetUIFunction {
 
 	/* Temporary declare */
 	private Button tempMenu;
-
 
 	public SetUIFunction(Activity activity) {
 		globalActivity = activity;
@@ -519,10 +518,20 @@ public class SetUIFunction {
 				// String hexColor =
 				// Integer.toHexString(intColor).toUpperCase();
 				// hexCode.setText("#" + hexColor);
-				int colorValue = (int) (intColor / 18.2);
+				int colorValue = (int) (intColor / 18);
+				int level1 = colorValue * 15 + 14;
+
 				String color = Integer.toString(colorValue).toUpperCase();
 				colorLevel.setText("Current LED LEVEL" + color);
-				controlLED(colorValue);
+				Log.i("shinhua1", " ***" + Integer.toHexString(level1) + "***");
+
+				/*
+				 * for(int i=0; i<15 ;i++){ int color1 = 0; color1 = i * 15 +
+				 * 14;
+				 * 
+				 * Log.i("shinhua1"," ***" + Integer.toHexString(color1) +
+				 * "***"); }
+				 */
 
 			}
 		});
@@ -543,14 +552,55 @@ public class SetUIFunction {
 		builder.create().show();
 	}
 
-	/* LED BlueTooth Control */
-	private void controlLED(int mode) {
-		int white = mode;
-		int yellow = 14 - mode;
-
-		Log.i("shinhua1", Integer.toHexString(white) + "***"
-						+ Integer.toHexString(yellow));
-
+	private void switchled(int itor) {
+		String cmd;
+		switch (itor) {
+		case 0:
+			cmd = "0x0E";
+			break;
+		case 1:
+			cmd = "0x1D";
+			break;
+		case 2:
+			cmd = "0x2C";
+			break;
+		case 3:
+			cmd = "0x3B";
+			break;
+		case 4:
+			cmd = "0x4A";
+			break;
+		case 5:
+			cmd = "0x59";
+			break;
+		case 6:
+			cmd = "0x68";
+			break;
+		case 7:
+			cmd = "0x77";
+			break;
+		case 8:
+			cmd = "0x86";
+			break;
+		case 9:
+			cmd = "0x96";
+			break;
+		case 10:
+			cmd = "0xA4";
+			break;
+		case 11:
+			cmd = "0xB3";
+			break;
+		case 12:
+			cmd = "0xC2";
+			break;
+		case 13:
+			cmd = "0xD1";
+			break;
+		case 14:
+			cmd = "0xE0";
+			break;
+		}
 	}
 
 	/* XMPP Sendfunction */

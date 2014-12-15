@@ -117,7 +117,6 @@ public class GameView extends View {
 	protected void onDraw(Canvas canvas) {
 		try {
 			gcanvas = canvas;
-			Log.i("shinhua", "OnDraw");
 			onMyDraw(canvas);
 
 		} catch (Exception e) {
@@ -265,7 +264,7 @@ public class GameView extends View {
 		// Log.i(TAG,"Draw target = "+ game.target[0] + " , " + game.target[1]);
 
 		// William Added
-		onDrawText(canvas);
+		//onDrawText(canvas);
 
 		if (drawCircleFlag == true) {
 			DrawRobotPosition(canvas);
@@ -282,25 +281,33 @@ public class GameView extends View {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			
 			Log.i("shinhua", "x: " + event.getX() + " y: " + event.getY());
-			isZoom = true;
+		
 			span = 30;
 			getMapSize();
 
-			xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2));
+			xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2)); 
 			ycoordinate = (int) ((screenHeight / 2) - (mapHeight / 2));
 			
-			fixWidthMapData = xcoordinate;
+
+			//fixWidthMapData = xcoordinate; 	// ZoomIn Screen in the right
+			fixWidthMapData = 0; 			// ZoomIn Screen in the middle
 			fixHeightMapData = ycoordinate;
 
 			Log.i("shinhua", "fixWidthMapData: " + fixWidthMapData + " fixHeightMapData: " + fixHeightMapData);
 			
-			//if(( event.getX() > (screenWidth -fixWidthMapData)) && ((event.getY() > (screenHeight -fixHeightMapData)))){
 			
+			
+//			if(event.getX() >= tempx && event.getY() <= screenHeight){
+				Log.i("shinhua", "GOGOGOGOGOGOGOOOOOOOOOGOGOGO");
+				isZoom = true;
+				touchDown = true;
+
+//			}
+	
 			requestLayout();
-			
-			touchDown = true;
 			drawZoomMap(event);
-			//}
+			
+			
 			
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
 			if (zoomout) {
@@ -498,10 +505,10 @@ public class GameView extends View {
 		col = map[0].length;
 		mapWidth = (col * (span + 1));
 		mapHeight = (row * (span + 1));
-		Log.i("shinhua", "MapSize: " + mapWidth + " & " + mapHeight);
+		//Log.i("shinhua", "MapSize: " + mapWidth + " & " + mapHeight);
 	}
 
-	public void setGridSize() {
+	public void setGridSize(){
 		/* The setGridSize */
 		map = game.map;
 		row = map.length;
@@ -518,10 +525,11 @@ public class GameView extends View {
 		else{ 
 			fixWidthMapData = screenWidth - (col * (span + 1));
 			height = (row * (span + 1)) + ycoordinate;
+			
 			setVIEW_WIDTH(screenWidth);
 			//setVIEW_WIDTH(width);
 			setVIEW_HEIGHT(height);
-		
+			
 		}
 
 	}

@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/linearLayout1"
-            android:text="BLEwrite" />
+            android:text="BLEwrite"/>
 
         <EditText
             android:id="@+id/BLEDataText"
