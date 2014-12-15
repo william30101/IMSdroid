@@ -13,6 +13,9 @@ bin/AndroidManifest.xml
 bin/R.txt
 bin/jarlist.cache
 bin/resources.ap_
+gen/com/larswerkman/holocolorpicker/R.java
+gen/org/doubango/imsdroid/R.java
+gen/org/doubango/ngn/R.java
 
 !.gitignore
 !*/
