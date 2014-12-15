@@ -7,6 +7,12 @@
 *.dex
 *.so
 *.launch
+gen/com/larswerkman/holocolorpicker/BuildConfig.java
+gen/com/larswerkman/holocolorpicker/R.java
+bin/AndroidManifest.xml
+bin/R.txt
+bin/jarlist.cache
+bin/resources.ap_
 
 !.gitignore
 !*/

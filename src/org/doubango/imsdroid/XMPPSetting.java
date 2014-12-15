@@ -20,7 +20,7 @@ public class XMPPSetting {
 	private String TAG = "william";
 
 	private static XMPPConnection connection;
-	private UartCmd UCmd = new UartCmd();
+	private UartCmd UCmd = UartCmd.getInstance();
 	private boolean LogSuc = false;
 
 	//public XMPPSetting(ScreenAV xmppClient)
@@ -43,8 +43,6 @@ public class XMPPSetting {
 	             new ConnectionConfiguration(host, Integer.parseInt(port));
 	     connection = new XMPPConnection(connConfig);
 	     Log.i(TAG, "Name= " + username + " Pass = " + Pass);
-	     
-	     UCmd = new UartCmd();
 
 	     try {
 	         connection.connect();

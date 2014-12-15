@@ -12,6 +12,7 @@ import org.doubango.imsdroid.cmd.DirectionCmd;
 import org.doubango.imsdroid.cmd.HealthCmd;
 import org.doubango.imsdroid.cmd.StopCmd;
 import org.doubango.imsdroid.cmd.StretchCmd;
+import org.doubango.imsdroid.map.NetworkStatus;
 
 
 import android.util.Log;
@@ -29,22 +30,42 @@ public class UartCmd extends BaseCmd{
 	private int Baud_rate = 0; // { B19200, B115200};
 	private static final String functionName = IMSDroid.class.getSimpleName();
 	
-	public static int fd = 0,nanoFd = 0,driFd = 0;
+	public static int fd = 0,dw1000Fd = 0,driFd = 0;
 	
 	//init all cmd object here
-	DirectionCmd direc = new DirectionCmd();
-	StopCmd scmd = new StopCmd();
-	AngleCmd angleCmd = new AngleCmd();
-	StretchCmd stretCmd = new StretchCmd();
+	DirectionCmd directionCmd;
+	StopCmd stopCmd;
+	AngleCmd angleCmd;
+	StretchCmd stretchCmd;
+	HealthCmd healCmd;
+	AxisCmd axisCmd;
+	AskCmd askCmd;
 	
-	HealthCmd healCmd = new HealthCmd();
+	private static UartCmd uartInstance;
 	
-	AxisCmd axisCmd = new AxisCmd();
-	AskCmd askCmd = new AskCmd();
+	public static UartCmd getInstance() {
+		 if (uartInstance == null){
+	            synchronized(NetworkStatus.class){
+	                if(uartInstance == null) {
+	                	uartInstance = new UartCmd();
+	                }
+	            }
+	        }
+	        return uartInstance;
+	}
 	
-	public UartCmd()
+	
+	private UartCmd()
 	{
 		super.SetByte(cmdStr,cmdByte,2);
+		
+		directionCmd = new DirectionCmd();
+		stopCmd = new StopCmd();
+		angleCmd = new AngleCmd();
+		stretchCmd = new StretchCmd();
+		healCmd = new HealthCmd();
+		axisCmd = new AxisCmd();
+		askCmd = new AskCmd();
 	}
 	
 	public byte[] GetAllByte(String[] inStr) throws IOException {
@@ -54,14 +75,14 @@ public class UartCmd extends BaseCmd{
 		switch (super.GetByteNum(inStr[0], 2)) {
 		case 0x01:
 
-			direc.SetByte(inStr);
-			retStreamDatas = direc.GetAllByte();
+			directionCmd.SetByte(inStr);
+			retStreamDatas = directionCmd.GetAllByte();
 			break;
 
 		case 0x02:
 
-			scmd.SetByte(inStr);
-			retStreamDatas = scmd.GetAllByte();
+			stopCmd.SetByte(inStr);
+			retStreamDatas = stopCmd.GetAllByte();
 			break;
 
 		case 0x03:
@@ -70,8 +91,8 @@ public class UartCmd extends BaseCmd{
 			break;
 
 		case 0x04:
-			stretCmd.SetByte(inStr);
-			retStreamDatas = stretCmd.GetAllByte();
+			stretchCmd.SetByte(inStr);
+			retStreamDatas = stretchCmd.GetAllByte();
 			break;
 
 		case 0x05:
@@ -136,10 +157,10 @@ public class UartCmd extends BaseCmd{
 			}
 			
 		} else if (portName.equals("ttymxc2")) {
-			nanoFd = OpenUart(portName);
-			if (nanoFd > 0) {
-				Log.i(TAG,"DW1000 portname = "  + portName + " fd = " + nanoFd);
-				return nanoFd;
+			dw1000Fd = OpenUart(portName);
+			if (dw1000Fd > 0) {
+				Log.i(TAG,"DW1000 portname = "  + portName + " fd = " + dw1000Fd);
+				return dw1000Fd;
 			}
 		}
 		else
@@ -151,9 +172,9 @@ public class UartCmd extends BaseCmd{
 		
 	}
 	
-	public boolean GetNanoPanOpend()
+	public boolean GetDW1000Opend()
 	{
-		return (nanoFd > 0 ? true : false);
+		return (dw1000Fd > 0 ? true : false);
 	}
 	
 	public boolean GetDrivingOpend()
@@ -179,7 +200,7 @@ public class UartCmd extends BaseCmd{
 	public static native int CloseUart(int fdNum);
 	public static native int SetUart(int fdNum , int baudrate);
 	public static native int SendMsgUart(int fdNum,byte[] inByte);
-	public static native String ReceiveMsgUart(int fdNum);
+	public static native String ReceiveDW1000Uart(int fdNum);
 	public static native byte[] ReceiveByteMsgUart(int fdNum);
 	public static native int StartCal();
 	public static native byte[] Combine(ArrayList<float[]> nanoq , ArrayList<byte[]> encoq);

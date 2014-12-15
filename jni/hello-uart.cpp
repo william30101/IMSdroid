@@ -316,7 +316,7 @@ extern "C"
 			env->ReleaseByteArrayElements(inByte, a, 0);
 	}
 
-	JNIEXPORT jstring JNICALL Native_ReceiveMsgUart(JNIEnv *env,jobject mc, jint fdnum)
+	JNIEXPORT jstring JNICALL Native_ReceiveDW1000Uart(JNIEnv *env,jobject mc, jint fdnum)
 	{
 		char buffer[255];
 		char buf[255];
@@ -422,12 +422,12 @@ extern "C"
 
 		LOGI("DW weight = %f encoder weight = %f",dwWeight,encoderWeight);
 
-		Q[0][0] = dwWeight;
-		Q[1][1] = dwWeight;
+		Q[0][0] = encoderWeight;
+		Q[1][1] = encoderWeight;
 
-		R[0][0] = encoderWeight;
-		R[1][1] = encoderWeight;
-		R[2][2] = encoderWeight;
+		R[0][0] = dwWeight;
+		R[1][1] = dwWeight;
+		R[2][2] = dwWeight;
 
 		//env->SetFloatArrayRegion(result, 0, 2, RobotLocation);
 
@@ -688,7 +688,7 @@ extern "C"
 
 	static JNINativeMethod gMethods[] = {
 		//Java Name			(Input Arg) return arg   JNI Name
-		{"ReceiveMsgUart",   "(I)Ljava/lang/String;",(void *)Native_ReceiveMsgUart},
+		{"ReceiveDW1000Uart",   "(I)Ljava/lang/String;",(void *)Native_ReceiveDW1000Uart},
 		{"ReceiveByteMsgUart",   "(I)[B",(void *)Native_ReceiveByteMsgUart},
 		{"SendMsgUart",   "(I[B)I",  (void *)Native_SendMsgUart},
 		{"SetUart",   "(II)I",   					(void *)Native_SetUart},

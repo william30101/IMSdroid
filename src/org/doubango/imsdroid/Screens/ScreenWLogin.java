@@ -64,7 +64,7 @@ public class ScreenWLogin extends BaseScreen {
 	
 	private NetworkStatus loggin;
 	
-	private UartCmd uartCmd = new UartCmd();
+	private UartCmd uartCmd = UartCmd.getInstance();
 	
 	public ScreenWLogin() {
 		super(SCREEN_TYPE.HOME_T, TAG);

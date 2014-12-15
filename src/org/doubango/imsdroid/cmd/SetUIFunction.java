@@ -121,7 +121,7 @@ public class SetUIFunction {
 
 	public void StartUIFunction() {
 
-		uartCmd = new UartCmd();
+		uartCmd = UartCmd.getInstance();
 		loggin = NetworkStatus.getInstance();
 
 		XMPPSet = new XMPPSetting();
