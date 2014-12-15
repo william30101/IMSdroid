@@ -176,7 +176,7 @@ public class GameView extends View {
 	protected void onMyDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		//canvas.drawColor(Color.GRAY); // gray background, annotate this line, the view don't show
+		canvas.drawColor(Color.GRAY); // gray background, annotate this line, the view don't show
 									
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Style.STROKE);
@@ -279,45 +279,37 @@ public class GameView extends View {
 		
 
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			
 			Log.i("shinhua", "x: " + event.getX() + " y: " + event.getY());
 		
-			span = 30;
-			getMapSize();
-
-			xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2)); 
-			ycoordinate = (int) ((screenHeight / 2) - (mapHeight / 2));
-			
-
-			//fixWidthMapData = xcoordinate; 	// ZoomIn Screen in the right
-			fixWidthMapData = 0; 			// ZoomIn Screen in the middle
-			fixHeightMapData = ycoordinate;
-
-			Log.i("shinhua", "fixWidthMapData: " + fixWidthMapData + " fixHeightMapData: " + fixHeightMapData);
-			
-			
-			
-//			if(event.getX() >= tempx && event.getY() <= screenHeight){
-				Log.i("shinhua", "GOGOGOGOGOGOGOOOOOOOOOGOGOGO");
+			if(event.getX() >= fixWidthMapData && event.getY() <= fixWidthMapData){
+				
+				span = 30;
+				getMapSize();
+	
+				xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2)); 
+				ycoordinate = (int) ((screenHeight / 2) - (mapHeight / 2));
+				
+				//fixWidthMapData = xcoordinate; 	// ZoomIn Screen in the right
+				fixWidthMapData = 0; 			// ZoomIn Screen in the middle
+				fixHeightMapData = ycoordinate;
+	
 				isZoom = true;
 				touchDown = true;
-
-//			}
 	
-			requestLayout();
+				requestLayout();
+			}
+			
 			drawZoomMap(event);
-			
-			
 			
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
 			if (zoomout) {
+				
 				isZoom = !isZoom;
 				zoomout = false;
 
 				span = 15;
 				xcoordinate = ycoordinate = 5;
 				fixWidthMapData = fixHeightMapData = 5;
-	
 
 				requestLayout();
 				drawZoomMap(event);
