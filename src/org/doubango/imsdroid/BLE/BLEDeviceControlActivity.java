@@ -290,8 +290,11 @@ public class BLEDeviceControlActivity {
     	 mDeviceName = deviceName;
     	 mDeviceAddress = deviceAddress;
          v.registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+<<<<<<< HEAD
          
          //ScreenJs = new ScreenDirectionJS();
+=======
+>>>>>>> 450328c21720485217aa095b7569ce8a4df98f16
 
          // Sets up UI references.
        //  ((TextView) findViewById(R.id.device_address)).setText(mDeviceAddress);

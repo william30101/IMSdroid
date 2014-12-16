@@ -213,6 +213,17 @@ public class BLEDeviceScanActivity extends ListActivity {
         startActivity(intent);
     }
 */
+    
+    public void scanLeDeviceStart(boolean started)
+    {
+    	Log.i("ble", "scanLeDeviceStart = " + started);
+    	mScanning = false;
+    	if (started)
+    		mBluetoothAdapter.startLeScan(mLeScanCallback);
+    	else
+    		mBluetoothAdapter.stopLeScan(mLeScanCallback);
+    }
+    
     private void scanLeDevice(final boolean enable) {
         if (enable) {
             // Stops scanning after a pre-defined scan period.
@@ -309,24 +320,27 @@ public class BLEDeviceScanActivity extends ListActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                	if (device.getName().equals("LedButtonDemo"))
+                	if (!device.getName().equals(null))
                 	{
-                		Log.i(TAG,"Find BLE Device LedButtonDemo");
-                		final BluetoothDevice bleDevice = device;
-                        if (bleDevice == null) return;
-                		//if (device == null) return;
-                        //Intent intent = new Intent(BLEDeviceScanActivity.this, BLEDeviceControlActivity.class);
-                        //intent.putExtra(BLEDeviceControlActivity.EXTRAS_DEVICE_NAME, bleDevice.getName());
-                        //intent.putExtra(BLEDeviceControlActivity.EXTRAS_DEVICE_ADDRESS, bleDevice.getAddress());
-                        if (mScanning) {
-                            mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                            mScanning = false;
-                        }
-                        BLEDeviceControl.BLEDeviceControlStart(BLEActivity,bleDevice.getName(),bleDevice.getAddress());
-                        //startActivity(intent);
-
-                		//mLeDeviceListAdapter.addDevice(device);
-                		//mLeDeviceListAdapter.notifyDataSetChanged();
+	                	if (device.getName().equals("LedButtonDemo"))
+	                	{
+	                		Log.i(TAG,"Find BLE Device LedButtonDemo");
+	                		final BluetoothDevice bleDevice = device;
+	                        if (bleDevice == null) return;
+	                		//if (device == null) return;
+	                        //Intent intent = new Intent(BLEDeviceScanActivity.this, BLEDeviceControlActivity.class);
+	                        //intent.putExtra(BLEDeviceControlActivity.EXTRAS_DEVICE_NAME, bleDevice.getName());
+	                        //intent.putExtra(BLEDeviceControlActivity.EXTRAS_DEVICE_ADDRESS, bleDevice.getAddress());
+	                        if (mScanning) {
+	                            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+	                            mScanning = false;
+	                        }
+	                        BLEDeviceControl.BLEDeviceControlStart(BLEActivity,bleDevice.getName(),bleDevice.getAddress());
+	                        //startActivity(intent);
+	
+	                		//mLeDeviceListAdapter.addDevice(device);
+	                		//mLeDeviceListAdapter.notifyDataSetChanged();
+	                	}
                 	}
                 }
             });
