@@ -110,6 +110,7 @@ public class SetUIFunction {
 	/* BlueTooth temporary declare */
 	private Button BLEWrite;
 	public static EditText BLEDataText;
+	public String BLEData = null;
 
 	/* Temporary declare */
 	private Button tempMenu;
@@ -424,6 +425,7 @@ public class SetUIFunction {
 			// TODO Auto-generated method stub
 			switch (event.getActionMasked()) {
 			case MotionEvent.ACTION_MOVE:
+				Log.i("shinhua1", "ACTION_MOVE");
 				int x = (int) event.getX() - offset_x;
 				int y = (int) event.getY() - offset_y;
 
@@ -476,9 +478,9 @@ public class SetUIFunction {
 		public boolean onTouch(View v, MotionEvent event) {
 			switch (event.getActionMasked()) {
 			case MotionEvent.ACTION_DOWN:
+				Log.i("shinhua1", "ACTION_HOVER_ENter");
 				offset_x = (int) event.getX();
 				offset_y = (int) event.getY();
-				// selected_item = v;
 				break;
 			default:
 				break;
@@ -488,7 +490,7 @@ public class SetUIFunction {
 		}
 
 	};
-
+	
 	private void executeColorPicker(View v) {
 
 		// Context mContext = v.getContext();
@@ -518,20 +520,13 @@ public class SetUIFunction {
 				// String hexColor =
 				// Integer.toHexString(intColor).toUpperCase();
 				// hexCode.setText("#" + hexColor);
-				int colorValue = (int) (intColor / 18);
+				int colorValue = Math.abs((int) (intColor / 18));
 				int level1 = colorValue * 15 + 14;
-
+				//Log.i("shinhua1", colorValue +" ======= " + switchled(colorValue));
 				String color = Integer.toString(colorValue).toUpperCase();
 				colorLevel.setText("Current LED LEVEL" + color);
-				Log.i("shinhua1", " ***" + Integer.toHexString(level1) + "***");
+	
 
-				/*
-				 * for(int i=0; i<15 ;i++){ int color1 = 0; color1 = i * 15 +
-				 * 14;
-				 * 
-				 * Log.i("shinhua1"," ***" + Integer.toHexString(color1) +
-				 * "***"); }
-				 */
 
 			}
 		});
@@ -552,55 +547,56 @@ public class SetUIFunction {
 		builder.create().show();
 	}
 
-	private void switchled(int itor) {
-		String cmd;
+	private String switchled(int itor) {
+
 		switch (itor) {
 		case 0:
-			cmd = "0x0E";
+			BLEData = "0x0E";
 			break;
 		case 1:
-			cmd = "0x1D";
+			BLEData = "0x1D";
 			break;
 		case 2:
-			cmd = "0x2C";
+			BLEData = "0x2C";
 			break;
 		case 3:
-			cmd = "0x3B";
+			BLEData = "0x3B";
 			break;
 		case 4:
-			cmd = "0x4A";
+			BLEData = "0x4A";
 			break;
 		case 5:
-			cmd = "0x59";
+			BLEData = "0x59";
 			break;
 		case 6:
-			cmd = "0x68";
+			BLEData = "0x68";
 			break;
 		case 7:
-			cmd = "0x77";
+			BLEData = "0x77";
 			break;
 		case 8:
-			cmd = "0x86";
+			BLEData = "0x86";
 			break;
 		case 9:
-			cmd = "0x96";
+			BLEData = "0x96";
 			break;
 		case 10:
-			cmd = "0xA4";
+			BLEData = "0xA4";
 			break;
 		case 11:
-			cmd = "0xB3";
+			BLEData = "0xB3";
 			break;
 		case 12:
-			cmd = "0xC2";
+			BLEData = "0xC2";
 			break;
 		case 13:
-			cmd = "0xD1";
+			BLEData = "0xD1";
 			break;
 		case 14:
-			cmd = "0xE0";
+			BLEData = "0xE0";
 			break;
 		}
+	return BLEData;
 	}
 
 	/* XMPP Sendfunction */

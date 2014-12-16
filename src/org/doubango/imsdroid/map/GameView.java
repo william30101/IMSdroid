@@ -176,7 +176,7 @@ public class GameView extends View {
 	protected void onMyDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		canvas.drawColor(Color.GRAY); // gray background, annotate this line, the view don't show
+		//canvas.drawColor(Color.GRAY); // gray background, annotate this line, the view don't show
 									
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Style.STROKE);
@@ -276,7 +276,6 @@ public class GameView extends View {
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
 		// Log.i("william","test");
-		
 
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			Log.i("shinhua", "x: " + event.getX() + " y: " + event.getY());
