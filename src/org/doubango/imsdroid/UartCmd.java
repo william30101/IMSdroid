@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.doubango.imsdroid.BLE.BLEDeviceControlActivity;
 import org.doubango.imsdroid.cmd.AngleCmd;
 import org.doubango.imsdroid.cmd.AskCmd;
 import org.doubango.imsdroid.cmd.AxisCmd;
@@ -41,6 +42,8 @@ public class UartCmd extends BaseCmd{
 	AxisCmd axisCmd;
 	AskCmd askCmd;
 	
+	private BLEDeviceControlActivity BLEDevCon;
+	
 	private static UartCmd uartInstance;
 	
 	public static UartCmd getInstance() {
@@ -65,7 +68,6 @@ public class UartCmd extends BaseCmd{
 		stretchCmd = new StretchCmd();
 		healCmd = new HealthCmd();
 		axisCmd = new AxisCmd();
-		askCmd = new AskCmd();
 	}
 	
 	public byte[] GetAllByte(String[] inStr) throws IOException {
@@ -123,6 +125,15 @@ public class UartCmd extends BaseCmd{
 			break;
 
 		case 0x0a:
+			break;
+			
+		case 0x40:
+			//BleCmd.SetByte(inStr);
+			if (BLEDevCon == null)
+				// Add BLE control
+				BLEDevCon = BLEDeviceControlActivity.getBLEDevCon();
+			// Parent , Child selected item , mode 0 = write
+			BLEDevCon.CharacteristicWRN(2, 1, 0, inStr[1]);
 			break;
 
 		default:
