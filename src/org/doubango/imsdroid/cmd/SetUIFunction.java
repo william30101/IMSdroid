@@ -26,10 +26,14 @@ import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
+import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -59,7 +63,7 @@ public class SetUIFunction {
 	private UartCmd uartCmd;
 	private UartReceive uartRec;
 
-	private BLEDeviceControlActivity BLEDevCon;
+	// private BLEDeviceControlActivity BLEDevCon;
 
 	// For map use
 	private Button jsRunBtn;
@@ -114,6 +118,11 @@ public class SetUIFunction {
 
 	/* Temporary declare */
 	private Button tempMenu;
+	
+	int clickCount = 0;
+	long startTime;
+	long duration;
+	static final int MAXDURATION = 500;
 
 	public SetUIFunction(Activity activity) {
 		globalActivity = activity;
@@ -171,9 +180,9 @@ public class SetUIFunction {
 		dragMenu = (ViewGroup) globalActivity.findViewById(R.id.mainlayout);
 		img = (ImageView) globalActivity.findViewById(R.id.screenmenu);
 
-		dragMenu.setOnTouchListener(dragListener);
+		// dragMenu.setOnTouchListener(dragListener);
+		dragMenu.setOnDragListener(dragListener1);
 		img.setOnTouchListener(imgListener);
-
 		selected_item = (View) globalActivity.findViewById(R.id.screenmenu);
 
 		/*--------------------------------------------------*/
@@ -277,8 +286,10 @@ public class SetUIFunction {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			indicator = v.getId();
-
+			Log.isLoggable("shinhua1", indicator);
 			switch (indicator) {
+
+				
 			case R.id.testMenu:
 				executeColorPicker(v);
 				break;
@@ -302,12 +313,12 @@ public class SetUIFunction {
 				break;
 
 			case R.id.BLEWriteBtn:
-				if (BLEDevCon == null)
-					// Add BLE control
-					BLEDevCon = BLEDeviceControlActivity.getBLEDevCon();
-				// Parent , Child selected item , mode 0 = write
-				BLEDevCon.CharacteristicWRN(2, 1, 0, BLEDataText.getText()
-						.toString());
+				/*
+				 * if (BLEDevCon == null) // Add BLE control BLEDevCon =
+				 * BLEDeviceControlActivity.getBLEDevCon(); // Parent , Child
+				 * selected item , mode 0 = write BLEDevCon.CharacteristicWRN(2,
+				 * 1, 0, BLEDataText.getText().toString());
+				 */
 				break;
 			default:
 				break;
@@ -471,26 +482,112 @@ public class SetUIFunction {
 		}
 
 	};
-
+	
 	View.OnTouchListener imgListener = new OnTouchListener() {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			switch (event.getActionMasked()) {
-			case MotionEvent.ACTION_DOWN:
-				Log.i("shinhua1", "ACTION_HOVER_ENter");
+			/*
+			 * switch (event.getActionMasked()) { case MotionEvent.ACTION_DOWN:
+			 * Log.i("shinhua1", "DragShadowBuilder"); offset_x = (int)
+			 * event.getX(); offset_y = (int) event.getY();
+			 * 
+			 * DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+			 * v.startDrag(null, shadowBuilder, v, 0);
+			 * v.setVisibility(View.INVISIBLE); break; default: break; }
+			 * 
+			 * return false; }
+			 */
+
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.i("shinhua1","ACTION_DOWNACTION_DOWNACTION_DOWNACTION_DOWN");
+				//executeColorPicker(v);
+				return true;
+			}if(event.getAction() == MotionEvent.ACTION_MOVE){
 				offset_x = (int) event.getX();
 				offset_y = (int) event.getY();
-				break;
-			default:
-				break;
+				DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+				v.startDrag(null, shadowBuilder, v, 0);
+				v.setVisibility(View.INVISIBLE);
+				Log.i("shinhua1","MOVEMOVEMOVEMOVEMOVEMOVEMOVE");
+			}
+			if(event.getAction() == MotionEvent.ACTION_UP){ 
+				v.setVisibility(View.VISIBLE);
+				return true;
+			}
+			else {
+				return false;
 			}
 
-			return false;
 		}
 
 	};
 	
+
+	View.OnDragListener dragListener1 = new OnDragListener() {
+
+		@Override
+		public boolean onDrag(View v, DragEvent event) {
+			// TODO Auto-generated method stub
+			int action = event.getAction();
+			switch (action) {
+			case DragEvent.ACTION_DROP:
+
+				int x = (int) event.getX() - offset_x;
+				int y = (int) event.getY() - offset_y;
+
+				int w = width - 100;
+				int h = height - 100;
+				Log.i("xyz", x + " === " + y);
+				if (x < 250)
+					x = 250;
+				if (y < 80)
+					y = 80;
+
+				if (x > w)
+					x = w;
+				if (y > h)
+					y = h;
+
+				Log.i("xyz", x + " =*= " + y);
+				RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+						new ViewGroup.MarginLayoutParams(
+								RelativeLayout.LayoutParams.WRAP_CONTENT,
+								RelativeLayout.LayoutParams.WRAP_CONTENT));
+
+				lp.setMargins(x, y, 0, 0);
+				// lp.setMargins(left, top, right, bottom)
+				selected_item.setLayoutParams(lp);
+				v = (View)event.getLocalState();
+				v.setVisibility(View.VISIBLE);
+				break;
+			case DragEvent.ACTION_DRAG_STARTED:
+				Log.d("xyz", "Drag event started");
+				break;
+			case DragEvent.ACTION_DRAG_ENTERED:
+				Log.d("xyz", "Drag event entered into ");
+				break;
+			case DragEvent.ACTION_DRAG_EXITED:
+				Log.d("xyz", "Drag event exited from ");
+
+			case DragEvent.ACTION_DRAG_ENDED:
+				RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(
+						new ViewGroup.MarginLayoutParams(
+								RelativeLayout.LayoutParams.WRAP_CONTENT,
+								RelativeLayout.LayoutParams.WRAP_CONTENT));
+
+				lp1.setMargins(250, 80, 0, 0);
+				
+				v = (View)event.getLocalState();
+				v.setVisibility(View.VISIBLE);
+				break;
+
+			}
+			return true;
+		}
+
+	};
+
 	private void executeColorPicker(View v) {
 
 		// Context mContext = v.getContext();
@@ -522,11 +619,10 @@ public class SetUIFunction {
 				// hexCode.setText("#" + hexColor);
 				int colorValue = Math.abs((int) (intColor / 18));
 				int level1 = colorValue * 15 + 14;
-				//Log.i("shinhua1", colorValue +" ======= " + switchled(colorValue));
+				// Log.i("shinhua1", colorValue +" ======= " +
+				// switchled(colorValue));
 				String color = Integer.toString(colorValue).toUpperCase();
 				colorLevel.setText("Current LED LEVEL" + color);
-	
-
 
 			}
 		});
@@ -547,6 +643,7 @@ public class SetUIFunction {
 		builder.create().show();
 	}
 
+	/* Send BlueTooth Command */
 	private String switchled(int itor) {
 
 		switch (itor) {
@@ -596,7 +693,7 @@ public class SetUIFunction {
 			BLEData = "0xE0";
 			break;
 		}
-	return BLEData;
+		return BLEData;
 	}
 
 	/* XMPP Sendfunction */
