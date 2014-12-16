@@ -86,7 +86,7 @@ public class ScreenDirection extends BaseScreen{
 	
 		mapScreenView = new MapScreenView();
 		mapScreenView.MapScreenView(this);
-		
+		Log.i("ble", "board name is " + android.os.Build.MODEL);
 		
 		/* Judge device support BlueTooth 4.0 */
 		if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -103,10 +103,18 @@ public class ScreenDirection extends BaseScreen{
 	}
 	
 	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.i("ble", "onResume");
+		BLEActivity.scanLeDeviceStart(true);
+	}
+
+	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-
+		BLEActivity.scanLeDeviceStart(false);
 		 //unbindService(BLEDevCon.getmServiceConnection());
 		 //BLEDeviceControlActivity.setmBluetoothLeService(null);
 	        //mBluetoothLeService = null;

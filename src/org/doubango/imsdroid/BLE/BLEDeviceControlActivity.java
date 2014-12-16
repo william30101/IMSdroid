@@ -18,7 +18,6 @@ package org.doubango.imsdroid.BLE;
 
 import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.Screens.ScreenDirection;
-import org.doubango.imsdroid.Screens.ScreenDirectionJS;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -99,7 +98,6 @@ public class BLEDeviceControlActivity {
     
     private AudioManager mAudioManager;
     private ComponentName mRemoteControlResponder;
-    private ScreenDirectionJS ScreenJs;
     
     
     
@@ -292,8 +290,6 @@ public class BLEDeviceControlActivity {
     	 mDeviceName = deviceName;
     	 mDeviceAddress = deviceAddress;
          v.registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-         
-         ScreenJs = new ScreenDirectionJS();
 
          // Sets up UI references.
        //  ((TextView) findViewById(R.id.device_address)).setText(mDeviceAddress);
