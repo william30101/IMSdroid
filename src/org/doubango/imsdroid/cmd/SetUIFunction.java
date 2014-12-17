@@ -113,6 +113,7 @@ public class SetUIFunction {
 	private int offset_x = 0;
 	private int offset_y = 0;
 	ImageView img;
+	int clickCount = 0;
 
 	/* BlueTooth temporary declare */
 	private Button BLEWrite;
@@ -120,12 +121,8 @@ public class SetUIFunction {
 	public String BLEData = null;
 
 	/* Temporary declare */
-	private Button tempMenu;
 	
-	int clickCount = 0;
-	long startTime;
-	int duration;
-	static final int MAXDURATION = 150;
+
 
 	public SetUIFunction(Activity activity) {
 		globalActivity = activity;
@@ -183,8 +180,7 @@ public class SetUIFunction {
 		dragMenu = (ViewGroup) globalActivity.findViewById(R.id.mainlayout);
 		img = (ImageView) globalActivity.findViewById(R.id.screenmenu);
 
-		// dragMenu.setOnTouchListener(dragListener);
-		dragMenu.setOnDragListener(dragListener1);
+		dragMenu.setOnDragListener(dragListener);
 		img.setOnTouchListener(imgListener);
 		selected_item = (View) globalActivity.findViewById(R.id.screenmenu);
 
@@ -199,11 +195,7 @@ public class SetUIFunction {
 				.findViewById(R.id.getAxisBtn);
 		getAxisBtn.setOnClickListener(onClickListener);
 
-		tempMenu = (Button) globalActivity.findViewById(R.id.testMenu);
-		tempMenu.setOnClickListener(onClickListener);
 		
-		
-		//cleanThread.scheduleAtFixedRate(new cleanCount(), 0, 300, TimeUnit.MILLISECONDS);
 	}
 
 	private void getScreenSize(Activity v) {
@@ -291,14 +283,7 @@ public class SetUIFunction {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			indicator = v.getId();
-			Log.isLoggable("shinhua1", indicator);
 			switch (indicator) {
-
-				
-			case R.id.testMenu:
-				executeColorPicker(v);
-				break;
-
 			case R.id.getAxisBtn:
 				uartRec.RunRecThread();
 				break;
@@ -434,20 +419,53 @@ public class SetUIFunction {
 	};
 
 	/* DragDrap Menu Listener */
-	View.OnTouchListener dragListener = new OnTouchListener() {
+	View.OnTouchListener imgListener = new OnTouchListener() {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
+
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				Log.i("shinhua1","ACTION_DOWN");
+				cleanThread(cleanService);
+				clickCount++;
+				if(clickCount == 2){
+					executeColorPicker(v);
+					clickCount = 0;
+				}
+				return true;
+			}
+			if(event.getAction() == MotionEvent.ACTION_MOVE){
+				Log.i("shinhua1","ACTION_MOVE");
+				offset_x = (int) event.getX();
+				offset_y = (int) event.getY();
+				DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+				v.startDrag(null, shadowBuilder, v, 0);
+				v.setVisibility(View.INVISIBLE);
+				return true;
+			}
+			else {
+				return false;
+			}
+
+		}
+
+	};
+	
+
+	View.OnDragListener dragListener = new OnDragListener() {
+
+		@Override
+		public boolean onDrag(View v, DragEvent event) {
 			// TODO Auto-generated method stub
-			switch (event.getActionMasked()) {
-			case MotionEvent.ACTION_MOVE:
-				Log.i("shinhua1", "ACTION_MOVE");
+			int action = event.getAction();
+			switch (action) {
+			case DragEvent.ACTION_DROP:
+
 				int x = (int) event.getX() - offset_x;
 				int y = (int) event.getY() - offset_y;
 
 				int w = width - 100;
 				int h = height - 100;
-
 				if (x < 250)
 					x = 250;
 				if (y < 80)
@@ -470,103 +488,7 @@ public class SetUIFunction {
 				 * FrameLayout.LayoutParams.WRAP_CONTENT,
 				 * FrameLayout.LayoutParams.WRAP_CONTENT));
 				 */
-				RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-						new ViewGroup.MarginLayoutParams(
-								RelativeLayout.LayoutParams.WRAP_CONTENT,
-								RelativeLayout.LayoutParams.WRAP_CONTENT));
-
-				lp.setMargins(x, y, 0, 0);
-				// lp.setMargins(left, top, right, bottom)
-
-				selected_item.setLayoutParams(lp);
-				break;
-			default:
-				break;
-			}
-			return true;
-		}
-
-	};
-	
-	View.OnTouchListener imgListener = new OnTouchListener() {
-
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			/*
-			 * switch (event.getActionMasked()) { case MotionEvent.ACTION_DOWN:
-			 * Log.i("shinhua1", "DragShadowBuilder"); offset_x = (int)
-			 * event.getX(); offset_y = (int) event.getY();
-			 * 
-			 * DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-			 * v.startDrag(null, shadowBuilder, v, 0);
-			 * v.setVisibility(View.INVISIBLE); break; default: break; }
-			 * 
-			 * return false; }
-			 */
-
-			if (event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.i("shinhua1","ACTION_DOWN");
-				cleanThread(cleanService);
-				clickCount++;
-				if(clickCount == 2){
-					executeColorPicker(v);
-					clickCount = 0;
-					duration = 0;
-				}
-				return true;
-			}
-			if(event.getAction() == MotionEvent.ACTION_MOVE){
-				Log.i("shinhua1","ACTION_DOWN");
-				offset_x = (int) event.getX();
-				offset_y = (int) event.getY();
-				DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-				v.startDrag(null, shadowBuilder, v, 0);
-				//v.setVisibility(View.INVISIBLE);
-			}
-			if(event.getAction() == MotionEvent.ACTION_UP){ 
-				Log.i("shinhua1","ACTION_UP");
-				if(clickCount == 2){
-					executeColorPicker(v);
-					clickCount = 0;
-					duration = 0;
-				}
-				return true;
-			}
-			else {
-				return false;
-			}
-
-		}
-
-	};
-	
-
-	View.OnDragListener dragListener1 = new OnDragListener() {
-
-		@Override
-		public boolean onDrag(View v, DragEvent event) {
-			// TODO Auto-generated method stub
-			int action = event.getAction();
-			switch (action) {
-			case DragEvent.ACTION_DROP:
-
-				int x = (int) event.getX() - offset_x;
-				int y = (int) event.getY() - offset_y;
-
-				int w = width - 100;
-				int h = height - 100;
-				Log.i("xyz", x + " === " + y);
-				if (x < 250)
-					x = 250;
-				if (y < 80)
-					y = 80;
-
-				if (x > w)
-					x = w;
-				if (y > h)
-					y = h;
-
-				Log.i("xyz", x + " =*= " + y);
+				
 				RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
 						new ViewGroup.MarginLayoutParams(
 								RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -576,7 +498,7 @@ public class SetUIFunction {
 				// lp.setMargins(left, top, right, bottom)
 				selected_item.setLayoutParams(lp);
 				v = (View)event.getLocalState();
-				//v.setVisibility(View.VISIBLE);
+				v.setVisibility(View.VISIBLE);
 				break;
 			case DragEvent.ACTION_DRAG_STARTED:
 				Log.d("xyz", "Drag event started");
@@ -596,7 +518,7 @@ public class SetUIFunction {
 				lp1.setMargins(250, 80, 0, 0);
 				
 				v = (View)event.getLocalState();
-				//v.setVisibility(View.VISIBLE);
+				v.setVisibility(View.VISIBLE);
 				break;
 
 			}
@@ -605,6 +527,7 @@ public class SetUIFunction {
 
 	};
 
+	/* Color Picker */
 	private void executeColorPicker(View v) {
 
 		// Context mContext = v.getContext();
@@ -614,8 +537,8 @@ public class SetUIFunction {
 		// Create color picker view
 
 		View view = inflater.inflate(R.layout.color_picker_dialog, null);
-		if (v == null)
-			return;
+		
+		if (v == null) return;
 
 		final ColorPicker picker = (ColorPicker) view.findViewById(R.id.picker);
 		SVBar svBar = (SVBar) view.findViewById(R.id.svbar);
@@ -727,6 +650,7 @@ public class SetUIFunction {
 		}
 	}
 
+	/* Use thread pool for XMPP communication */
 	public class MyThread implements Runnable {
 		String SendMsg;
 
@@ -763,21 +687,15 @@ public class SetUIFunction {
 	private void useThreadPool(ExecutorService service, String Msg) {
 		service.execute(new MyThread(Msg));
 	}
-	
 
-	private void cleanThread(ExecutorService service){
-		service.execute(new cThread());
-	}
-	
+	/* Clean drag & drop menu click count */
 	private class cThread implements Runnable{
 
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			try {
-			
 				Thread.sleep(450);
-				Log.i("xyz", "Clean clickCount");
 				clickCount = 0;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -786,6 +704,11 @@ public class SetUIFunction {
 		
 		}
 		
+	}
+	
+	/* Create thread service.execute for clean button click count */ 
+	private void cleanThread(ExecutorService service){
+		service.execute(new cThread());
 	}
 	
 	

@@ -120,14 +120,6 @@
             <requestFocus />
         </EditText>
 
-        <Button
-            android:id="@+id/testMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/navigation"
-            android:layout_alignLeft="@+id/runjs"
-            android:text="Test Menu" />
-
         <TextView
             android:id="@+id/BLEconnectStatus"
             android:layout_width="wrap_content"
@@ -141,8 +133,8 @@
             android:id="@+id/getAxisBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/BLEDataText"
-            android:layout_toRightOf="@+id/linearLayout1"
+            android:layout_above="@+id/navigation"
+            android:layout_alignLeft="@+id/runjs"
             android:text="GetAxis" />
 
 </RelativeLayout>
