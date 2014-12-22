@@ -510,6 +510,8 @@ public class UartReceive {
 						pointOriginal.x = robotLocation[2];
 						pointOriginal.y = robotLocation[3];
 						
+						pointOriginal.setCompass(tempInt[2]);
+						
 						AxisPointData.add(pointOriginal);
 						
 						point.x = (float) (robotLocation[0]*5 + 150);

@@ -59,7 +59,6 @@ public class SetUIFunction {
 	Context mContext;
 
 	private String TAG = "App";
-	private boolean isNeedAdd = false;
 	private XMPPSetting XMPPSet;
 	private NetworkStatus loggin;
 	private UartCmd uartCmd;
@@ -305,9 +304,8 @@ public class SetUIFunction {
 			case R.id.BLEWriteBtn:
 				
 				 if (BLEDevCon == null) // Add BLE control 
-					 BLEDevCon =BLEDeviceControlActivity.getBLEDevCon(); // Parent , Childselected item mode 0 = write
-				 BLEDevCon.CharacteristicWRN(2,
-				 1, 0, BLEDataText.getText().toString());
+					 BLEDevCon =BLEDeviceControlActivity.getInstance(); // Parent , Childselected item mode 0 = write
+				 BLEDevCon.CharacteristicWRN(2,1, 0, BLEDataText.getText().toString());
 				 
 				break;
 			default:
@@ -564,6 +562,23 @@ public class SetUIFunction {
 				String color = Integer.toString(colorValue).toUpperCase();
 				colorLevel.setText("Current LED LEVEL" + color);
 
+				if (BLEDevCon == null)
+					BLEDevCon =BLEDeviceControlActivity.getInstance();
+				String bleConnectedStatusString = BLEDevCon.ismConnected();
+				// setText (bleConnectedStatusString)
+				/*
+				 *  Send BLE Command to Control Board.
+				 *  data format is BLE + data
+				 *  ex: "BLE e0"
+				 * 
+				 * */
+				try {
+					SendToBoard("BLE " + switchled(colorValue));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Log.i(TAG, "BLE send data=" + switchled(colorValue) + " error");
+					e.printStackTrace();
+				}
 			}
 		});
 

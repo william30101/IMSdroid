@@ -24,8 +24,8 @@ public class UartCmd extends BaseCmd{
 	ByteArrayOutputStream retStreamDatas;
 
 	private String[] cmdStr= {"direction","stop","pitchAngle","stretch","stopBySensor","ask",
-			"destination","health","axis","ret","startBySensor","mapFromPIC32","encoder","mapControl","mode"};
-	private byte[] cmdByte = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f};
+			"destination","health","axis","ret","startBySensor","mapFromPIC32","encoder","mapControl","mode", "BLE"};
+	private byte[] cmdByte = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,0x40};
 	
 	private boolean drivingOpend = false , nanoPanOpend = false;
 	private int Baud_rate = 0; // { B19200, B115200};
@@ -131,7 +131,7 @@ public class UartCmd extends BaseCmd{
 			//BleCmd.SetByte(inStr);
 			if (BLEDevCon == null)
 				// Add BLE control
-				BLEDevCon = BLEDeviceControlActivity.getBLEDevCon();
+				BLEDevCon = BLEDeviceControlActivity.getInstance();
 			// Parent , Child selected item , mode 0 = write
 			BLEDevCon.CharacteristicWRN(2, 1, 0, inStr[1]);
 			break;

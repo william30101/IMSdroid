@@ -51,7 +51,7 @@ public class ScreenDirection extends BaseScreen{
 		
 	}
 	
-	
+	/*
 	public static Handler BLEStatusHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			if (msg.what == 1) {
@@ -61,7 +61,7 @@ public class ScreenDirection extends BaseScreen{
 				mConnectionState.setText((String)msg.obj);
 			}
 		}
-	};
+	};*/
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -94,11 +94,14 @@ public class ScreenDirection extends BaseScreen{
 		    Log.i(TAG,"support BT 4.0");
 		    BLEActivity = new BLEDeviceScanActivity();
 			BLEActivity.BLEDeviceScanStart(this);
+			
+			BLEDevCon = BLEDeviceControlActivity.getInstance();
 		}
 		else{
 			Log.i(TAG,"not support BT 4.0");
 		}
 		mConnectionState = (TextView) findViewById(R.id.BLEconnectStatus);
+
 		
 	}
 	
@@ -107,7 +110,11 @@ public class ScreenDirection extends BaseScreen{
 		// TODO Auto-generated method stub
 		super.onResume();
 		if ( BLEActivity != null)
+		{
 			BLEActivity.scanLeDeviceStart(true);
+			mConnectionState.setText(BLEDevCon.ismConnected());
+			
+		}
 	}
 
 	@Override

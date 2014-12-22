@@ -17,7 +17,6 @@
 package org.doubango.imsdroid.BLE;
 
 import org.doubango.imsdroid.R;
-import org.doubango.imsdroid.Screens.ScreenDirection;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -28,31 +27,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.media.AudioManager;
-import android.media.RemoteControlClient;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.RemoteException;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -76,17 +60,17 @@ public class BLEDeviceControlActivity {
     private static BluetoothLeService mBluetoothLeService;
     private static ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
             new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
-    private boolean mConnected = false;
-    private BluetoothGattCharacteristic mNotifyCharacteristic;
+    public static boolean mConnected = false;
+
+	private BluetoothGattCharacteristic mNotifyCharacteristic;
 
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
     
-    private Button BLEWrite;  
     public static EditText BLEDataText;
     
     public static final String TAG = "william";
-    public static BLEDeviceControlActivity DevCon;
+    public static BLEDeviceControlActivity instance;
     
     private Activity BLEDeviceConActivity;
     private BLEDeviceScanActivity BLEDeviceControl;
@@ -96,10 +80,23 @@ public class BLEDeviceControlActivity {
     List<String> childList;
     //Map<String, List<String>> laptopCollection;
     
-    private AudioManager mAudioManager;
-    private ComponentName mRemoteControlResponder;
+    //private AudioManager mAudioManager;
+   // private ComponentName mRemoteControlResponder;
+    public String ismConnected() {
+		return mConnected ? "BLE connected": "BLE disconnected";
+	}
     
     
+    public static BLEDeviceControlActivity getInstance() {
+		 if (instance == null){
+	            synchronized(BLEDeviceControlActivity.class){
+	                if(instance == null) {
+	                     instance = new BLEDeviceControlActivity();
+	                }
+	            }
+	        }
+	        return instance;
+	}
     
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -147,23 +144,20 @@ public class BLEDeviceControlActivity {
             
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
-                //updateConnectionState("BLE connected");
                 Log.i(TAG,"BLE connected");
-                Message msg1 = ScreenDirection.BLEStatusHandler.obtainMessage(1, "BLE connected");
-                ScreenDirection.BLEStatusHandler.sendMessage(msg1);
+                //Message msg1 = ScreenDirection.BLEStatusHandler.obtainMessage(1, "BLE connected");
+               // ScreenDirection.BLEStatusHandler.sendMessage(msg1);
 
                 //invalidateOptionsMenu();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
-                //updateConnectionState(R.string.disconnected);
                 //invalidateOptionsMenu();
                 //clearUI();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                //displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
-                
+                                
                 //dispatchKeyEvent(new KeyEvent (KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_VOLUME_UP));
             }
         }
@@ -280,7 +274,7 @@ public class BLEDeviceControlActivity {
 
     public void BLEDeviceControlStart(Activity v, String deviceName , String deviceAddress)
     {
-    	 DevCon = new BLEDeviceControlActivity();
+    	 instance = new BLEDeviceControlActivity();
 
     	 BLEDeviceConActivity = v;
     	 Context context = v.getApplicationContext();
@@ -310,9 +304,6 @@ public class BLEDeviceControlActivity {
 		return mServiceConnection;
 	}
 
-	public static BLEDeviceControlActivity getBLEDevCon() {
-		return DevCon;
-	}
 
 	
     /*
@@ -375,20 +366,6 @@ public class BLEDeviceControlActivity {
         return super.onOptionsItemSelected(item);
     }
 */
-    private void updateConnectionState(String status) {
-       // runOnUiThread(new Runnable() {
-           // @Override
-           // public void run() {
-                mConnectionState.setText(status);
-           // }
-        //});
-    }
-
-    private void displayData(String data) {
-        if (data != null) {
-            mDataField.setText(data);
-        }
-    }
 
     // Demonstrates how to iterate through the supported GATT Services/Characteristics.
     // In this sample, we populate the data structure that is bound to the ExpandableListView
