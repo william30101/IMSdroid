@@ -398,6 +398,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int changdu=0x7f0a005d;
         public static final int checkBox_earlyIMS=0x7f0a0160;
         public static final int color_level=0x7f0a0005;
+        public static final int connectStatus=0x7f0a0006;
         public static final int content=0x7f0a0136;
         public static final int control_hint=0x7f0a0004;
         public static final int control_layout=0x7f0a0003;
@@ -420,7 +421,6 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int go=0x7f0a0066;
         public static final int handle=0x7f0a0135;
         public static final int header2=0x7f0a000e;
-        public static final int hex_code=0x7f0a0006;
         public static final int icon=0x7f0a0000;
         public static final int imageView1=0x7f0a0073;
         public static final int item_layout=0x7f0a0002;

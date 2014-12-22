@@ -25,6 +25,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
+import android.net.wifi.WifiManager;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -120,7 +123,7 @@ public class SetUIFunction {
 	public String BLEData = null;
 
 	/* Temporary declare */
-	
+	public static TextView mConnectState;
 
 
 	public SetUIFunction(Activity activity) {
@@ -189,11 +192,15 @@ public class SetUIFunction {
 		BLEDataText = (EditText) globalActivity.findViewById(R.id.BLEDataText);
 
 		BLEWrite.setOnClickListener(onClickListener);
-
 		Button getAxisBtn = (Button) globalActivity
 				.findViewById(R.id.getAxisBtn);
 		getAxisBtn.setOnClickListener(onClickListener);
 
+		
+		/* Temporary - Wifi */
+		WifiManager wifi = (WifiManager) globalActivity.getSystemService(mContext.WIFI_SERVICE);
+
+		
 		
 	}
 
@@ -541,12 +548,15 @@ public class SetUIFunction {
 		final ColorPicker picker = (ColorPicker) view.findViewById(R.id.picker);
 		SVBar svBar = (SVBar) view.findViewById(R.id.svbar);
 		OpacityBar opacityBar = (OpacityBar) view.findViewById(R.id.opacitybar);
-		final TextView hexCode = (TextView) view.findViewById(R.id.hex_code);
-
+		
+		mConnectState = (TextView) view.findViewById(R.id.connectStatus);
+		
+		bluestatus();
+		
 		// shinhua add
-		final TextView colorLevel = (TextView) view
-				.findViewById(R.id.color_level);
-
+		final TextView colorLevel = (TextView) view.findViewById(R.id.color_level);
+		
+		
 		// picker.addSVBar(svBar);
 		// picker.addOpacityBar(opacityBar);
 		picker.setOnColorChangedListener(new ColorPicker.OnColorChangedListener() {
@@ -556,9 +566,7 @@ public class SetUIFunction {
 				// Integer.toHexString(intColor).toUpperCase();
 				// hexCode.setText("#" + hexColor);
 				int colorValue = Math.abs((int) (intColor / 18));
-				int level1 = colorValue * 15 + 14;
-				// Log.i("shinhua1", colorValue +" ======= " +
-				// switchled(colorValue));
+				// Log.i("shinhua1", colorValue +" ======= " + switchled(colorValue));
 				String color = Integer.toString(colorValue).toUpperCase();
 				colorLevel.setText("Current LED LEVEL" + color);
 
@@ -597,6 +605,21 @@ public class SetUIFunction {
 		});
 		builder.create().show();
 	}
+	
+	public void bluestatus(){
+		mConnectState.setText("Shinhua1");
+	}
+	
+	
+	public static Handler BLEStatusHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			if (msg.what == 1) {
+				Log.i("shinhua1","ble status handler = " + msg.obj);
+				mConnectState.setText((String)msg.obj);
+			}
+		}
+	};
+	
 
 	/* Send BlueTooth Command */
 	private String switchled(int itor) {

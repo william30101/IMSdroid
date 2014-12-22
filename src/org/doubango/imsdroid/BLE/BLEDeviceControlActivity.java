@@ -299,7 +299,7 @@ public class BLEDeviceControlActivity {
          context.bindService(gattServiceIntent, mServiceConnection, context.BIND_AUTO_CREATE);
 
     }
-  
+    
     public ServiceConnection getmServiceConnection() {
 		return mServiceConnection;
 	}
