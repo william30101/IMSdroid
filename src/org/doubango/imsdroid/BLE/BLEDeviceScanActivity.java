@@ -320,7 +320,7 @@ public class BLEDeviceScanActivity extends ListActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                	if (!device.getName().equals(null))
+                	if (device.getName() != null)
                 	{
 	                	if (device.getName().equals("LedButtonDemo"))
 	                	{

@@ -123,6 +123,7 @@ public class SetUIFunction {
 	public String BLEData = null;
 
 	/* Temporary declare */
+	private ImageView bleConnect;
 	public static TextView mConnectState;
 
 
@@ -198,6 +199,8 @@ public class SetUIFunction {
 
 		
 		/* Temporary - Wifi */
+		bleConnect = (ImageView) globalActivity.findViewById(R.id.imageView2);
+		
 		WifiManager wifi = (WifiManager) globalActivity.getSystemService(mContext.WIFI_SERVICE);
 
 		
@@ -536,8 +539,7 @@ public class SetUIFunction {
 	private void executeColorPicker(View v) {
 
 		// Context mContext = v.getContext();
-		LayoutInflater inflater = (LayoutInflater) mContext
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		// Create color picker view
 
@@ -551,7 +553,13 @@ public class SetUIFunction {
 		
 		mConnectState = (TextView) view.findViewById(R.id.connectStatus);
 		
-		bluestatus();
+		
+		if (BLEDevCon == null) BLEDevCon =BLEDeviceControlActivity.getInstance();
+		
+		String bleConnectedStatusString = BLEDevCon.ismConnected();
+		mConnectState.setText(bleConnectedStatusString);
+		bluetoothIcon(bleConnectedStatusString);
+		
 		
 		// shinhua add
 		final TextView colorLevel = (TextView) view.findViewById(R.id.color_level);
@@ -566,13 +574,10 @@ public class SetUIFunction {
 				// Integer.toHexString(intColor).toUpperCase();
 				// hexCode.setText("#" + hexColor);
 				int colorValue = Math.abs((int) (intColor / 18));
-				// Log.i("shinhua1", colorValue +" ======= " + switchled(colorValue));
 				String color = Integer.toString(colorValue).toUpperCase();
 				colorLevel.setText("Current LED LEVEL" + color);
 
-				if (BLEDevCon == null)
-					BLEDevCon =BLEDeviceControlActivity.getInstance();
-				String bleConnectedStatusString = BLEDevCon.ismConnected();
+
 				// setText (bleConnectedStatusString)
 				/*
 				 *  Send BLE Command to Control Board.
@@ -582,6 +587,7 @@ public class SetUIFunction {
 				 * */
 				try {
 					SendToBoard("BLE " + switchled(colorValue));
+					BLEDevCon.CharacteristicWRN(2,1, 0, switchled(colorValue));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					Log.i(TAG, "BLE send data=" + switchled(colorValue) + " error");
@@ -606,21 +612,15 @@ public class SetUIFunction {
 		builder.create().show();
 	}
 	
-	public void bluestatus(){
-		mConnectState.setText("Shinhua1");
+	private void bluetoothIcon(String itor){
+		if(itor == "BLE connected"){
+			bleConnect.setVisibility(View.VISIBLE);
+		}
+		else if(itor == "BLE disconnected"){
+			bleConnect.setVisibility(View.INVISIBLE);
+		}
 	}
 	
-	
-	public static Handler BLEStatusHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			if (msg.what == 1) {
-				Log.i("shinhua1","ble status handler = " + msg.obj);
-				mConnectState.setText((String)msg.obj);
-			}
-		}
-	};
-	
-
 	/* Send BlueTooth Command */
 	private String switchled(int itor) {
 
