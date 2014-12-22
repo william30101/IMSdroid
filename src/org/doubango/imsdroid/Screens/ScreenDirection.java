@@ -106,15 +106,16 @@ public class ScreenDirection extends BaseScreen{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		Log.i("ble", "onResume");
-		BLEActivity.scanLeDeviceStart(true);
+		if ( BLEActivity != null)
+			BLEActivity.scanLeDeviceStart(true);
 	}
 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		BLEActivity.scanLeDeviceStart(false);
+		if (BLEActivity != null)
+			BLEActivity.scanLeDeviceStart(false);
 		 //unbindService(BLEDevCon.getmServiceConnection());
 		 //BLEDeviceControlActivity.setmBluetoothLeService(null);
 	        //mBluetoothLeService = null;
