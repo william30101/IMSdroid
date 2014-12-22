@@ -86,9 +86,9 @@ public abstract class BaseCmd {
 		
 		rdataByte[0] = start;
 		rdataByte[1] = this.funcByte;
-		for (int i=2; i < datasize ; i++ )
+		for (int i=2; i < datasize + 2 ; i++ )
 		{
-			rdataByte[i] = this.dataByte[i -2];
+			rdataByte[i] = (byte) (this.dataByte[i -2] & 0xff);
 		}
 		
 		rdataByte[datasize + 2] = end; 

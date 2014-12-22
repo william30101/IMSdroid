@@ -11,6 +11,7 @@ import org.doubango.imsdroid.cmd.AxisCmd;
 import org.doubango.imsdroid.cmd.BaseCmd;
 import org.doubango.imsdroid.cmd.DirectionCmd;
 import org.doubango.imsdroid.cmd.HealthCmd;
+import org.doubango.imsdroid.cmd.RotateAngleCmd;
 import org.doubango.imsdroid.cmd.StopCmd;
 import org.doubango.imsdroid.cmd.StretchCmd;
 import org.doubango.imsdroid.map.NetworkStatus;
@@ -20,17 +21,17 @@ import android.util.Log;
 
 public class UartCmd extends BaseCmd{
 	
-	private String TAG = "william";
+	private static final String TAG = UartCmd.class.getSimpleName();
 	ByteArrayOutputStream retStreamDatas;
 
 	private String[] cmdStr= {"direction","stop","pitchAngle","stretch","stopBySensor","ask",
-			"destination","health","axis","ret","startBySensor","mapFromPIC32","encoder","mapControl","mode", "BLE"};
-	private byte[] cmdByte = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,0x40};
+			"destination","health","axis","ret","startBySensor","mapFromPIC32","encoder","mapControl","mode",
+			"RotateAngle", "BLE"};
+	private byte[] cmdByte = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,
+			0x0e,0x0f, 0x10, 0x40};
 	
 	private boolean drivingOpend = false , nanoPanOpend = false;
-	private int Baud_rate = 0; // { B19200, B115200};
-	private static final String functionName = IMSDroid.class.getSimpleName();
-	
+
 	public static int fd = 0,dw1000Fd = 0,driFd = 0;
 	
 	//init all cmd object here
@@ -41,6 +42,7 @@ public class UartCmd extends BaseCmd{
 	HealthCmd healCmd;
 	AxisCmd axisCmd;
 	AskCmd askCmd;
+	RotateAngleCmd rotateAngleCmd;
 	
 	private BLEDeviceControlActivity BLEDevCon;
 	
@@ -68,6 +70,8 @@ public class UartCmd extends BaseCmd{
 		stretchCmd = new StretchCmd();
 		healCmd = new HealthCmd();
 		axisCmd = new AxisCmd();
+		rotateAngleCmd = new RotateAngleCmd();
+		askCmd = new AskCmd();
 	}
 	
 	public byte[] GetAllByte(String[] inStr) throws IOException {
@@ -110,7 +114,7 @@ public class UartCmd extends BaseCmd{
 
 		// Need to modify it.
 		case 0x08:
-			healCmd.GetByte(inStr);
+			healCmd.SetByte(inStr);
 			break;
 
 		case 0x09:
@@ -125,6 +129,11 @@ public class UartCmd extends BaseCmd{
 			break;
 
 		case 0x0a:
+			break;
+			
+		case 0x10:
+			rotateAngleCmd.SetByte(inStr);
+			retStreamDatas = rotateAngleCmd.GetAllByte();
 			break;
 			
 		case 0x40:

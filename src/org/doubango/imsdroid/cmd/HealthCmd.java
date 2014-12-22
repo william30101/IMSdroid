@@ -11,19 +11,20 @@ public class HealthCmd extends BaseCmd{
 	private String TAG = "HealthCmd";
 	
 	private byte funcByte = (byte) 0x08;
-	private int dataSize = 3;
+	private int dataSize = 4;
 	private byte[] dataByte = new byte[dataSize];
 	
 	// We don't know now , need to fix it.
-	private String[] byte3CmdStr0 = {"PICError","4011Error","Ready","Left motor over current","Left motor error",
-			"Right motor over current","Right motor error","n/a"};
+	private String[] byte3CmdStr0 = {"PIC32Error","4011Error","Ready","CommunicationError",
+			"PeripheralError","UnknownCommand","TaskOvertime","NA"};
 	private byte[] byte3CmdByte0 = {0x00,0x01,0x02,0x04,0x08,0x10,0x20,0x40};
 	
-	private String[] byte4CmdStr0 = {"Ultrasonic3","Ultrasonic4","Ultrasonic5","Neck laser","Side laser","Cliff laser"};
+	private String[] byte4CmdStr0 = {"Ultrasonic1" , "Ultrasonic2","Ultrasonic3"
+			,"Ultrasonic4","Ultrasonic5","IMU" };
 	private byte[] byte4CmdByte0 = {0x01,0x02,0x04,0x08,0x10,0x20};
 	
-	private String[] byte5CmdStr0 = {"Communication","Communication with control","Task impossible"," Task overtime",
-			"Neck/Head motor","IMU" , "Ultrasonic1" , "Ultrasonic2"};
+	private String[] byte5CmdStr0 = {"LeftMotorOverCurrent","LeftMotorError","RightMotorOverCurrent","RightMotorError",
+			"NeckMotor","NeckLaser","SideLaser","CliffLaser"};
 	private byte[] byte5CmdByte0 = {0x01,0x02,0x04,0x08,0x10,0x20 , 0x40,(byte)0x80};
 	
 	public HealthCmd()
@@ -46,7 +47,7 @@ public class HealthCmd extends BaseCmd{
 		super.SetDataByte(dataByte);
 	}*/
 	
-	public void GetByte(String[] inStr)
+	public void SetByte(String[] inStr)
 	{
 
 		Arrays.fill(dataByte, (byte)0x00);

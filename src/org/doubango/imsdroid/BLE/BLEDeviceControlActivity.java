@@ -51,8 +51,8 @@ public class BLEDeviceControlActivity {
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public boolean write_count = false;
-    public byte write_byte[] = {0x01};
-    private TextView mConnectionState;
+    public static byte write_byte[] = {0x01};
+	private TextView mConnectionState;
     private TextView mDataField;
     private String mDeviceName;
     private String mDeviceAddress;
@@ -86,6 +86,9 @@ public class BLEDeviceControlActivity {
 		return mConnected ? "BLE connected": "BLE disconnected";
 	}
     
+    public static byte[] getWrite_byte() {
+		return write_byte;
+	}
     
     public static BLEDeviceControlActivity getInstance() {
 		 if (instance == null){
@@ -189,6 +192,35 @@ public class BLEDeviceControlActivity {
         }
     }
     */
+    public byte[] SendDataToBleDevice(String data)
+    {
+        if (!data.equals("") && data.length() == 2)
+        {
+       	 byte pwm1 = (byte)data.toLowerCase().charAt(0);
+       	 byte pwm0 = (byte)data.toLowerCase().charAt(1);
+       	 if (pwm1 >=0x30 && pwm1 <= 0x39)
+       		 pwm1 = (byte) (pwm1 - 0x30);
+       	 else if (pwm1 >=0x61 && pwm1 <= 0x66)
+       		 pwm1 = (byte) (pwm1 - 87);
+       	 
+       	 if (pwm0 >=0x30 && pwm0 <= 0x39)
+       		 pwm0 = (byte) (pwm0 - 0x30);
+       	 else if (pwm0 >=0x61 && pwm0 <= 0x66)
+       		 pwm0 = (byte) (pwm0 - 87);
+       	 
+       	 write_byte[0] = (byte) ( (pwm1 << 4)+ pwm0);
+       	 
+       	return write_byte;
+       	 
+        }
+        else
+        {
+        	write_byte[0] = 0x00;
+        	write_byte[1] = 0x00;
+        	return write_byte;
+        }
+    }
+    
     public boolean CharacteristicWRN(int groupPosition,int childPosition,int method, String data)
     {
     	
@@ -209,30 +241,13 @@ public class BLEDeviceControlActivity {
                                      mNotifyCharacteristic, false);
                              mNotifyCharacteristic = null;
                          }
-                         if (!data.equals("") && data.length() == 2)
-                         {
-                        	 byte pwm1 = (byte)data.toLowerCase().charAt(0);
-                        	 byte pwm0 = (byte)data.toLowerCase().charAt(1);
-                        	 if (pwm1 >=0x30 && pwm1 <= 0x39)
-                        		 pwm1 = (byte) (pwm1 - 0x30);
-                        	 else if (pwm1 >=0x61 && pwm1 <= 0x66)
-                        		 pwm1 = (byte) (pwm1 - 87);
-                        	 
-                        	 if (pwm0 >=0x30 && pwm0 <= 0x39)
-                        		 pwm0 = (byte) (pwm0 - 0x30);
-                        	 else if (pwm0 >=0x61 && pwm0 <= 0x66)
-                        		 pwm0 = (byte) (pwm0 - 87);
-                        	 
-                        	 write_byte[0] = (byte) ( (pwm1 << 4)+ pwm0);
-                        	 
-                        	 characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
-                        	 Log.i(TAG,"BLE write byte = "+write_byte[0]);
-                        	 characteristic.setValue(write_byte);
-                        	 mBluetoothLeService.writeCharacteristic(characteristic);
-                        	 
-                         }
-                         else 
-                        	 break;
+                         
+                         write_byte = SendDataToBleDevice(data);
+                         
+                       	 characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+                       	 Log.i(TAG,"BLE write byte = "+write_byte[0]);
+                       	 characteristic.setValue(write_byte);
+                       	 mBluetoothLeService.writeCharacteristic(characteristic);
                      }
             		
             		break;
