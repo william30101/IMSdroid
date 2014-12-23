@@ -32,7 +32,7 @@ public class XMPPSetting {
 	public boolean XMPPStart(String Name , String Pass)
 	{
 		// Hardcode here , we could modify later.
-		 String host = "61.222.245.149";
+		 String host = "kinposerver.cloudapp.net";
 	     String port = "5222";
 	     String username = Name;
 	     String password = Pass;
@@ -111,7 +111,7 @@ public class XMPPSetting {
 	public void XMPPSendText(String to,String istr)
     {
 		//Server name , can't be removed here.
-    	String Reci = to+"@james-pc/Smack";
+		String Reci = to+"@kinpo/Smack";
         String text = istr;
 
         Log.i(TAG, "Sending text [" + text + "] to [" + Reci + "]");

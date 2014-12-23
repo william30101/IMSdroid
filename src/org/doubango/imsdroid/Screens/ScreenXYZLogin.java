@@ -96,12 +96,12 @@ public class ScreenXYZLogin extends BaseScreen {
 		editTextUsername.setText(mConfigurationService.getString(
 				NgnConfigurationEntry.IDENTITY_DISPLAY_NAME,
 				NgnConfigurationEntry.DEFAULT_IDENTITY_DISPLAY_NAME));
-		editTextImpu.setText("sip:"+editTextUsername.getText().toString().trim()+"@61.222.245.149");
+		editTextImpu.setText("sip:"+editTextUsername.getText().toString().trim()+"@kinposerver.cloudapp.net");
 		editTextImpi.setText(editTextUsername.getText().toString().trim());
 		editTextPassword.setText(mConfigurationService.getString(
 				NgnConfigurationEntry.IDENTITY_PASSWORD,
 				NgnConfigurationEntry.DEFAULT_IDENTITY_PASSWORD));
-		editTextRealm.setText("sip:61.222.245.149");
+		editTextRealm.setText("sip:kinposerver.cloudapp.net");
 		checkBoxEarlyIMS.setChecked(false);
 			
 		super.addConfigurationListener(editTextUsername);

@@ -28,8 +28,7 @@ public class TestService extends AndroidTestCase {
 		byte[] resultByte = {0x53,0x10,0x01,0x00,(byte)0xfa,0x45};
 		for (int i=0;i<cmdByte.length;i++)
 		{
-			Log.i(TAG, "Assert error index = " + i);
-			assertEquals(resultByte[i],cmdByte[i]);
+			assertEquals("Assert error index = " + i,resultByte[i],cmdByte[i]);
 		}
 	}
 	
@@ -49,8 +48,7 @@ public class TestService extends AndroidTestCase {
 		byte[] resultByte = {0x53,0x01,0x01,0x00,0x00,0x45};
 		for (int i=0;i<cmdByte.length;i++)
 		{
-			Log.i(TAG, "Assert error index = " + i);
-			assertEquals(resultByte[i],cmdByte[i]);
+			assertEquals("Assert error index = " + i , resultByte[i],cmdByte[i]);
 		}
 	}
 	
@@ -69,8 +67,7 @@ public class TestService extends AndroidTestCase {
 		byte[] resultByte = {0x53,0x03,0x01,0x00,0x00,0x45};
 		for (int i=0;i<cmdByte.length;i++)
 		{
-			Log.i(TAG, "Assert error index = " + i);
-			assertEquals(resultByte[i],cmdByte[i]);
+			assertEquals("Assert error index = " + i,resultByte[i],cmdByte[i]);
 		}
 	}
 	
@@ -88,8 +85,7 @@ public class TestService extends AndroidTestCase {
 		byte[] resultByte = {0x53,0x04,0x01,0x00,0x00,0x45};
 		for (int i=0;i<cmdByte.length;i++)
 		{
-			Log.i(TAG, "Assert error index = " + i);
-			assertEquals(resultByte[i],cmdByte[i]);
+			assertEquals("Assert error index = " + i, resultByte[i],cmdByte[i]);
 		}
 	}
 	
@@ -107,8 +103,7 @@ public class TestService extends AndroidTestCase {
 		byte[] resultByte = {0x53,0x06,0x0d,0x00,0x00,0x45};
 		for (int i=0;i<cmdByte.length;i++)
 		{
-			Log.i(TAG, "Assert error index = " + i);
-			assertEquals(resultByte[i],cmdByte[i]);
+			assertEquals("Assert error index = " + i,resultByte[i],cmdByte[i]);
 		}
 	}
 	
@@ -126,8 +121,7 @@ public class TestService extends AndroidTestCase {
 		byte[] resultByte = {0x53,0x02,0x01,0x00,0x00,0x45};
 		for (int i=0;i<cmdByte.length;i++)
 		{
-			Log.i(TAG, "Assert error index = " + i);
-			assertEquals(resultByte[i],cmdByte[i]);
+			assertEquals("Assert error index = " + i, resultByte[i],cmdByte[i]);
 		}
 	}
 
@@ -145,8 +139,7 @@ public class TestService extends AndroidTestCase {
 		byte[] resultByte = {0x53,0x08,0x00,0x08,0x01,0x00,0x45};
 		for (int i=0;i<cmdByte.length;i++)
 		{
-			Log.i(TAG, "Assert error index = " + i);
-			assertEquals(resultByte[i],cmdByte[i]);
+			assertEquals("Assert error index = " + i,resultByte[i],cmdByte[i]);
 		}
 	}
 	
@@ -165,7 +158,7 @@ public class TestService extends AndroidTestCase {
 		//byte[] cmdByte = UCmd.GetAllByte(inM);
 
 		BLEDevice.SendDataToBleDevice("e0");
-		assertEquals((byte)0xe0,BLEDevice.getWrite_byte()[0]);
+		assertEquals("BLE data not equal ",(byte)0xe0,BLEDevice.getWrite_byte()[0]);
 		
 	}
 }

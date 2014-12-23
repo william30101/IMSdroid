@@ -196,27 +196,25 @@ public class BLEDeviceControlActivity {
     {
         if (!data.equals("") && data.length() == 2)
         {
-       	 byte pwm1 = (byte)data.toLowerCase().charAt(0);
-       	 byte pwm0 = (byte)data.toLowerCase().charAt(1);
-       	 if (pwm1 >=0x30 && pwm1 <= 0x39)
-       		 pwm1 = (byte) (pwm1 - 0x30);
-       	 else if (pwm1 >=0x61 && pwm1 <= 0x66)
-       		 pwm1 = (byte) (pwm1 - 87);
-       	 
-       	 if (pwm0 >=0x30 && pwm0 <= 0x39)
-       		 pwm0 = (byte) (pwm0 - 0x30);
-       	 else if (pwm0 >=0x61 && pwm0 <= 0x66)
-       		 pwm0 = (byte) (pwm0 - 87);
-       	 
-       	 write_byte[0] = (byte) ( (pwm1 << 4)+ pwm0);
-       	 
-       	return write_byte;
-       	 
+        	byte pwm1 = (byte)data.toLowerCase().charAt(0);
+        	byte pwm0 = (byte)data.toLowerCase().charAt(1);
+        	if (pwm1 >=0x30 && pwm1 <= 0x39)
+        		pwm1 = (byte) (pwm1 - 0x30);
+        	else if (pwm1 >=0x61 && pwm1 <= 0x66)
+        		pwm1 = (byte) (pwm1 - 87);
+        	
+        	if (pwm0 >=0x30 && pwm0 <= 0x39)
+        		pwm0 = (byte) (pwm0 - 0x30);
+        	else if (pwm0 >=0x61 && pwm0 <= 0x66)
+        		pwm0 = (byte) (pwm0 - 87);
+	       	 
+        	write_byte[0] = (byte) ( (pwm1 << 4)+ pwm0);
+	       	 
+        	return write_byte;
         }
         else
         {
         	write_byte[0] = 0x00;
-        	write_byte[1] = 0x00;
         	return write_byte;
         }
     }
