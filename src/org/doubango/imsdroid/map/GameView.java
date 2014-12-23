@@ -480,7 +480,7 @@ public class GameView extends View {
 	 * }
 	 */
 
-	public void getScreenSize() {
+	@SuppressLint("NewApi") public void getScreenSize() {
 		WindowManager wm = (WindowManager) mContext
 				.getSystemService(mContext.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();

@@ -18,8 +18,10 @@ import org.doubango.imsdroid.Screens.ScreenUIVerticalSeekBar;
 import org.doubango.imsdroid.Utils.NetworkStatus;
 import org.doubango.imsdroid.map.Game;
 import org.doubango.imsdroid.map.GameView;
+import org.doubango.imsdroid.map.MapList;
 import org.doubango.imsdroid.map.SendCmdToBoardAlgorithm;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -72,8 +74,12 @@ public class SetUIFunction {
 	// For map use
 	private Button jsRunBtn;
 	GameView gameView;
+	TextView Axis_show_X, Axis_show_Y;
+	EditText Axis_TestAxisInput;
 	Game game;
+	
 	// End for Map use
+	MapList map = new MapList();
 
 	private ExecutorService service = Executors.newFixedThreadPool(10);
 	SendCmdToBoardAlgorithm SendAlgo;
@@ -126,6 +132,27 @@ public class SetUIFunction {
 	private ImageView bleConnect;
 	public static TextView mConnectState;
 
+	private Handler handler = new Handler();
+
+	/* Detect Robot Location */
+	Runnable Axis_trigger_thread = new Axis_thread();
+
+	public int Axis_InputY_fromDW1000;
+	public int Axis_InputX_fromDW1000;
+	public int Axis_BRSArraylow = 0;
+	public int Axis_BRSArraymiddle = 0;
+	public int Axis_BRStimes_Y = 0;
+	public int Axis_BRStimes_X = 0;
+	public int Axis_BRSretIndexY = 0;
+	public int Axis_BRSretIndexX = 0;
+	public int Axis_BRSserchArray_Index_Y = 0;
+	public int Axis_BRSserchArray_Index_X = 0;
+	public int Axis_BRShigh = MapList.Axis_GraduateY.length;
+
+	private int Axis_GetPollTime = 3000;
+	private int Axis_BRShigh_X = 0;
+	private int Axis_BRSlow_X = 0;
+	private int Axis_BRSmiddle_X = 0;
 
 	public SetUIFunction(Activity activity) {
 		globalActivity = activity;
@@ -134,12 +161,17 @@ public class SetUIFunction {
 
 	public void StartUIFunction() {
 
+		Axis_show_X = (TextView) globalActivity.findViewById(R.id.Axis_show_X);
+		Axis_show_Y = (TextView) globalActivity.findViewById(R.id.Axis_show_Y);
+		Axis_TestAxisInput = (EditText) globalActivity
+				.findViewById(R.id.Axis_TestInputAxis);
+
 		uartCmd = UartCmd.getInstance();
 		loggin = NetworkStatus.getInstance();
 
 		XMPPSet = new XMPPSetting();
 		uartRec = new UartReceive();
-		// uartRec.RunRecThread();
+		uartRec.RunRecThread();
 
 		gameView = (GameView) globalActivity.findViewById(R.id.gameView1);
 		game = new Game();
@@ -207,8 +239,8 @@ public class SetUIFunction {
 		
 	}
 
+	@SuppressLint("NewApi")
 	private void getScreenSize(Activity v) {
-		// TODO Auto-generated method stub
 		Display display = v.getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
@@ -221,7 +253,6 @@ public class SetUIFunction {
 	}
 
 	private void setJoyStickParameter(Activity v) {
-		// TODO Auto-generated method stub
 		js = new ScreenUIJoyStick(v.getApplicationContext(), layout_joystick,
 				R.drawable.joystick);
 
@@ -252,7 +283,6 @@ public class SetUIFunction {
 	OnTouchListener joystickListener = new OnTouchListener() {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			// TODO Auto-generated method stub
 			joystickAction = event.getAction();
 
 			/* Draw JoyStick */
@@ -294,7 +324,10 @@ public class SetUIFunction {
 			indicator = v.getId();
 			switch (indicator) {
 			case R.id.getAxisBtn:
-				uartRec.RunRecThread();
+				handler.postDelayed(Axis_trigger_thread, Axis_GetPollTime);
+				Log.d("jamesdebug", "touchBtn");
+
+				// uartRec.RunRecThread();
 				break;
 
 			case R.id.runjs:
@@ -356,7 +389,6 @@ public class SetUIFunction {
 			try {
 				SendToBoard("pitchAngle bottom");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
@@ -365,7 +397,6 @@ public class SetUIFunction {
 			try {
 				SendToBoard("pitchAngle middle");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
@@ -374,7 +405,6 @@ public class SetUIFunction {
 			try {
 				SendToBoard("pitchAngle top");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
@@ -387,7 +417,6 @@ public class SetUIFunction {
 		@Override
 		public void onProgressChanged(SeekBar seekBar, int progress,
 				boolean fromUser) {
-			// TODO Auto-generated method stub
 
 			switch (progress) {
 			case 0:
@@ -395,7 +424,6 @@ public class SetUIFunction {
 				try {
 					SendToBoard("stretch bottom");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -404,7 +432,6 @@ public class SetUIFunction {
 				try {
 					SendToBoard("stretch top");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -414,13 +441,11 @@ public class SetUIFunction {
 
 		@Override
 		public void onStartTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void onStopTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
 
 		}
 
@@ -429,6 +454,7 @@ public class SetUIFunction {
 	/* DragDrap Menu Listener */
 	View.OnTouchListener imgListener = new OnTouchListener() {
 
+		@SuppressLint("NewApi")
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
@@ -504,6 +530,7 @@ public class SetUIFunction {
 
 				lp.setMargins(x, y, 0, 0);
 				// lp.setMargins(left, top, right, bottom)
+
 				selected_item.setLayoutParams(lp);
 				v = (View)event.getLocalState();
 				v.setVisibility(View.VISIBLE);
@@ -688,6 +715,90 @@ public class SetUIFunction {
 		}
 	}
 
+	private int Axis_BRSlessY(int Axis_InputVarY) throws IOException {
+
+		while (Axis_BRSArraylow <= Axis_BRShigh) {
+
+			Axis_BRStimes_Y ++;
+			Axis_BRSArraymiddle = ((Axis_BRSArraylow + Axis_BRShigh) / 2);
+
+			if (Axis_InputVarY <= MapList.Axis_GraduateY[Axis_BRSArraymiddle]) {
+
+				Axis_BRShigh = Axis_BRSArraymiddle - 1;
+
+			} else {
+				Axis_BRSArraylow = Axis_BRSArraymiddle + 1;
+			}
+		}
+
+		Log.d("jamesdebug", "The times is:" + Axis_BRStimes_Y);
+
+		// if(Axis_low > 0)
+		// {
+		// Log.d("jamesdebug","The " + Axis_data[Axis_low - 1] + " is less " +
+		// Axis_InputVar +
+		// " The array index is : " + (Axis_low - 1));
+		// }else{
+		// Log.d("jamesdebug", "Can't find the element less " + Axis_InputVar);
+		// }
+
+		// if(Axis_low > 0)
+		// {
+		// Log.d("jamesdebug","The " + MapList.test[0][Axis_low - 1] +
+		// " is less " + Axis_InputVar +
+		// " The array index is : " + (Axis_low - 1));
+		// }else{
+		// Log.d("jamesdebug", "Can't find the element less " + Axis_InputVar);
+		// }
+
+		if (Axis_BRSArraylow > 0) {
+
+			Log.d("jamesdebug", "The "
+			        + MapList.Axis_GraduateY[Axis_BRSArraylow - 1]
+					+ " is less " + Axis_InputVarY + " The array index is : "
+					+ (Axis_BRSArraylow - 1));
+
+			Axis_BRSretIndexY = Axis_BRSArraylow;
+
+		} else {
+			Log.d("jamesdebug", "Can't find the element less " + Axis_InputVarY);
+		}
+		return Axis_BRSretIndexY;
+	}
+
+	private int Axis_BRSlessX(int Axis_InputVarX) throws IOException {
+
+		Axis_BRShigh_X = MapList.AxisX_Array[0][Axis_BRSserchArray_Index_Y].length - 1;
+
+		while (Axis_BRSlow_X <= Axis_BRShigh_X) {
+
+			Axis_BRStimes_X ++;
+			Axis_BRSmiddle_X = ((Axis_BRSlow_X + Axis_BRShigh_X) / 2);
+
+			if (Axis_InputVarX <= MapList.AxisX_Array[0][Axis_BRSserchArray_Index_Y][Axis_BRSmiddle_X]) {
+
+				Axis_BRShigh_X = Axis_BRSmiddle_X - 1;
+
+			} else {
+				Axis_BRSlow_X = Axis_BRSmiddle_X + 1;
+			}
+		}
+
+		if (Axis_BRSlow_X > 0) {
+
+			Log.d("jamesdebug","The "
+							+ MapList.AxisX_Array[0][Axis_BRSserchArray_Index_Y][Axis_BRSlow_X - 1]
+							+ " is less " + Axis_InputVarX
+							+ " The array index is : " + (Axis_BRSlow_X - 1));
+
+			Axis_BRSretIndexX = Axis_BRSlow_X - 1;
+
+		} else {
+			Log.d("jamesdebug", "Can't find the element less " + Axis_InputVarX);
+		}
+		return Axis_BRSretIndexX;
+	}
+
 	/* Use thread pool for XMPP communication */
 	public class MyThread implements Runnable {
 		String SendMsg;
@@ -710,16 +821,62 @@ public class SetUIFunction {
 						SendToBoard("direction " + sub);
 					Thread.sleep(100l);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
 	}
-	
+
+	public class Axis_thread implements Runnable {
+		public void run() {
+
+			Axis_show_X.setText(" State X : "
+					+ Float.toString(UartReceive.robotLocation[2] * 100));
+			Axis_show_Y.setText(" State Y : "
+					+ Float.toString(UartReceive.robotLocation[3] * 100));
+
+			// Log.d("jamesdebug","Axis_showX: " + Float.toString(UartReceive.robotLocation[2] * 100));
+			// Log.d("jamesdebug","Axis_showY: " + Float.toString(UartReceive.robotLocation[3] * 100));
+
+			// Axis_InputVarY = Integer.parseInt(Axis_TestAxisInput.getText().toString());
+			
+			Axis_InputY_fromDW1000 = Integer.parseInt(Axis_show_Y.getText().toString());
+
+			Log.d("jamesdebug", "The stream is: " + Axis_InputY_fromDW1000);
+
+			try {
+
+				Axis_BRSserchArray_Index_Y = Axis_BRSlessY(Axis_InputY_fromDW1000);
+				Axis_BRSserchArray_Index_X = Axis_BRSlessX(Axis_InputX_fromDW1000);
+
+				Log.d("jamesdebug", "***************Index[X][Y] is : [ "
+						+ Axis_BRSserchArray_Index_X + " ][ " + Axis_BRSserchArray_Index_Y
+						+ " ]");
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			handler.postDelayed(Axis_trigger_thread, Axis_GetPollTime);
+
+			Log.d("jamesdebug", "===================Info======================");
+
+			game.source[0] = Axis_BRSserchArray_Index_X;
+			game.source[1] = Axis_BRSserchArray_Index_Y;
+
+			gameView.postInvalidate();
+
+			try {
+
+				Thread.sleep(20);
+
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	/* Create ThreadPool to fix thread quantity */
 	private void useThreadPool(ExecutorService service, String Msg) {
@@ -748,6 +905,4 @@ public class SetUIFunction {
 	private void cleanThread(ExecutorService service){
 		service.execute(new cThread());
 	}
-	
-	
 }

@@ -20,7 +20,7 @@ import android.util.Log;
 public class UartReceive {
 	
 	private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
-	boolean debugNanoQueue = true , debugEncoderQueue = false;
+	boolean debugNanoQueue = false , debugEncoderQueue = false;
 
 	private int nanoCount = 0 , encoderCount = 0;  
 	private String nanoTestData[] = {
@@ -35,7 +35,8 @@ public class UartReceive {
 	private String ReStrEnco,ReStrNano;
 	
 	// We could modify here , to chage how many data should we get from queue.
-	private int getNanoDataSize = 3 , getEncoderDataSize = 2 , beSentMessage = 13;
+	public static int getNanoDataSize = 3 , getEncoderDataSize = 2 , beSentMessage = 13;
+
 	private int nanoInterval = 100 , encoderWriteWiatInterval = 50 , 
 				encoderReadWaitInterval = 300 , encoderWaitInterval = 350, combineInterval = 400;
 	public static int fd,nanoFd,encFd;
@@ -44,9 +45,11 @@ public class UartReceive {
 	
 	byte [] ReByteEnco = new byte[11];
 	
-	float[] nanoFloat = new float[getNanoDataSize];
-	float[] nanoFloat_1 = new float[getNanoDataSize];
+	public static float robotLocation[]={0,0,0,0};
 	
+	public static float[] nanoFloat = new float[getNanoDataSize];
+	public static float[] nanoFloat_1 = new float[getNanoDataSize];
+
 	private static ArrayList<float[]> nanoQueue = new ArrayList<float[]>();
 	private static ArrayList<byte[]> encoderQueue = new ArrayList<byte[]>();
 	
@@ -64,6 +67,7 @@ public class UartReceive {
 	
 	EncoderCmd encoderCmd = new EncoderCmd();
 	
+	public static int[] tempInt = new int[3]; // L Wheel , R Wheel , Compass
 	
 	// for DBG , save X Y data to file
 	boolean nanoStart = false , 
@@ -418,7 +422,6 @@ public class UartReceive {
 	
 						ArrayList<int[]> encoderDataQueue = new ArrayList<int[]>();
 						byte[] encoByte = encoderData.get(0);
-						int[] tempInt = new int[3]; // L Wheel , R Wheel , Compass
 						
 						for (int i=0;i<encoderData.size();i++)
 						{
@@ -452,10 +455,9 @@ public class UartReceive {
 			///監看nanopan輸入值
 						Log.i("toEKF","Nano1=" + nanoFloat_1[0] + " Nano2=" + nanoFloat_1[1] + " Nano3= " + nanoFloat_1[2]);
 			///------EKF-----------------------------------------------------------------------------------------
-						float robotLocation[] = uartCmd.EKF((float)nanoFloat_1[0],(float)nanoFloat_1[1],(float)nanoFloat_1[2],(int) tempInt[0] ,(int) tempInt[1],(int) tempInt[2]);
+						robotLocation = UartCmd.EKF((float)nanoFloat_1[0],(float)nanoFloat_1[1],(float)nanoFloat_1[2],(int) encoderLSum ,(int) encoderRSum,(int) tempInt[2]);
 			///--------------------------------------------------------------------------------------------------
 						
-						Log.i(TAG,"Send axis to Driving board");
 						byte[] sendAxisToDriving = new byte[11];
 						
 						if (robotLocation[0] < 0  )

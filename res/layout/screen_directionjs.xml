@@ -130,6 +130,14 @@
             <requestFocus />
         </EditText>
 
+        <Button
+            android:id="@+id/testMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/navigation"
+            android:layout_alignLeft="@+id/runjs"
+            android:text="Test Menu" />
+
         <TextView
             android:id="@+id/BLEconnectStatus"
             android:layout_width="wrap_content"
@@ -143,8 +151,41 @@
             android:id="@+id/getAxisBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/navigation"
-            android:layout_alignLeft="@+id/runjs"
+            android:layout_above="@+id/BLEDataText"
+            android:layout_toRightOf="@+id/linearLayout1"
             android:text="GetAxis" />
+
+    <TextView
+        android:id="@+id/Axis_show_Y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:text="Axis_show_Y" />
+
+    <TextView
+        android:id="@+id/Axis_show_X"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/screenmenu"
+        android:layout_alignLeft="@+id/BLEconnectStatus"
+        android:text="Axis_show_X" />
+
+    <EditText
+        android:id="@+id/Axis_TestInputAxis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/layout_joystick"
+        android:layout_alignParentTop="true"
+        android:ems="10" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_below="@+id/editText1"
+        android:text="TextView" />
 
 </RelativeLayout>
