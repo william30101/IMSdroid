@@ -324,6 +324,7 @@ public class SetUIFunction {
 			indicator = v.getId();
 			switch (indicator) {
 			case R.id.getAxisBtn:
+				SendCmdToBoardAlgorithm.SetCompass();
 				handler.postDelayed(Axis_trigger_thread, Axis_GetPollTime);
 				Log.d("jamesdebug", "touchBtn");
 

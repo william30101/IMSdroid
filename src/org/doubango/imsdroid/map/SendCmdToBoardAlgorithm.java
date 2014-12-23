@@ -2,6 +2,7 @@ package org.doubango.imsdroid.map;
 
 import java.util.ArrayList;
 
+import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
 
 import android.util.Log;
@@ -17,6 +18,23 @@ public class SendCmdToBoardAlgorithm {
 	int originalX = 0, originalY = 0;
 	MapList mapList;
 	
+	// Setting direction for e-Compass
+		//Index of Axis_eComAngle_F  = 0
+		//Index of Axis_eComAngle_RF = 1
+		//Index of Axis_eComAngle_R  = 2
+		//Index of Axis_eComAngle_RB = 3
+		//Index of Axis_eComAngle_B  = 4
+		//Index of Axis_eComAngle_LB = 5
+		//Index of Axis_eComAngle_L  = 6
+		//Index of Axis_eComAngle_LF = 7
+
+	public static int Axis_eComAngle_ret = 0;
+	public static int Axis_eComAngle_tmp = 0;
+	public static String Axis_SendeComAngle_to32 = "forward";
+
+	public static int [] Axis_eComAngle_Array = new int []
+			{0, 0, 0, 0, 0, 0, 0, 0};
+
 	ArrayList<int[][]> pathQ = new ArrayList<int[][]>();
 	//GameView gameView;
 	
@@ -166,111 +184,143 @@ public class SendCmdToBoardAlgorithm {
 		
 	}
 	
-	
-	public String FindDirection(int inTheta)
+	public static void SetCompass()
 	{
-		String direction = "forward";
-		
+		Axis_eComAngle_Array[0] = UartReceive.tempInt[2];
+		Axis_eComAngle_tmp = Axis_eComAngle_Array[0];
+
+		for (int i = 1 ; i < 8 ; i++)
+		{
+			if ( Axis_eComAngle_tmp > 360 ) {
+				Axis_eComAngle_tmp = Axis_eComAngle_tmp - 360;
+			}
+
+			Axis_eComAngle_tmp = Axis_eComAngle_tmp + 45;
+			Axis_eComAngle_Array[i] = Axis_eComAngle_tmp;
+		};
+	}
+	
+	public int FindCompass(int dx , int dy)
+	{
+		int compass = 0;
+
+		if (dx == 0 && dy == 1) {
+
+			compass = Axis_eComAngle_Array[0];
+
+		} else if (dx == -1 && dy == 1)  {
+
+			compass = Axis_eComAngle_Array[1];
+
+		} else if (dx == -1 && dy == 0)  {
+
+			compass = Axis_eComAngle_Array[2];
+
+		} else if (dx == -1 && dy == -1) {
+
+			compass = Axis_eComAngle_Array[3];
+
+		} else if (dx == 0 && dy == -1)  {
+
+			compass = Axis_eComAngle_Array[4];
+
+		} else if (dx == 1 && dy == -1)  {
+
+			compass = Axis_eComAngle_Array[5];
+
+		} else if (dx == 1 && dy == 0)   {
+
+			compass = Axis_eComAngle_Array[6];
+
+		} else if (dx == 1 && dy == 1)   {
+
+			compass = Axis_eComAngle_Array[7];
+
+		}
+
+		return compass;
+	}
+
+	public String FindDirection(final XMPPSetting inXMPPSet, int inTheta)
+	{
 		if (inTheta == 0)
 		{
-			direction = "forward";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
-		if (inTheta == 45)
+		else if (inTheta == 45)
 		{
-			direction = "forRig";
+			Axis_SendeComAngle_to32 = "RotateAngle P 45";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
-		if (inTheta == -45)
+		else if ( inTheta == -45)
 		{
-			direction = "forLeft";
+			Axis_SendeComAngle_to32 = "RotateAngle N 45";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
 		else if (inTheta == 90)
 		{
-			direction = "right";
+			Axis_SendeComAngle_to32 = "RotateAngle P 90";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
-		else if (inTheta == -90)
+		else if ( inTheta == -90)
 		{
-			direction = "left";
+			Axis_SendeComAngle_to32 = "RotateAngle N 90";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
 		else if (inTheta == 135)
 		{
-			direction = "bacRig";
+			Axis_SendeComAngle_to32 = "RotateAngle P 135";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
 		else if (inTheta == -135)
 		{
-			direction = "bacLeft";
+			Axis_SendeComAngle_to32 = "RotateAngle N 135";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
 		else if (inTheta == 180)
 		{
-			direction = "backward";
+			Axis_SendeComAngle_to32 = "RotateAngle P 180";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
-		// Is this okay??
-		// need to check this condition
 		else if (inTheta == -180)
 		{
-			direction = "backward";
+			Axis_SendeComAngle_to32 = "RotateAngoe P 180";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
 		else if (inTheta == 225)
 		{
-			direction = "bacLeft";
+			Axis_SendeComAngle_to32 = "RotateAngle P 225";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
 		else if (inTheta == -225)
 		{
-			direction = "bacRig";
+			Axis_SendeComAngle_to32 = "RotateAngle N 255";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
 		else if (inTheta == 270)
 		{
-			direction = "left";
+			Axis_SendeComAngle_to32 = "RotateAngle P 270";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
 		else if (inTheta == -270)
 		{
-			direction = "right";
+			Axis_SendeComAngle_to32 = "RotateAngle N 270";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
 		else if (inTheta == 315)
 		{
-			direction = "forLeft";
+			Axis_SendeComAngle_to32 = "RotateAngle P 315";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
 		else if (inTheta == -315)
 		{
-			direction = "forRig";
+			Axis_SendeComAngle_to32 = "RotateAngle N 315";
+			Axis_SendeComAngle_to32 = "direction forward";
 		}
-		
-		return direction;
+
+		return Axis_SendeComAngle_to32;
 	}
-	
-	public int FindCompass(final XMPPSetting inXMPPSet, int dx , int dy)
-	{
-		int compass = 0;
-		if (dx == 0 && dy == 1) {
-			compass = 0;
-			//SendCommand("forward");
-			//SendCommand(inXMPPSet,"forward");
-		} else if (dx == -1 && dy == 1) {
-			compass = 45;
-			//SendCommand("forRig");
-		} else if (dx == -1 && dy == 0) {
-			compass = 90;
-			//SendCommand("right");
-		} else if (dx == -1 && dy == -1) {
-			compass = 135;
-			//SendCommand("bacRig");
-		} else if (dx == 0 && dy == -1) {
-			compass = 180;
-			SendCommand(inXMPPSet,"backward");
-			//SendCommand("backward");
-		} else if (dx == 1 && dy == -1) {
-			compass = 225;
-			//SendCommand("bacLeft");
-		} else if (dx == 1 && dy == 0) {
-			compass = 270;
-			//SendCommand("left");
-		} else if (dx == 1 && dy == 1) {
-			compass = 315;
-			//SendCommand("forLeft");
-		}
-		
-		return compass;
-	}
-	
+
 	public void RobotStart(final GameView gameView , final Game game , final XMPPSetting inXMPPSet)
 	{
 		Log.i("william", "Robot thread running");
@@ -336,8 +386,8 @@ public class SendCmdToBoardAlgorithm {
 						int dx = nextX - originalX;
 						int dy = nextY - originalY;
 						
-						int OriginalCompass = FindCompass(inXMPPSet, old_dx , old_dy);
-						int nextCompass = FindCompass(inXMPPSet, dx , dy);
+						int OriginalCompass = FindCompass(old_dx , old_dy);
+						int nextCompass = FindCompass(dx , dy);
 						
 						int theta = nextCompass - OriginalCompass;
 						
@@ -355,7 +405,7 @@ public class SendCmdToBoardAlgorithm {
 						//		|| OriginalCompass == 225)
 						//	theta = theta + 180 ;
 						
-						String dir = FindDirection(theta);
+						String dir = FindDirection(inXMPPSet, theta);
 						SendCommand(inXMPPSet,dir);
 						
 					}
@@ -379,10 +429,6 @@ public class SendCmdToBoardAlgorithm {
 					gameView.drawCircleFlag = false;
 
 					gameView.postInvalidate();
-					
-					
-
-
 				}
 			}
 		}.start();
