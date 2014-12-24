@@ -49,6 +49,8 @@ public class ScreenXYZsignin extends BaseScreen {
 	int Screen_width, Screen_height;
 	int horizontalscope, verticalscope;	
 
+	private UartCmd uartCmd = UartCmd.getInstance();
+	
 	public ScreenXYZsignin() {
 		super(SCREEN_TYPE.HOME_T, TAG);
 		
@@ -62,6 +64,12 @@ public class ScreenXYZsignin extends BaseScreen {
 
 		// *************** Get each field from default configure , 
 		// *************** if we modify it on view,  will save to default configure on ClickListener function.
+		
+        if (UartCmd.driFd == 0 || UartCmd.dw1000Fd == 0)
+        {
+        	uartCmd.OpenSetUartPort("ttymxc3");
+        	uartCmd.OpenSetUartPort("ttymxc2");
+        }
 		
 		setScreenBackground();
 		getScreenParameter();

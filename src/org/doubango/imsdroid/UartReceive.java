@@ -49,6 +49,13 @@ public class UartReceive {
 	
 	public static float[] nanoFloat = new float[getNanoDataSize];
 	public static float[] nanoFloat_1 = new float[getNanoDataSize];
+	
+	/*
+	 * [0] = DW1000 anchor 1
+	 * [1] = DW1000 anchor 2
+	 * [2] = DW1000 anchor 3
+	 * */ 
+	public static float[] nanoFloat3Datas = new float[3];
 
 	private static ArrayList<float[]> nanoQueue = new ArrayList<float[]>();
 	private static ArrayList<byte[]> encoderQueue = new ArrayList<byte[]>();
@@ -111,15 +118,15 @@ public class UartReceive {
 				*/
 				
 				//String nanoStr = ReceiveMsgUart(2);
-				if (nanoCount  > 2)
+				if (nanoCount  > 7)
 					nanoCount = 0;
 					
 				String nanoStr = nanoTestData[nanoCount];
 				String[] daf = nanoStr.split(":");
-				float[] myflot = {Float.parseFloat(daf[0].substring(2, daf[0].length())),0};
+				float[] myflot = {Float.parseFloat(daf[2]),Float.parseFloat(daf[0].substring(2, daf[0].length()))};
 				//Get data : #-001.27:017:001:015
-				 
-				
+				//nanoFloat3Datas[Integer.parseInt(daf[2]) - 1] = Float.parseFloat(daf[0].substring(2, daf[0].length()));
+
 				nanoQueue.add(myflot);
 				nanoCount++;
 				
@@ -151,18 +158,16 @@ public class UartReceive {
 
 								if (daf.length == 4)
 								{
-									float[] myflot = {
-											Float.parseFloat(daf[2]),
-											Float.parseFloat(daf[0].substring(
-													2, daf[0].length())) };
 
-									
+									float[] myflot = {Float.parseFloat(daf[2]),
+											Float.parseFloat(daf[0].substring(2, daf[0].length()))};
 									
 									// If data > 0 , we use it , else ignore it.
 									if (myflot[1] > 0) 				
 									{
 										//Log.i(TAG, "Nano my float distance = "
 										//		+ myflot[1]);
+
 										nanoQueue.add(myflot);
 									}
 									// view.append(ReStr);
@@ -379,25 +384,38 @@ public class UartReceive {
 	
 					Log.i(TAG, "nanoQueue.size() = " + nanoQueue.size()
 							+ " encoderQueue.size() = " + encoderQueue.size());
-	
-					if (nanoQueue.size() >= getNanoDataSize + 4
+					
+					boolean getAllDW1000Data = false;
+					float dw1000NewData[] = getDW1000NewData(nanoQueue);
+					if (dw1000NewData[0] != 0 && dw1000NewData[1] != 0 && dw1000NewData[2] != 0)
+						getAllDW1000Data = true;
+					
+					
+					//if (nanoQueue.size() >= getNanoDataSize + 4
+					//		&& encoderQueue.size() >= getEncoderDataSize) {
+					if ( getAllDW1000Data == true
 							&& encoderQueue.size() >= getEncoderDataSize) {
 	
 						// Arrays.fill(beSendMsg, (byte)0x00);
 	
-						minusNumber = nanoQueue.size() - getNanoDataSize;
+						//minusNumber = nanoQueue.size() - getNanoDataSize;
 						// Two input here.
 	
-						if (nanoQueue.size() % 3 != 0) {
+						//if (nanoQueue.size() % 3 != 0) {
 	
-							minusNumber = nanoQueue.size() - getNanoDataSize
-									- (nanoQueue.size() % 3);
-						}
+						//	minusNumber = nanoQueue.size() - getNanoDataSize
+						//			- (nanoQueue.size() % 3);
+						//}
 	
 						// Two input here.
-						ArrayList<float[]> nanoData = getNanoRange(nanoQueue,
-								minusNumber, nanoQueue.size()
-										- (nanoQueue.size() % 3));
+					//ArrayList<float[]> nanoData = new ArrayList<float[]>();
+						//float nanoData[] = new float[3];
+						//for (int i=0;i<3;i++)
+						//	nanoData[i] = nanoFloat3Datas[i];
+								
+								//getNanoRange(nanoQueue,
+								//minusNumber, nanoQueue.size()
+										//- (nanoQueue.size() % 3));
 						ArrayList<byte[]> encoderData = getEncoderRange(encoderQueue,
 								encoderQueue.size() - getEncoderDataSize,
 								encoderQueue.size());
@@ -412,13 +430,13 @@ public class UartReceive {
 						// [L Polarity] [L2] [L1] [R polarity] [R2] [R1] [COM2] [COM1] [0x45]
 						// Save to byte array beSendMsg[11]
 						// ....................
-						for (int i = 0; i < nanoData.size(); i++) {
+						/*for (int i = 0; i < nanoData.size(); i++) {
 							nanoFloat = nanoData.get(i);
 							nanoFloat_1[i]=nanoFloat[1];
 							Log.i(TAG, "combine nanoFloat [" + i + " ] = "
 									+ nanoFloat_1[i]);
 							
-						}
+						}*/
 	
 						ArrayList<int[]> encoderDataQueue = new ArrayList<int[]>();
 						byte[] encoByte = encoderData.get(0);
@@ -448,14 +466,14 @@ public class UartReceive {
 						//thetaView.setText("theta : " + tempInt[2]);
 						
 						 
-						Log.i("toEKF","encoder size = " + encoderData.size() +" L Sum =" + encoderLSum + " R Sum =" + encoderLSum+ " com =" + tempInt[2]);
+						Log.i("toEKF","encoder size = " + encoderData.size() +" L Sum =" + encoderLSum + " R Sum =" + encoderRSum+ " com =" + tempInt[2]);
 						//WeightSet(Float.parseFloat(dwWeight.getText( ).toString())
 						//		,Float.parseFloat(encoderWeight.getText().toString()));
 						
 			///監看nanopan輸入值
-						Log.i("toEKF","Nano1=" + nanoFloat_1[0] + " Nano2=" + nanoFloat_1[1] + " Nano3= " + nanoFloat_1[2]);
+						Log.i("toEKF","Nano1=" + dw1000NewData[0] + " Nano2=" + dw1000NewData[1] + " Nano3= " + dw1000NewData[2]);
 			///------EKF-----------------------------------------------------------------------------------------
-						robotLocation = UartCmd.EKF((float)nanoFloat_1[0],(float)nanoFloat_1[1],(float)nanoFloat_1[2],(int) encoderLSum ,(int) encoderRSum,(int) tempInt[2]);
+						robotLocation = UartCmd.EKF((float)dw1000NewData[0],(float)dw1000NewData[1],(float)dw1000NewData[2],(int) tempInt[0] ,(int) tempInt[1],(int) tempInt[2]);
 			///--------------------------------------------------------------------------------------------------
 						
 						byte[] sendAxisToDriving = new byte[11];
@@ -583,6 +601,33 @@ public class UartReceive {
 			}
 
 		return temp;
+	}
+	
+	public static float[] getDW1000NewData(ArrayList<float[]> list) {
+		boolean floatData0BeWrite = false;
+		boolean floatData1BeWrite = false;
+		boolean floatData2BeWrite = false;
+		
+		for (int i= list.size() - 1;i >= 0;i-- )
+		{
+			if (list.get(i)[0] == 1 && floatData0BeWrite == false)
+			{
+				nanoFloat3Datas[0] = list.get(i)[1];
+				floatData0BeWrite = true;
+			}
+			else if (list.get(i)[0] == 2 && floatData1BeWrite == false)
+			{
+				nanoFloat3Datas[1] = list.get(i)[1];
+				floatData1BeWrite = true;
+			}
+			else if (list.get(i)[0] == 3 && floatData2BeWrite == false)
+			{
+				nanoFloat3Datas[2] = list.get(i)[1];
+				floatData2BeWrite = true;
+			}
+		}
+		
+		return nanoFloat3Datas;
 	}
 	
 	public static ArrayList<float[]> getNanoRange(ArrayList<float[]> list, int start, int last) {

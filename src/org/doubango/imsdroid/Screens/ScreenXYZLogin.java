@@ -1,7 +1,6 @@
 package org.doubango.imsdroid.Screens;
 
 import org.doubango.imsdroid.R;
-import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.Utils.NetworkStatus;
 import org.doubango.ngn.events.NgnEventArgs;
@@ -45,8 +44,7 @@ public class ScreenXYZLogin extends BaseScreen {
 	private int width, height;
 	
 	private NetworkStatus loggin;
-	
-	private UartCmd uartCmd = UartCmd.getInstance();
+
 	
 	private String xmppUsername, xmppPassword; 	//For XMPP thread user name & password
 	private XMPPSetting XMPPSet;
@@ -115,12 +113,6 @@ public class ScreenXYZLogin extends BaseScreen {
       
         super.SetmName(editTextUsername.getText().toString().trim());
         super.SetmPass(editTextPassword.getText().toString().trim());
-        
-        if (UartCmd.driFd == 0 || UartCmd.dw1000Fd == 0)
-        {
-		uartCmd.OpenSetUartPort("ttymxc3");
-		uartCmd.OpenSetUartPort("ttymxc2");
-        }
 
 		mSipBroadCastRecv = new BroadcastReceiver(){
 
