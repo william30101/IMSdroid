@@ -226,4 +226,5 @@ public class UartCmd extends BaseCmd{
 	public static native byte[] Combine(ArrayList<float[]> nanoq , ArrayList<byte[]> encoq);
 	public static native int WeightSet(float dwWeight , float encoderWeight);
 	public static native float[] EKF(float a,float b,float c,int left,int right,int degree);
+	public static native int BeasonReset(String str);
 }

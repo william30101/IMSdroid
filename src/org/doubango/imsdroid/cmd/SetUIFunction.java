@@ -11,6 +11,7 @@ import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
+import org.doubango.imsdroid.BeaconUtils;
 import org.doubango.imsdroid.BLE.BLEDeviceControlActivity;
 import org.doubango.imsdroid.Screens.ScreenDraw;
 import org.doubango.imsdroid.Screens.ScreenUIJoyStick;
@@ -154,6 +155,11 @@ public class SetUIFunction {
 	private int Axis_BRSlow_X = 0;
 	private int Axis_BRSmiddle_X = 0;
 
+	/* Beacon reset declare */
+	private final static String ResetInterface = "/sys/class/gpio/gpio175/value";
+	private BeaconUtils beaconUtils;
+	private Button BeaconReset;
+
 	public SetUIFunction(Activity activity) {
 		globalActivity = activity;
 		mContext = activity.getWindow().getDecorView().getContext();
@@ -218,6 +224,11 @@ public class SetUIFunction {
 		dragMenu.setOnDragListener(dragListener);
 		img.setOnTouchListener(imgListener);
 		selected_item = (View) globalActivity.findViewById(R.id.screenmenu);
+
+		/* Set listener for Beacon reset */
+		beaconUtils = new BeaconUtils();
+		BeaconReset = (Button) globalActivity.findViewById(R.id.BeaconReset);
+		BeaconReset.setOnClickListener(onClickListener);
 
 		/*--------------------------------------------------*/
 		/* Temporary */
@@ -352,6 +363,18 @@ public class SetUIFunction {
 				 BLEDevCon.CharacteristicWRN(2,1, 0, BLEDataText.getText().toString());
 				 
 				break;
+
+			case R.id.BeaconReset:
+				if (beaconUtils.getLibState() == true) {
+					Log.i(TAG, "Beason reset by beaconUtils");
+					beaconUtils.BeasonReset(ResetInterface);
+				}else {
+					Log.i(TAG, "Beason reset by uartCmd");
+					uartCmd.BeasonReset(ResetInterface);
+				}
+
+				break;
+
 			default:
 				break;
 

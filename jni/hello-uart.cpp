@@ -685,6 +685,33 @@ extern "C"
 				return result;
 	}
 
+	JNIEXPORT jint JNICALL Native_BeasonReset(JNIEnv *env, jobject obj, jstring str){
+		char *dir = (char*)env->GetStringUTFChars(str, JNI_FALSE);
+		int fd, ret, i;
+		char buf[3] = {'1', '0', '1'};
+
+		LOGD("Interface: %s", dir);
+		fd = open(dir, O_WRONLY);
+		if(fd < 0) {
+			LOGD("Need to change sysfs mode to 777");
+			return -1;
+		}
+
+		for(i = 0; i < 3; i++) {
+			ret = write(fd, &buf[i], 1);
+			if (ret < 0) {
+				LOGD("Write fail");
+				close(fd);
+				return -1;
+			}
+			usleep(200000);
+		}
+
+		LOGD("Reset success");
+		close(fd);
+
+		return 0;
+	}
 
 	static JNINativeMethod gMethods[] = {
 		//Java Name			(Input Arg) return arg   JNI Name
@@ -700,7 +727,7 @@ extern "C"
 		{"EKF", "(FFFIII)[F"	,(void *)Native_EKF},
 		{"WeightSet", "(FF)I"	,(void *)Native_WeightSet},
 		//{"AnchorSet", "(FFFFFF)I"	,(void *)Native_AnchorSet},
-
+		{"BeasonReset",	"(Ljava/lang/String;)I",	(void *)Native_BeasonReset},
 
 	};
 

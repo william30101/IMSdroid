@@ -155,6 +155,14 @@
             android:layout_toRightOf="@+id/linearLayout1"
             android:text="GetAxis" />
 
+        <Button
+            android:id="@+id/BeaconReset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/getAxisBtn"
+            android:layout_toRightOf="@+id/linearLayout1"
+            android:text="BeaconReset" />
+
     <TextView
         android:id="@+id/Axis_show_Y"
         android:layout_width="wrap_content"
