@@ -82,14 +82,14 @@ public class SetUIFunction {
 	// End for Map use
 	MapList map = new MapList();
 
-	private ExecutorService service = Executors.newFixedThreadPool(10);
 	SendCmdToBoardAlgorithm SendAlgo;
 
 	/* ThreadPool declare for JoyStick operate */
 	int height, width;
 
-	private ExecutorService newService = Executors.newFixedThreadPool(10);
+	private ExecutorService newService = Executors.newFixedThreadPool(1);
 	private ExecutorService cleanService = Executors.newFixedThreadPool(1);
+	private ScheduledExecutorService wifiService =  Executors.newScheduledThreadPool(1);
 
 	/* Parameter declare */
 	private volatile boolean isContinue = false;
@@ -129,6 +129,10 @@ public class SetUIFunction {
 	public static EditText BLEDataText;
 	public String BLEData = null;
 
+	/* Robot body - WiFI & BlueTooth */
+	private ImageView bleConnect, wifistatus1, wifistatus2, wifistatus3, wifistatus4;
+	private Button lightingSwitch;
+	
 	/* Temporary declare */
 	private ImageView bleConnect;
 	public static TextView mConnectState;
@@ -138,6 +142,7 @@ public class SetUIFunction {
 	/* Detect Robot Location */
 	Runnable Axis_trigger_thread = new Axis_thread();
 
+	/* Navigation parameter */ 
 	public int Axis_InputY_fromDW1000;
 	public int Axis_InputX_fromDW1000;
 	public int Axis_BRSArraylow = 0;
@@ -224,6 +229,20 @@ public class SetUIFunction {
 		dragMenu.setOnDragListener(dragListener);
 		img.setOnTouchListener(imgListener);
 		selected_item = (View) globalActivity.findViewById(R.id.screenmenu);
+		
+		
+		/* Temporary - Wifi & bluetooth */
+		wifistatus1 = (ImageView) globalActivity.findViewById(R.id.wifi_status1);
+		wifistatus2 = (ImageView) globalActivity.findViewById(R.id.wifi_status2);
+		wifistatus3 = (ImageView) globalActivity.findViewById(R.id.wifi_status3);
+		wifistatus4 = (ImageView) globalActivity.findViewById(R.id.wifi_status4);
+		bleConnect = (ImageView) globalActivity.findViewById(R.id.bluetooth_status);
+
+		
+		//lightingSwitch.setOnClickListener(onClickListener);
+		
+		// WiFi Monitor
+		wifiService.scheduleAtFixedRate(new wifiMonitorThread(), 5000, 5000, TimeUnit.MILLISECONDS);
 
 		/* Set listener for Beacon reset */
 		beaconUtils = new BeaconUtils();
@@ -239,14 +258,6 @@ public class SetUIFunction {
 		Button getAxisBtn = (Button) globalActivity
 				.findViewById(R.id.getAxisBtn);
 		getAxisBtn.setOnClickListener(onClickListener);
-
-		
-		/* Temporary - Wifi */
-		bleConnect = (ImageView) globalActivity.findViewById(R.id.imageView2);
-		
-		WifiManager wifi = (WifiManager) globalActivity.getSystemService(mContext.WIFI_SERVICE);
-
-		
 		
 	}
 
@@ -304,7 +315,7 @@ public class SetUIFunction {
 			case MotionEvent.ACTION_MOVE:
 				isContinue = true;
 				instructor = js.get8Direction();
-
+				Log.i("shinhua1", str[instructor]);
 				if (instructor != 0) {
 					useThreadPool(newService, str[instructor]);
 				}
@@ -334,6 +345,18 @@ public class SetUIFunction {
 			// TODO Auto-generated method stub
 			indicator = v.getId();
 			switch (indicator) {
+			case R.id.bleSwitch:
+				Log.i("shinhua", "Blue tooth onclick");
+				try {
+					SendToBoard("BLE " + "00");
+					BLEDevCon.CharacteristicWRN(2,1, 0, "00");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Log.i(TAG, "BLE send data=" + " 00 " + " error");
+					e.printStackTrace();
+				}
+				break;
+			
 			case R.id.getAxisBtn:
 				SendCmdToBoardAlgorithm.SetCompass();
 				handler.postDelayed(Axis_trigger_thread, Axis_GetPollTime);
@@ -599,9 +622,10 @@ public class SetUIFunction {
 		if (v == null) return;
 
 		final ColorPicker picker = (ColorPicker) view.findViewById(R.id.picker);
-		SVBar svBar = (SVBar) view.findViewById(R.id.svbar);
-		OpacityBar opacityBar = (OpacityBar) view.findViewById(R.id.opacitybar);
+		//SVBar svBar = (SVBar) view.findViewById(R.id.svbar);
+		//OpacityBar opacityBar = (OpacityBar) view.findViewById(R.id.opacitybar);
 		
+		lightingSwitch = (Button) view.findViewById(R.id.bleSwitch);
 		mConnectState = (TextView) view.findViewById(R.id.connectStatus);
 		
 		
@@ -609,7 +633,7 @@ public class SetUIFunction {
 		
 		String bleConnectedStatusString = BLEDevCon.ismConnected();
 		mConnectState.setText(bleConnectedStatusString);
-		bluetoothIcon(bleConnectedStatusString);
+		bluetoothIconStatus(bleConnectedStatusString);
 		
 		
 		// shinhua add
@@ -647,6 +671,10 @@ public class SetUIFunction {
 			}
 		});
 
+		
+		lightingSwitch.setOnClickListener(onClickListener);
+		
+		
 		// Config dialog
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 		builder.setView(view);
@@ -657,13 +685,29 @@ public class SetUIFunction {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// Update color
-
+				if( which == -1){
+				String tag1;
+				tag1 = Integer.toString(which);
+				
+				
+//				try {
+//					SendToBoard("BLE " + switchled(colorValue));
+//					BLEDevCon.CharacteristicWRN(2,1, 0, switchled(colorValue));
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					Log.i(TAG, "BLE send data=" + switchled(colorValue) + " error");
+//					e.printStackTrace();
+//				}
+//				
+				
+				}
 			}
 		});
 		builder.create().show();
 	}
 	
-	private void bluetoothIcon(String itor){
+	/* Bluetooth signal display icon */
+	private void bluetoothIconStatus(String itor){
 		if(itor == "BLE connected"){
 			bleConnect.setVisibility(View.VISIBLE);
 		}
@@ -677,49 +721,49 @@ public class SetUIFunction {
 
 		switch (itor) {
 		case 0:
-			BLEData = "0x0E";
+			BLEData = "0E";
 			break;
 		case 1:
-			BLEData = "0x1D";
+			BLEData = "1D";
 			break;
 		case 2:
-			BLEData = "0x2C";
+			BLEData = "2C";
 			break;
 		case 3:
-			BLEData = "0x3B";
+			BLEData = "3B";
 			break;
 		case 4:
-			BLEData = "0x4A";
+			BLEData = "4A";
 			break;
 		case 5:
-			BLEData = "0x59";
+			BLEData = "59";
 			break;
 		case 6:
-			BLEData = "0x68";
+			BLEData = "68";
 			break;
 		case 7:
-			BLEData = "0x77";
+			BLEData = "77";
 			break;
 		case 8:
-			BLEData = "0x86";
+			BLEData = "86";
 			break;
 		case 9:
-			BLEData = "0x96";
+			BLEData = "96";
 			break;
 		case 10:
-			BLEData = "0xA4";
+			BLEData = "A4";
 			break;
 		case 11:
-			BLEData = "0xB3";
+			BLEData = "B3";
 			break;
 		case 12:
-			BLEData = "0xC2";
+			BLEData = "C2";
 			break;
 		case 13:
-			BLEData = "0xD1";
+			BLEData = "D1";
 			break;
 		case 14:
-			BLEData = "0xE0";
+			BLEData = "E0";
 			break;
 		}
 		return BLEData;
@@ -912,21 +956,74 @@ public class SetUIFunction {
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			try {
 				Thread.sleep(450);
 				clickCount = 0;
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
 		}
-		
 	}
 	
 	/* Create thread service.execute for clean button click count */ 
 	private void cleanThread(ExecutorService service){
 		service.execute(new cThread());
 	}
+	
+	/* Monitor wifi signal */
+	private class wifiMonitorThread implements Runnable{
+		int rssi, level;
+		String tag2;
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			WifiManager wifi = (WifiManager) globalActivity.getSystemService(mContext.WIFI_SERVICE);
+			rssi = wifi.getConnectionInfo().getRssi();
+			level = wifi.calculateSignalLevel(rssi, 4);
+			tag2 = Integer.toString(rssi);
+			Log.i("shinhua1", "level " + tag2);
+			
+			Message meg1 = UIHandler.obtainMessage(1,tag2);
+			UIHandler.sendMessage(meg1);
+			
+		}
+		
+	}
+	
+	/* Update UI Handler */
+	private Handler UIHandler = new Handler(){
+		public void handleMessage(Message msg){
+			super.handleMessage(msg);
+			/* Change wifi UI display */ 
+			wifiIconStatus( Integer.valueOf((String)msg.obj) );
+		}
+	};
+	
+	/* WiFi signal display icon */
+	private void wifiIconStatus(int level){
+		
+		if(level < 0 && level >= -50){
+			wifistatus1.setVisibility(View.VISIBLE);
+			wifistatus2.setVisibility(View.VISIBLE);
+			wifistatus3.setVisibility(View.VISIBLE);
+			wifistatus4.setVisibility(View.VISIBLE);
+		}else if(level < -50 && level >= -100){
+			wifistatus1.setVisibility(View.VISIBLE);
+			wifistatus2.setVisibility(View.VISIBLE);
+			wifistatus3.setVisibility(View.VISIBLE);
+			wifistatus4.setVisibility(View.INVISIBLE);
+		}else if(level < -100 && level >= -150){
+			wifistatus1.setVisibility(View.VISIBLE);
+			wifistatus2.setVisibility(View.VISIBLE);
+			wifistatus3.setVisibility(View.INVISIBLE);
+			wifistatus4.setVisibility(View.INVISIBLE);
+		}else if(level < -150 && level >= -200){
+			wifistatus1.setVisibility(View.VISIBLE);
+			wifistatus2.setVisibility(View.INVISIBLE);
+			wifistatus3.setVisibility(View.INVISIBLE);
+			wifistatus4.setVisibility(View.INVISIBLE);
+		}
+	}
+	
+
 }
