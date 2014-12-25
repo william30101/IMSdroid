@@ -283,6 +283,7 @@ public class Game {//�t��k���O
 							{source[0],source[1]}
 						};
 						queue.offer(start);
+						Log.i("jamesdebug", "source =" + start[0][0] +" " + start[0][1] + " " + start[1][0] + " " + start[1][1]);
 						while(flag){					
 							int[][] currentEdge=queue.poll();//�q������X��
 							int[] tempTarget=currentEdge[1];//��X���䪺�ت��I

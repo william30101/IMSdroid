@@ -2,8 +2,11 @@ package org.doubango.imsdroid;
 
 import java.io.IOException;
 
+import org.doubango.imsdroid.cmd.SetUIFunction;
+import org.doubango.imsdroid.cmd.SetUIFunction.Axis_thread;
 import org.doubango.imsdroid.map.Game;
 import org.doubango.imsdroid.map.GameView;
+import org.doubango.imsdroid.map.SendCmdToBoardAlgorithm;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
@@ -87,30 +90,35 @@ public class XMPPSetting {
 		            Message message = (Message) packet;
 		            if (message.getBody() != null) {
 		                String fromName = StringUtils.parseBareAddress(message.getFrom());
-		                
+		                Log.i(TAG, " Enter xmpp receive thread" );
 		                
 		                String[] inM = message.getBody().split("\\s+");
-		                
-		                if (inM[0] == "start")
+		                String start_string = "start";
+		                if (inM[0].length() == 5 )
 		                {
-		                	Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" );
-		                	game.source[0] = Integer.parseInt(inM[1]);
-		                	game.source[1] = Integer.parseInt(inM[2]);
+		                	if (SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate == false)
+			                {
+			                	Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" );
+			                	game.source[0] = Integer.parseInt(inM[1]);
+			                	game.source[1] = Integer.parseInt(inM[2]);
+		                	}
 		                }
-		                
-						try {
-							byte[] cmdByte = UCmd.GetAllByte(inM);
-							Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" + " Func num = " + cmdByte[1] + " Direc = " + cmdByte[2]);
-							//Do JNI here , We got correct data format here.
-							//String decoded = new String(cmdByte, "ISO-8859-1");
-							UCmd.SendMsgUart(1,cmdByte);
-
-							
-							
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+		                else
+		                {
+							try {
+								byte[] cmdByte = UCmd.GetAllByte(inM);
+								Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" + " Func num = " + cmdByte[1] + " Direc = " + cmdByte[2]);
+								//Do JNI here , We got correct data format here.
+								//String decoded = new String(cmdByte, "ISO-8859-1");
+								UCmd.SendMsgUart(1,cmdByte);
+	
+								
+								
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+		                }
 		                
 		                //We receive message here.
 		                

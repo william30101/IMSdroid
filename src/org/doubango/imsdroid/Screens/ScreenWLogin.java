@@ -32,8 +32,8 @@ import android.widget.Toast;
 public class ScreenWLogin extends BaseScreen {
 	
 	
-	private static String TAG = ScreenWLogin.class.getCanonicalName();
-	//private static String TAG = "william";
+	//private static String TAG = ScreenWLogin.class.getCanonicalName();
+	private static String TAG = "william";
 	
 	private final INgnConfigurationService mConfigurationService;
 	

@@ -536,6 +536,13 @@ public class SendCmdToBoardAlgorithm {
 			
 			inXMPPSet.XMPPSendText("james1", xxx);
 			
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 //				try {
 //				
 //				Log.d("jamesdebug", "Direction_" + xxx);
@@ -580,15 +587,15 @@ public class SendCmdToBoardAlgorithm {
 //				try {
 //					cmdByte = uartCmd.GetAllByte(inM);
 //					UartCmd.SendMsgUart(1, cmdByte);
-//					Log.d("jamesdebug", "correct forward times= " + i);
-//					
-//					try {
-//						
-//						Thread.sleep(100);
-//						
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
+					Log.d("jamesdebug", "correct forward times= " + i);
+					
+					try {
+						
+						Thread.sleep(100);
+						
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 //					
 //					
 //					
@@ -615,13 +622,13 @@ public class SendCmdToBoardAlgorithm {
 //					byte[] cmdByte = uartCmd.GetAllByte(inM);
 ////					 String decoded = new String(cmdByte, "ISO-8859-1");
 //					UartCmd.SendMsgUart(1, cmdByte);
-//					try {
-//						
-//						Thread.sleep(300);
-//						
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
+					try {
+						
+						Thread.sleep(300);
+						
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 //					
 //				} catch (IOException e) {
 //					e.printStackTrace();

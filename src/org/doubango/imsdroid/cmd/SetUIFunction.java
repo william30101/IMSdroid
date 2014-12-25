@@ -1031,8 +1031,7 @@ public class SetUIFunction {
 				gameView.postInvalidate();
 			
 				
-				XMPPSet.XMPPSendText("william1", "start " + (Axis_BRSserchArray_Index_X + 5) +
-						" " + Axis_BRSserchArray_Index_Y);
+				
 			try {
 
 				Thread.sleep(20);
@@ -1040,6 +1039,11 @@ public class SetUIFunction {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
+			
+			XMPPSet.XMPPSendText("william1", "start " + (Axis_BRSserchArray_Index_X + 5) +
+					" " + Axis_BRSserchArray_Index_Y);
+			
 		}
 		}
 	}
