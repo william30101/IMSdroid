@@ -89,7 +89,8 @@ public class SetUIFunction {
 
 	private ExecutorService newService = Executors.newFixedThreadPool(1);
 	private ExecutorService cleanService = Executors.newFixedThreadPool(1);
-	private ScheduledExecutorService wifiService =  Executors.newScheduledThreadPool(1);
+	private ScheduledExecutorService wifiService = Executors.newScheduledThreadPool(1);
+	private ScheduledExecutorService bleService = Executors.newScheduledThreadPool(1);
 
 	/* Parameter declare */
 	private volatile boolean isContinue = false;
@@ -97,7 +98,10 @@ public class SetUIFunction {
 	private String[] str = { "stop", "forward", "forRig", "right", "bacRig",
 			"backward", "bacLeft", "left", "forLeft" };
 	private int instructor; /* Robot Commands Direction Instructor */
-
+	int colorValue;
+	
+	
+	
 	/* JoyStick object declare */
 	RelativeLayout layout_joystick, layout_menu, layout_robot;
 	ScreenUIJoyStick js;
@@ -112,6 +116,7 @@ public class SetUIFunction {
 
 	/* Robot vertical seekbar object declare */
 	ScreenUIVerticalSeekBar seekbar = null;
+	
 	/* TextView vsProgress; */
 	RelativeLayout seekbarlayout;
 	LayoutParams seekbarparams, seekBarlayoutparams;
@@ -132,9 +137,8 @@ public class SetUIFunction {
 	/* Robot body - WiFI & BlueTooth */
 	private ImageView bleConnect, wifistatus1, wifistatus2, wifistatus3, wifistatus4;
 	private Button lightingSwitch;
-	
-	/* Temporary declare */
-	public static TextView mConnectState;
+	private boolean isConnectBlueTooth;
+
 
 	private Handler handler = new Handler();
 
@@ -163,6 +167,9 @@ public class SetUIFunction {
 	private final static String ResetInterface = "/sys/class/gpio/gpio175/value";
 	private BeaconUtils beaconUtils;
 	private Button BeaconReset;
+	
+	/* Temporary declare */
+	public static TextView mConnectState;
 
 	public SetUIFunction(Activity activity) {
 		globalActivity = activity;
@@ -237,12 +244,10 @@ public class SetUIFunction {
 		wifistatus4 = (ImageView) globalActivity.findViewById(R.id.wifi_status4);
 		bleConnect = (ImageView) globalActivity.findViewById(R.id.bluetooth_status);
 
-		
-		//lightingSwitch.setOnClickListener(onClickListener);
-		
-		// WiFi Monitor
+		// WiFi & BlueTooth Monitor 
 		wifiService.scheduleAtFixedRate(new wifiMonitorThread(), 5000, 5000, TimeUnit.MILLISECONDS);
-
+		bleService.scheduleAtFixedRate(new bluetoothMonitorThread(), 5000, 10000, TimeUnit.MILLISECONDS);
+		
 		/* Set listener for Beacon reset */
 		beaconUtils = new BeaconUtils();
 		BeaconReset = (Button) globalActivity.findViewById(R.id.BeaconReset);
@@ -345,14 +350,16 @@ public class SetUIFunction {
 			indicator = v.getId();
 			switch (indicator) {
 			case R.id.bleSwitch:
-				Log.i("shinhua", "Blue tooth onclick");
-				try {
-					SendToBoard("BLE " + "00");
-					BLEDevCon.CharacteristicWRN(2,1, 0, "00");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					Log.i(TAG, "BLE send data=" + " 00 " + " error");
-					e.printStackTrace();
+				if(isConnectBlueTooth == true){
+					Log.i("shinhua", "Blue tooth onclick");
+					try {
+						SendToBoard("BLE " + "00");
+						BLEDevCon.CharacteristicWRN(2,1, 0, "00");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						Log.i(TAG, "BLE send data=" + " 00 " + " error");
+						e.printStackTrace();
+					}
 				}
 				break;
 			
@@ -524,6 +531,7 @@ public class SetUIFunction {
 				return true;
 			}
 			else {
+				v.setVisibility(View.VISIBLE);
 				return false;
 			}
 
@@ -615,7 +623,6 @@ public class SetUIFunction {
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		// Create color picker view
-
 		View view = inflater.inflate(R.layout.color_picker_dialog, null);
 		
 		if (v == null) return;
@@ -625,14 +632,15 @@ public class SetUIFunction {
 		//OpacityBar opacityBar = (OpacityBar) view.findViewById(R.id.opacitybar);
 		
 		lightingSwitch = (Button) view.findViewById(R.id.bleSwitch);
+		lightingSwitch.setOnClickListener(onClickListener);
+		
 		mConnectState = (TextView) view.findViewById(R.id.connectStatus);
 		
 		
-		if (BLEDevCon == null) BLEDevCon =BLEDeviceControlActivity.getInstance();
-		
-		String bleConnectedStatusString = BLEDevCon.ismConnected();
-		mConnectState.setText(bleConnectedStatusString);
-		bluetoothIconStatus(bleConnectedStatusString);
+		//if (BLEDevCon == null) BLEDevCon = BLEDeviceControlActivity.getInstance();
+		//String bleConnectedStatusString = BLEDevCon.ismConnected();
+		//mConnectState.setText(bleConnectedStatusString);
+		//bluetoothIconStatus(bleConnectedStatusString);
 		
 		
 		// shinhua add
@@ -644,35 +652,14 @@ public class SetUIFunction {
 		picker.setOnColorChangedListener(new ColorPicker.OnColorChangedListener() {
 			@Override
 			public void onColorChanged(int intColor) {
-				// String hexColor =
-				// Integer.toHexString(intColor).toUpperCase();
-				// hexCode.setText("#" + hexColor);
-				int colorValue = Math.abs((int) (intColor / 18));
+				
+				colorValue = Math.abs((int) (intColor / 18));
 				String color = Integer.toString(colorValue).toUpperCase();
 				colorLevel.setText("Current LED LEVEL" + color);
 
-
-				// setText (bleConnectedStatusString)
-				/*
-				 *  Send BLE Command to Control Board.
-				 *  data format is BLE + data
-				 *  ex: "BLE e0"
-				 * 
-				 * */
-				try {
-					SendToBoard("BLE " + switchled(colorValue));
-					BLEDevCon.CharacteristicWRN(2,1, 0, switchled(colorValue));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					Log.i(TAG, "BLE send data=" + switchled(colorValue) + " error");
-					e.printStackTrace();
-				}
 			}
 		});
 
-		
-		lightingSwitch.setOnClickListener(onClickListener);
-		
 		
 		// Config dialog
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -685,36 +672,28 @@ public class SetUIFunction {
 			public void onClick(DialogInterface dialog, int which) {
 				// Update color
 				if( which == -1){
-				String tag1;
-				tag1 = Integer.toString(which);
-				
-				
-//				try {
-//					SendToBoard("BLE " + switchled(colorValue));
-//					BLEDevCon.CharacteristicWRN(2,1, 0, switchled(colorValue));
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					Log.i(TAG, "BLE send data=" + switchled(colorValue) + " error");
-//					e.printStackTrace();
-//				}
-//				
-				
+					if(isConnectBlueTooth == true){
+						try{
+							Log.i("shinhua", "isConnectBlueTooth == true" + switchled(colorValue));
+							SendToBoard("BLE " + switchled(colorValue));
+							BLEDevCon.CharacteristicWRN(2,1, 0, switchled(colorValue));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							Log.i(TAG, "BLE send data=" + switchled(colorValue) + " error");
+							e.printStackTrace();
+						}
+					}else if(isConnectBlueTooth == false){
+						Log.i("shinhua", "isConnectBlueTooth == false");
+						Log.i("shinhua", "BLE send data=" + switchled(0) + " error");
+					}
 				}
 			}
 		});
+		
 		builder.create().show();
 	}
 	
-	/* Bluetooth signal display icon */
-	private void bluetoothIconStatus(String itor){
-		if(itor == "BLE connected"){
-			bleConnect.setVisibility(View.VISIBLE);
-		}
-		else if(itor == "BLE disconnected"){
-			bleConnect.setVisibility(View.INVISIBLE);
-		}
-	}
-	
+
 	/* Send BlueTooth Command */
 	private String switchled(int itor) {
 
@@ -763,6 +742,9 @@ public class SetUIFunction {
 			break;
 		case 14:
 			BLEData = "E0";
+			break;
+		default:
+			BLEData = "D1";
 			break;
 		}
 		return BLEData;
@@ -972,25 +954,26 @@ public class SetUIFunction {
 	/* Monitor wifi signal */
 	private class wifiMonitorThread implements Runnable{
 		int rssi, level;
-		String tag2;
+		String tempString;
+		Message message;
+		
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			WifiManager wifi = (WifiManager) globalActivity.getSystemService(mContext.WIFI_SERVICE);
 			rssi = wifi.getConnectionInfo().getRssi();
 			level = wifi.calculateSignalLevel(rssi, 4);
-			tag2 = Integer.toString(rssi);
-			Log.i("shinhua1", "level " + tag2);
-			
-			Message meg1 = UIHandler.obtainMessage(1,tag2);
-			UIHandler.sendMessage(meg1);
-			
+			tempString = Integer.toString(rssi);
+			Log.i("shinhua1", "level " + tempString);
+		
+			message = wifiUIHandler.obtainMessage(1,tempString);
+			wifiUIHandler.sendMessage(message);
 		}
 		
 	}
-	
+		
 	/* Update UI Handler */
-	private Handler UIHandler = new Handler(){
+	private Handler wifiUIHandler = new Handler(){
 		public void handleMessage(Message msg){
 			super.handleMessage(msg);
 			/* Change wifi UI display */ 
@@ -1021,6 +1004,40 @@ public class SetUIFunction {
 			wifistatus2.setVisibility(View.INVISIBLE);
 			wifistatus3.setVisibility(View.INVISIBLE);
 			wifistatus4.setVisibility(View.INVISIBLE);
+		}
+	}
+	
+	/* Monitor bluetooth signal */
+	private class bluetoothMonitorThread implements Runnable{
+		String connectStatus;
+		Message message;
+		@Override
+		public void run() {
+			if (BLEDevCon == null) BLEDevCon =BLEDeviceControlActivity.getInstance();
+			
+			connectStatus = BLEDevCon.ismConnected();
+			Log.i("shinhua1","connectStatus " + connectStatus);
+			message = bluetoothUIHandler.obtainMessage(1, connectStatus);
+			bluetoothUIHandler.sendMessage(message);
+		}
+	}
+	
+	private Handler bluetoothUIHandler = new Handler(){
+		public void handleMessage(Message msg){
+			super.handleMessage(msg);
+			bluetoothIconStatus( (String)msg.obj );
+		}
+	};
+	
+	/* Bluetooth signal display icon */
+	private void bluetoothIconStatus(String itor){
+		if(itor == "BLE connected"){
+			isConnectBlueTooth = true;
+			bleConnect.setVisibility(View.VISIBLE);
+		}
+		else if(itor == "BLE disconnected"){
+			isConnectBlueTooth = false;
+			bleConnect.setVisibility(View.INVISIBLE);
 		}
 	}
 	
