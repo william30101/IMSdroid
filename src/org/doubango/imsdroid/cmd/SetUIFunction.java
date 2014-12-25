@@ -196,7 +196,7 @@ public class SetUIFunction {
 
 		XMPPSet = new XMPPSetting();
 		uartRec = new UartReceive();
-		//uartRec.RunRecThread();
+		uartRec.RunRecThread();
 
 		gameView = (GameView) globalActivity.findViewById(R.id.gameView1);
 		game = new Game();
@@ -1028,7 +1028,7 @@ public class SetUIFunction {
 
 				game.source[0] = Axis_BRSserchArray_Index_X + 5;
 				game.source[1] = Axis_BRSserchArray_Index_Y;
-				//gameView.postInvalidate();
+				gameView.postInvalidate();
 			
 				
 				XMPPSet.XMPPSendText("william1", "start " + (Axis_BRSserchArray_Index_X + 5) +

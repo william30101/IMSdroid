@@ -93,6 +93,7 @@ public class XMPPSetting {
 		                
 		                if (inM[0] == "start")
 		                {
+		                	Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" );
 		                	game.source[0] = Integer.parseInt(inM[1]);
 		                	game.source[1] = Integer.parseInt(inM[2]);
 		                }
