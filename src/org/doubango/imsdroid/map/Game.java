@@ -7,6 +7,7 @@ import java.util.Stack;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.doubango.imsdroid.cmd.SetUIFunction;
 import org.doubango.imsdroid.map.GameView.ShowThread;
 
 
@@ -39,15 +40,17 @@ public class Game {//�t��k���O
 	int[][] visited=new int[MapList.map[0].length][MapList.map[0][0].length];//0 ���h�L 1 �h�L
 	int[][] sequence={
 		{0,1},{0,-1},
-		{-1,0},{1,0},
-		{-1,1},{-1,-1},
-		{1,-1},{1,1}
+		{-1,0},{1,0}//,
+//		{-1,1},{-1,-1},
+//		{1,-1},{1,1}
 	};
 	private static boolean pathFlag=false;//true ���F���|
 	int timeSpan=10;//�ɶ����j
 	
 	BFSThread BFST;
 	private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
+	
+	private Handler handler = new Handler();
 	
 	private Handler myHandler = new Handler(){//�Ψӧ�sUI�����
         public void handleMessage(Message msg){
@@ -129,7 +132,9 @@ public class Game {//�t��k���O
 				break;
 			case 1:// �s���u��t��k
 				BFST = new BFSThread();
-				singleThreadExecutor.execute(BFST);
+				handler.postDelayed(BFST, 30);
+				//singleThreadExecutor.execute(BFST);
+				
 				// BFS();
 				break;
 			case 2:// �s���u�� A*�t��k
@@ -266,8 +271,10 @@ public class Game {//�t��k���O
 	public class BFSThread implements Runnable {
 
 		public void run() {
-				try {
-					synchronized (gameView) {
+//				try {
+//					synchronized (gameView) {
+						
+						SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate = true;
 						
 						int count=0;
 						boolean flag=true;
@@ -291,7 +298,7 @@ public class Game {//�t��k���O
 									new int[][]{currentEdge[1],currentEdge[0]});
 							gameView.postInvalidate();
 							try{Thread.sleep(timeSpan);}catch(Exception e){e.printStackTrace();}
-							//�P�_���_���ت��I
+			 				//�P�_���_���ت��I
 							if(tempTarget[0]==target[0]&&tempTarget[1]==target[1]){
 								break;
 							}
@@ -313,17 +320,19 @@ public class Game {//�t��k���O
 								}
 							}
 						}
-						setPathFlag(true);	
+						setPathFlag(true);
+						
 						gameView.postInvalidate();
 						Message msg1 = myHandler.obtainMessage(1);
 						myHandler.sendMessage(msg1);//�]�w���s���i�Ω�
 						Message msg2 = myHandler.obtainMessage(2, count);
 						myHandler.sendMessage(msg2);//����TextView��r
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
+//					}
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+				
+				SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate = false;
 			
 		}
 	}

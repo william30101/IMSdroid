@@ -35,7 +35,7 @@ public class RotateAngleCmd extends BaseCmd{
 		
 		
 		//High Byte dataByte[1] 
-		dataByte[1] = (byte)( ( (compassData & 0xff00) >> 16));
+		dataByte[1] = (byte)( ( (compassData & 0xff00) >> 8));
 				
 		dataByte[1]  = (byte) (dataByte[1]  & 0xff);
 		

@@ -16,7 +16,7 @@
             android:layout_height="wrap_content" />
     </RelativeLayout>
 
-    <RelativeLayout
+     <RelativeLayout
         android:id="@+id/layout_joystick"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -26,14 +26,6 @@
         android:layout_marginRight="20dp"
         android:background="@drawable/joystickbg" >
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/navigation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/layout_joystick"
-        android:layout_toLeftOf="@+id/layout_joystick"
-        android:text="Navigation" />
 
     <Button
         android:id="@+id/runjs"
@@ -138,7 +130,7 @@
         </RelativeLayout>
     </LinearLayout>
 
-        <ImageView
+        <!-- <ImageView
             android:id="@+id/screenmenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -146,7 +138,7 @@
             android:layout_marginLeft="273dp"
             android:layout_toRightOf="@+id/linearLayout1"
             android:src="@drawable/screenmenu" />
-
+ -->
         <Button
             android:id="@+id/BLEWriteBtn"
             android:layout_width="wrap_content"
@@ -192,29 +184,12 @@
             android:text="BeaconReset" />
 
     <TextView
-        android:id="@+id/Axis_show_Y"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView1"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:text="Axis_show_Y" />
-
-    <TextView
         android:id="@+id/Axis_show_X"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/screenmenu"
         android:layout_alignLeft="@+id/BLEconnectStatus"
         android:text="Axis_show_X" />
-
-    <EditText
-        android:id="@+id/Axis_TestInputAxis"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/layout_joystick"
-        android:layout_alignParentTop="true"
-        android:ems="10" />
 
     <TextView
         android:id="@+id/textView1"
@@ -223,5 +198,31 @@
         android:layout_alignLeft="@+id/editText1"
         android:layout_below="@+id/editText1"
         android:text="TextView" />
+
+    <TextView
+        android:id="@+id/Axis_show_Y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/BLEDataText"
+        android:text="Axis_show_Y" />
+
+<!--     <EditText
+        android:id="@+id/Axis_TestInputAxis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Axis_show_X"
+        android:layout_toLeftOf="@+id/navigation"
+        android:ems="10" />
+ -->
+
+    <Button
+        android:id="@+id/navigation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/BLEconnectStatus"
+        android:layout_below="@+id/getAxisBtn"
+        android:layout_marginLeft="17dp"
+        android:text="Navigation" />
 
 </RelativeLayout>

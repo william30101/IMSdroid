@@ -440,39 +440,45 @@ public class UartReceive {
 	
 						ArrayList<int[]> encoderDataQueue = new ArrayList<int[]>();
 						byte[] encoByte = encoderData.get(0);
-						
-						for (int i=0;i<encoderData.size();i++)
-						{
-							tempInt[0]  = ( (encoByte[1] << 8) & 0xff00 | (encoByte[2] & 0xff));
-							if (encoByte[0] == 2)
+						//Log.i("toEKF","encoByte[0] = " + encoByte[0]+  "encoByte[1] = " + encoByte[1] + " encoByte[2] = "+ encoByte[2] + " encoByte[3] = " + encoByte[3]+" encoByte[4] =" + encoByte[4] 
+							//			+ "encoByte[5] = " + encoByte[5]);
+						//for (int i=0;i<encoderData.size();i++)
+						//{
+							tempInt[0] = 0;
+							tempInt[1] = 0;
+							
+							tempInt[0]  = ( (encoByte[3] << 8) & 0xff00 | (encoByte[4] & 0xff));
+							if (encoByte[2] == 2)
 								tempInt[0] = -tempInt[0];
 							 
-							encoderLSum = encoderLSum + tempInt[0];
+							//encoderLSum = encoderLSum + tempInt[0];
 							
-							tempInt[1]  = ( (encoByte[4] << 8) & 0xff00 | (encoByte[5] & 0xff));
-							if (encoByte[3] == 2)
+							tempInt[1]  = ( (encoByte[6] << 8) & 0xff00 | (encoByte[7] & 0xff));
+							if (encoByte[5] == 2)
 								tempInt[1] = -tempInt[1];
 							
-							encoderRSum = encoderRSum + tempInt[1];
+							//encoderRSum = encoderRSum + tempInt[1];
 							
-							tempInt[2]  = ( (encoByte[6] << 8) & 0xff00 | (encoByte[7] & 0xff));
+							tempInt[2]  = ( (encoByte[8] << 8) & 0xff00 | (encoByte[9] & 0xff));
 							
 							
 							//Log.i("toEKF","encoder size = " + encoderData.size() +"  encoder data L=" + tempInt[0] + " R=" + tempInt[1] + " com = " + tempInt[2]);
 							
-							encoderDataQueue.add(tempInt);
-						}
+							//encoderDataQueue.add(tempInt);
+						//}
 						
 						//thetaView.setText("theta : " + tempInt[2]);
 						
 						 
-						Log.i("toEKF","encoder size = " + encoderData.size() +" L Sum =" + encoderLSum + " R Sum =" + encoderRSum+ " com =" + tempInt[2]);
+						//Log.i("toEKF","encoder size = " + encoderData.size() + " L = "+ tempInt[0] + " R = " + tempInt[1]+" L Sum =" + encoderLSum + " R Sum =" + encoderRSum+ " com =" + tempInt[2]);
+						Log.i("toEKF","encoder size = " + encoderData.size() + " L = "+ tempInt[0] + " R = " + tempInt[1]+" Compass =" + tempInt[2] );
 						//WeightSet(Float.parseFloat(dwWeight.getText( ).toString())
 						//		,Float.parseFloat(encoderWeight.getText().toString()));
 						
 			///監看nanopan輸入值
 						Log.i("toEKF","Nano1=" + dw1000NewData[0] + " Nano2=" + dw1000NewData[1] + " Nano3= " + dw1000NewData[2]);
 			///------EKF-----------------------------------------------------------------------------------------
+						//robotLocation = UartCmd.EKF((float)dw1000NewData[0],(float)dw1000NewData[1],(float)dw1000NewData[2],(int) tempInt[0] ,(int) tempInt[1],(int) tempInt[2]);
 						robotLocation = UartCmd.EKF((float)dw1000NewData[0],(float)dw1000NewData[1],(float)dw1000NewData[2],(int) tempInt[0] ,(int) tempInt[1],(int) tempInt[2]);
 			///--------------------------------------------------------------------------------------------------
 						
@@ -658,5 +664,4 @@ public class UartReceive {
 		 */
 		return temp;
 	}
-
 }

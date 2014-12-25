@@ -50,10 +50,12 @@ public abstract class BaseCmd {
 		byte retByte = 0x00;
 		switch (byteNum) {
 		case 2:
-			retByte = (Byte) this.byte3Map.get(inStr);
+			if (byte3Map != null)
+				retByte = (Byte) this.byte3Map.get(inStr);
 			break;
 		case 3:
-			retByte = (Byte) this.byte3Map.get(inStr);
+			if (byte3Map != null)
+				retByte = (Byte) this.byte3Map.get(inStr);
 			break;
 		case 4:
 			retByte = (Byte) this.byte4Map.get(inStr);

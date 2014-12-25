@@ -38,7 +38,11 @@ public class GameView extends View {
 	public TextView CDTextView;
 	int span = 16;
 	int theta = 0;
-	public boolean drawCircleFlag = false, turnToBigMap = false;
+	public static boolean drawCircleFlag = false, turnToBigMap = false;
+
+	public static void setDrawCircleFlag(boolean drawCircleFlag) {
+		GameView.drawCircleFlag = drawCircleFlag;
+	}
 
 	public static int mL = 0, mR = 0, mT = 0, mB = 0;
 
@@ -64,7 +68,7 @@ public class GameView extends View {
 	Game gamejava = new Game();
 	int drawBaseLine = 100, drawIncrease = 20;
 
-	public static int drawCount = 0; // For drawcircle position
+	public static int drawCount = 5; // For drawcircle position
 
 	double rX = 0, rY = 0;
 	int[][] map;
@@ -81,7 +85,7 @@ public class GameView extends View {
 	 * [0] : Original position X [1] : Original position Y [2] : Next position X
 	 * [3] : Next position Y
 	 */
-	private ArrayList<int[][]> pathQueue = new ArrayList<int[][]>();
+	private static ArrayList<int[][]> pathQueue = new ArrayList<int[][]>();
 
 	Canvas gcanvas;
 
@@ -261,11 +265,12 @@ public class GameView extends View {
 						+ game.target[1] * (span + 1), paint);
 
 		// Log.i(TAG,"Draw source = "+ game.source[0] + " , " + game.source[1]);
-		// Log.i(TAG,"Draw target = "+ game.target[0] + " , " + game.target[1]);
+		 Log.i("jamesdebug","Draw target = "+ game.target[0] + " , " + game.target[1]);
 
 		// William Added
 		//onDrawText(canvas);
 
+		 Log.i(TAG,"drawcircleflag = " + drawCircleFlag );
 		if (drawCircleFlag == true) {
 			DrawRobotPosition(canvas);
 		}
@@ -282,20 +287,21 @@ public class GameView extends View {
 		
 			if(event.getX() >= fixWidthMapData && event.getY() <= fixWidthMapData){
 				
-				span = 30;
-				getMapSize();
+				//span = 30;
+				//span = 15;
+				//getMapSize();
 	
-				xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2)); 
-				ycoordinate = (int) ((screenHeight / 2) - (mapHeight / 2));
+				//xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2)); 
+				//ycoordinate = (int) ((screenHeight / 2) - (mapHeight / 2));
 				
 				//fixWidthMapData = xcoordinate; 	// ZoomIn Screen in the right
-				fixWidthMapData = 0; 			// ZoomIn Screen in the middle
-				fixHeightMapData = ycoordinate;
+				//fixWidthMapData = 0; 			// ZoomIn Screen in the middle
+				//fixHeightMapData = ycoordinate;
 	
-				isZoom = true;
+				isZoom = false;
 				touchDown = true;
 	
-				requestLayout();
+				//requestLayout();
 			}
 			
 			drawZoomMap(event);
@@ -303,14 +309,14 @@ public class GameView extends View {
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
 			if (zoomout) {
 				
-				isZoom = !isZoom;
-				zoomout = false;
+				//isZoom = !isZoom;
+				//zoomout = false;
 
-				span = 15;
-				xcoordinate = ycoordinate = 5;
-				fixWidthMapData = fixHeightMapData = 5;
+				//span = 15;
+				//xcoordinate = ycoordinate = 5;
+				//fixWidthMapData = fixHeightMapData = 5;
 
-				requestLayout();
+				//requestLayout();
 				drawZoomMap(event);
 
 			}
@@ -338,13 +344,14 @@ public class GameView extends View {
 				// Draw Grid position on canvas
 				gridX = pos[0];
 				gridY = pos[1];
-
+				Log.i("jamesdebug","touch target draw before");
 				// Setting net Target postion
-				if (touchDown && pos[0] != -1 && pos[1] != -1) {
+			//	if (touchDown && pos[0] != -1 && pos[1] != -1) {
+				if ( pos[0] != -1 && pos[1] != -1) {
 					MapList.target[0][0] = pos[0];
 					MapList.target[0][1] = pos[1];
-					
-					zoomout = true;
+					Log.i("jamesdebug","touch target draw after");
+					//zoomout = true;
 				}
 
 				// Update Target bitmap position
@@ -542,7 +549,7 @@ public class GameView extends View {
 		VIEW_HEIGHT = vIEW_HEIGHT;
 	}
 
-	public ArrayList<int[][]> getPathQueue() {
+	public static ArrayList<int[][]> getPathQueue() {
 		return pathQueue;
 	}
 

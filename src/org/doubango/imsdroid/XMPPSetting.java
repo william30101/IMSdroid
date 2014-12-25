@@ -2,6 +2,8 @@ package org.doubango.imsdroid;
 
 import java.io.IOException;
 
+import org.doubango.imsdroid.map.Game;
+import org.doubango.imsdroid.map.GameView;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
@@ -22,6 +24,8 @@ public class XMPPSetting {
 	private static XMPPConnection connection;
 	private UartCmd UCmd = UartCmd.getInstance();
 	private boolean LogSuc = false;
+	
+	public Game game = new Game();
 
 	//public XMPPSetting(ScreenAV xmppClient)
 	public XMPPSetting()
@@ -32,7 +36,7 @@ public class XMPPSetting {
 	public boolean XMPPStart(String Name , String Pass)
 	{
 		// Hardcode here , we could modify later.
-		 String host = "kinposerver.cloudapp.net";
+		 String host = "61.222.245.149";
 	     String port = "5222";
 	     String username = Name;
 	     String password = Pass;
@@ -86,6 +90,13 @@ public class XMPPSetting {
 		                
 		                
 		                String[] inM = message.getBody().split("\\s+");
+		                
+		                if (inM[0] == "start")
+		                {
+		                	game.source[0] = Integer.parseInt(inM[1]);
+		                	game.source[1] = Integer.parseInt(inM[2]);
+		                }
+		                
 						try {
 							byte[] cmdByte = UCmd.GetAllByte(inM);
 							Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" + " Func num = " + cmdByte[1] + " Direc = " + cmdByte[2]);
@@ -111,7 +122,7 @@ public class XMPPSetting {
 	public void XMPPSendText(String to,String istr)
     {
 		//Server name , can't be removed here.
-		String Reci = to+"@kinpo/Smack";
+		String Reci = to+"@james-pc/Smack";
         String text = istr;
 
         Log.i(TAG, "Sending text [" + text + "] to [" + Reci + "]");

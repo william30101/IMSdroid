@@ -57,14 +57,15 @@ static float Kk[8][3],Pk_HkT[8][3],HkPk_HkT[3][3],HkPk_HkTR[3][3],InvHkPk_HkTR[3
 static float KkdZ[8][1],Xk[8][1];
 static float KkHk[8][8],KkHkPk_[8][8],Pk[8][8];
 
-static float Xk_[8][1]={{0},{0},{6.3},{1.75},{5.75},{-1.51},{0.70},{0.91}};//modify the coordinate here(robot,anchor1,anchor2,anchor3)
+//static float Xk_[8][1]={{0},{0},{-0.6},{0.4},{5.0},{0},{4.63},{4.1}};//modify the coordinate here(robot,anchor1,anchor2,anchor3)
+static float Xk_[8][1]={{0},{0},{-0.6},{0.4},{4.9},{4.63},{5.0},{0}};//modify the coordinate here(robot,anchor1,anchor2,anchor3)
 static float Pk_[8][8]={{1,0,0,0,0,0,0,0},{0,1,0,0,0,0,0,0},{0,0,1,0,0,0,0,0},{0,0,0,1,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,0,0,0,1,0,0},{0,0,0,0,0,0,1,0},{0,0,0,0,0,0,0,1}};
 
 //Encoder
-static float Q[8][8]={{0.1,0,0,0,0,0,0,0},{0,0.1,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0}};//modify the rate of state equation
+static float Q[8][8]={{1,0,0,0,0,0,0,0},{0,1,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0}};//modify the rate of state equation
 //static float Q[8][8]={{1,0,0,0,0,0,0,0},{0,1,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0}};//modify the rate of state equation
 //DW1000
-static float R[3][3]={{1,0,0},{0,1,0},{0,0,1}};//modify the rate of measurement
+static float R[3][3]={{0.1,0,0},{0,0.1,0},{0,0,0.1}};//modify the rate of measurement
 //static float R[3][3]={{0.1,0,0},{0,0.1,0},{0,0,0.1}};//modify the rate of measurement
 
 static float X,Y,dX,dY;

@@ -10,6 +10,7 @@ import org.doubango.imsdroid.map.NetworkStatus;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -36,6 +37,9 @@ public class MapScreenView{
 
 	GameView gameView;		
 	Game game;
+	SendCmdToBoardAlgorithm sendCmdToBoardAlgorithm;
+	
+
 	//Encoder encoder;
 	
 	
@@ -56,7 +60,7 @@ public class MapScreenView{
 	public void MapScreenView(Activity v) {
 
 		gameView = (GameView) v.findViewById(R.id.gameView1);
-		
+		sendCmdToBoardAlgorithm = new SendCmdToBoardAlgorithm();
 		game = new Game();
 		game.reloadMap(0,gameView);
 
@@ -94,5 +98,7 @@ public class MapScreenView{
     	game.gameView = this.gameView;
     	game.runButton = this.jsRunBtn;
     	game.goButton = this.navigationBtn;
+    	sendCmdToBoardAlgorithm._gameView = this.gameView;
+    	sendCmdToBoardAlgorithm._game = this.game;
     }
 }

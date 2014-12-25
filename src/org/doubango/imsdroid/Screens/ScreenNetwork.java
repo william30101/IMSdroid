@@ -80,7 +80,7 @@ public class ScreenNetwork extends BaseScreen {
         mSpProxyDiscovery.setAdapter(adapter);
         
         //mEtProxyHost.setText(mConfigurationService.getString(NgnConfigurationEntry.NETWORK_PCSCF_HOST, NgnConfigurationEntry.DEFAULT_NETWORK_PCSCF_HOST));
-        mEtProxyHost.setText("kinposerver.cloudapp.net");
+        mEtProxyHost.setText("61.222.245.149");
         //mEtProxyPort.setText(Integer.toString(mConfigurationService.getInt(NgnConfigurationEntry.NETWORK_PCSCF_PORT, NgnConfigurationEntry.DEFAULT_NETWORK_PCSCF_PORT)));
         mEtProxyPort.setText("20060");
 
