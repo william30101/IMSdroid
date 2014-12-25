@@ -89,15 +89,51 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/robotbody" />
-            
+                     
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/bluetooth_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/robotbody_ble" 
                 android:visibility="invisible"/>
+            
+            <ImageView
+                android:id="@+id/wifi_status1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/robotwifi_status1"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/wifi_status2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/robotwifi_status2"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/wifi_status3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/robotwifi_status3"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/wifi_status4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/robotwifi_status4"
+                android:visibility="invisible" />
             
         </RelativeLayout>
     </LinearLayout>
@@ -129,14 +165,6 @@
 
             <requestFocus />
         </EditText>
-
-        <Button
-            android:id="@+id/testMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/navigation"
-            android:layout_alignLeft="@+id/runjs"
-            android:text="Test Menu" />
 
         <TextView
             android:id="@+id/BLEconnectStatus"

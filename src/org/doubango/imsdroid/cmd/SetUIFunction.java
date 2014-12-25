@@ -134,7 +134,6 @@ public class SetUIFunction {
 	private Button lightingSwitch;
 	
 	/* Temporary declare */
-	private ImageView bleConnect;
 	public static TextView mConnectState;
 
 	private Handler handler = new Handler();
