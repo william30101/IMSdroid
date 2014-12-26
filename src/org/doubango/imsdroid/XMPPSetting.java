@@ -90,21 +90,21 @@ public class XMPPSetting {
 		            Message message = (Message) packet;
 		            if (message.getBody() != null) {
 		                String fromName = StringUtils.parseBareAddress(message.getFrom());
-		                Log.i(TAG, " Enter xmpp receive thread" );
+		                //Log.i(TAG, " Enter xmpp receive thread" );
 		                
 		                String[] inM = message.getBody().split("\\s+");
-		                String start_string = "start";
-		                if (inM[0].length() == 5 )
-		                {
-		                	if (SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate == false)
-			                {
-			                	Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" );
-			                	game.source[0] = Integer.parseInt(inM[1]);
-			                	game.source[1] = Integer.parseInt(inM[2]);
-		                	}
-		                }
-		                else
-		                {
+//		                String start_string = "start";
+//		                if (inM[0].length() == 5 )
+//		                {
+//		                	if (SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate == false)
+//			                {
+//			                	Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" );
+//			                	game.source[0] = Integer.parseInt(inM[1]);
+//			                	game.source[1] = Integer.parseInt(inM[2]);
+//		                	}
+//		                }
+		                //else
+		                //{
 							try {
 								byte[] cmdByte = UCmd.GetAllByte(inM);
 								Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" + " Func num = " + cmdByte[1] + " Direc = " + cmdByte[2]);
@@ -118,7 +118,7 @@ public class XMPPSetting {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-		                }
+		                //}
 		                
 		                //We receive message here.
 		                

@@ -1041,8 +1041,8 @@ public class SetUIFunction {
 			}
 			
 			
-			XMPPSet.XMPPSendText("william1", "start " + (Axis_BRSserchArray_Index_X + 5) +
-					" " + Axis_BRSserchArray_Index_Y);
+			//XMPPSet.XMPPSendText("william1", "start " + (Axis_BRSserchArray_Index_X + 5) +
+				//	" " + Axis_BRSserchArray_Index_Y);
 			
 		}
 		}

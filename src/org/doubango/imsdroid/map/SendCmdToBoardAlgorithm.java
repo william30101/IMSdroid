@@ -534,37 +534,31 @@ public class SendCmdToBoardAlgorithm {
 			
 				
 			
-			inXMPPSet.XMPPSendText("james1", xxx);
+			//inXMPPSet.XMPPSendText("james1", xxx);
 			
-			try {
-				Thread.sleep(300);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			
+				try {
+				
+				Log.d("jamesdebug", "Direction_" + xxx);
+//				String forward_string = "direction forward";
+				//setUIfunction.SendToBoard("direction forward");
+				String[] inM = xxx.split("\\s+");
+				byte[] cmdByte = uartCmd.GetAllByte(inM);
+//				 String decoded = new String(cmdByte, "ISO-8859-1");
+				UartCmd.SendMsgUart(1, cmdByte);
+				try {
+					
+					Thread.sleep(300);
+					
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				//Axis_InitialCompass = UartReceive.tempInt[2];
+				
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			
-//				try {
-//				
-//				Log.d("jamesdebug", "Direction_" + xxx);
-////				String forward_string = "direction forward";
-//				//setUIfunction.SendToBoard("direction forward");
-//				String[] inM = xxx.split("\\s+");
-//				byte[] cmdByte = uartCmd.GetAllByte(inM);
-////				 String decoded = new String(cmdByte, "ISO-8859-1");
-//				UartCmd.SendMsgUart(1, cmdByte);
-//				try {
-//					
-//					Thread.sleep(300);
-//					
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//				
-//				Axis_InitialCompass = UartReceive.tempInt[2];
-//				
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
 
 
 			try {
@@ -582,11 +576,11 @@ public class SendCmdToBoardAlgorithm {
 			
 			for (int i=0;i<10;i++)
 			{
-				inXMPPSet.XMPPSendText("james1", "direction forward");
+				//inXMPPSet.XMPPSendText("james1", "direction forward");
 				
-//				try {
-//					cmdByte = uartCmd.GetAllByte(inM);
-//					UartCmd.SendMsgUart(1, cmdByte);
+			try {
+					cmdByte = uartCmd.GetAllByte(inM);
+					UartCmd.SendMsgUart(1, cmdByte);
 					Log.d("jamesdebug", "correct forward times= " + i);
 					
 					try {
@@ -596,32 +590,30 @@ public class SendCmdToBoardAlgorithm {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-//					
-//					
-//					
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 //			 String decoded = new String(cmdByte, "ISO-8859-1");
 		} else if (xxx == "direction forward"){
 			for( int i = 0; i < times; i++ )
 			{
 				
-				inXMPPSet.XMPPSendText("james1", xxx);
+				//inXMPPSet.XMPPSendText("james1", xxx);
 				Log.d("jamesdebug", "Direction_" + xxx +" _times: " + i);
-//				try {
-//					
-//					
-////					String forward_string = "direction forward";
-//					//setUIfunction.SendToBoard("direction forward");
-//					
-//					
-//					
-//					String[] inM = xxx.split("\\s+");
-//					byte[] cmdByte = uartCmd.GetAllByte(inM);
-////					 String decoded = new String(cmdByte, "ISO-8859-1");
-//					UartCmd.SendMsgUart(1, cmdByte);
+				try {
+					
+					
+//					String forward_string = "direction forward";
+					//setUIfunction.SendToBoard("direction forward");
+					
+					
+					
+					String[] inM = xxx.split("\\s+");
+					byte[] cmdByte = uartCmd.GetAllByte(inM);
+//					 String decoded = new String(cmdByte, "ISO-8859-1");
+					UartCmd.SendMsgUart(1, cmdByte);
 					try {
 						
 						Thread.sleep(300);
@@ -629,10 +621,10 @@ public class SendCmdToBoardAlgorithm {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-//					
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
