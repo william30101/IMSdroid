@@ -13,14 +13,6 @@
         android:layout_marginLeft="10dp" 
         />
 
-    <TextView
-        android:id="@+id/connectStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp" 
-		android:text="BLE disconnected"
-		android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <com.larswerkman.holocolorpicker.ColorPicker
         android:id="@+id/picker"
         android:layout_width="wrap_content"

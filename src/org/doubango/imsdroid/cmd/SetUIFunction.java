@@ -169,7 +169,7 @@ public class SetUIFunction {
 	private Button BeaconReset;
 	
 	/* Temporary declare */
-	public static TextView mConnectState;
+
 
 	public SetUIFunction(Activity activity) {
 		globalActivity = activity;
@@ -518,7 +518,7 @@ public class SetUIFunction {
 				if(clickCount == 2){
 					executeColorPicker(v);
 					clickCount = 0;
-				}
+				}				
 				return true;
 			}
 			if(event.getAction() == MotionEvent.ACTION_MOVE){
@@ -528,6 +528,7 @@ public class SetUIFunction {
 				DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
 				v.startDrag(null, shadowBuilder, v, 0);
 				v.setVisibility(View.INVISIBLE);
+				
 				return true;
 			}
 			else {
@@ -536,6 +537,23 @@ public class SetUIFunction {
 			}
 
 		}
+		
+	
+		
+		
+		
+//		public void run() {
+//			if (BLEDevCon == null) BLEDevCon =BLEDeviceControlActivity.getInstance();
+//			
+//			connectStatus = BLEDevCon.ismConnected();
+//			Log.i("shinhua1","connectStatus " + connectStatus);
+//			message = bluetoothUIHandler.obtainMessage(1, connectStatus);
+//			bluetoothUIHandler.sendMessage(message);
+//		}
+		
+		
+		
+		
 
 	};
 	
@@ -626,21 +644,50 @@ public class SetUIFunction {
 		View view = inflater.inflate(R.layout.color_picker_dialog, null);
 		
 		if (v == null) return;
-
-		final ColorPicker picker = (ColorPicker) view.findViewById(R.id.picker);
-		//SVBar svBar = (SVBar) view.findViewById(R.id.svbar);
-		//OpacityBar opacityBar = (OpacityBar) view.findViewById(R.id.opacitybar);
 		
+		final ColorPicker picker = (ColorPicker) view.findViewById(R.id.picker);
 		lightingSwitch = (Button) view.findViewById(R.id.bleSwitch);
 		lightingSwitch.setOnClickListener(onClickListener);
 		
-		mConnectState = (TextView) view.findViewById(R.id.connectStatus);
 		
 		
-		//if (BLEDevCon == null) BLEDevCon = BLEDeviceControlActivity.getInstance();
-		//String bleConnectedStatusString = BLEDevCon.ismConnected();
-		//mConnectState.setText(bleConnectedStatusString);
-		//bluetoothIconStatus(bleConnectedStatusString);
+		
+		// Temporary test function
+//		Thread background = new Thread(new Runnable(){
+//			public void run() {
+//				if (BLEDevCon == null) BLEDevCon = BLEDeviceControlActivity.getInstance();
+//				String status = BLEDevCon.ismConnected();
+//				Log.i("shinhua1","Dialog connectStatus " + status);
+//				
+//				Message msg = dialogHandler.obtainMessage(1, status);
+//				dialogHandler.sendMessage(msg);
+//			}
+//			
+//			private Handler dialogHandler = new Handler(){
+//				public void handlerMessage(Message msg){
+//					
+//					if(msg.obj != null){
+//						Log.i("shinhua1","**");
+//					}
+//					
+//					
+//					if( (String)msg.obj == "BLE connected"){
+//						Log.i("shinhua1","**********BLE connected");
+//						lightingSwitch.setEnabled(true);
+//					}else if ( (String)msg.obj == "BLE disconnected"){
+//						Log.i("shinhua1","**********BLE connected");
+//						lightingSwitch.setEnabled(false);
+//					}
+//				}
+//			};
+//			
+//		});
+		//background.start();
+		
+/*		if (BLEDevCon == null) BLEDevCon = BLEDeviceControlActivity.getInstance();
+		String bleConnectedStatusString = BLEDevCon.ismConnected();
+		mConnectState.setText(bleConnectedStatusString);
+		bluetoothIconStatus(bleConnectedStatusString);*/
 		
 		
 		// shinhua add
@@ -1022,6 +1069,7 @@ public class SetUIFunction {
 		}
 	}
 	
+	/* BlueTooth UI Handler */
 	private Handler bluetoothUIHandler = new Handler(){
 		public void handleMessage(Message msg){
 			super.handleMessage(msg);
