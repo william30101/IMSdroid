@@ -195,8 +195,7 @@ public class SetUIFunction {
 		loggin = NetworkStatus.getInstance();
 
 		XMPPSet = new XMPPSetting();
-		uartRec = new UartReceive();
-		uartRec.RunRecThread();
+
 
 		gameView = (GameView) globalActivity.findViewById(R.id.gameView1);
 		game = new Game();
@@ -217,17 +216,17 @@ public class SetUIFunction {
 
 		/* Arc Menu */
 		/* Set layout size & position */
-		setARClayoutSize(width);
-		LayoutParams params = new RelativeLayout.LayoutParams(arcLayoutsize,
-				arcLayoutsize);
-		Log.i("shinhua", "params width " + params.width + "params height"
-				+ params.height);
-		RelativeLayout layout = (RelativeLayout) globalActivity
-				.findViewById(R.id.layout_robot);
+		//setARClayoutSize(width);
+		//LayoutParams params = new RelativeLayout.LayoutParams(arcLayoutsize,
+		//		arcLayoutsize);
+		//Log.i("shinhua", "params width " + params.width + "params height"
+		//		+ params.height);
+		//RelativeLayout layout = (RelativeLayout) globalActivity
+		//		.findViewById(R.id.layout_robot);
 
-	//	arcMenu = (ArcMenu) globalActivity.findViewById(R.id.arc_menu);
-	//	arcMenu.setLayoutParams(params);
-//	initArcMenu(arcMenu, ITEM_DRAWABLES, globalActivity);
+		//arcMenu = (ArcMenu) globalActivity.findViewById(R.id.arc_menu);
+		//arcMenu.setLayoutParams(params);
+	//initArcMenu(arcMenu, ITEM_DRAWABLES, globalActivity);
 
 		/* Robot seekbar */
 		seekbar = (ScreenUIVerticalSeekBar) globalActivity
@@ -237,8 +236,8 @@ public class SetUIFunction {
 		setSeekbarParameter();
 
 		/* DragDrop menu */
-		//dragMenu = (ViewGroup) globalActivity.findViewById(R.id.mainlayout);
-		//img = (ImageView) globalActivity.findViewById(R.id.screenmenu);
+		dragMenu = (ViewGroup) globalActivity.findViewById(R.id.mainlayout);
+		img = (ImageView) globalActivity.findViewById(R.id.screenmenu);
 
 		dragMenu.setOnDragListener(dragListener);
 		img.setOnTouchListener(imgListener);
@@ -270,7 +269,16 @@ public class SetUIFunction {
 		Button getAxisBtn = (Button) globalActivity
 				.findViewById(R.id.getAxisBtn);
 		getAxisBtn.setOnClickListener(onClickListener);
+
 		
+		/* Temporary - Wifi */
+		bleConnect = (ImageView) globalActivity.findViewById(R.id.imageView2);
+		
+		WifiManager wifi = (WifiManager) globalActivity.getSystemService(mContext.WIFI_SERVICE);
+	
+		
+		uartRec = new UartReceive();
+		uartRec.RunRecThread();
 	}
 
 	@SuppressLint("NewApi")
@@ -1041,8 +1049,8 @@ public class SetUIFunction {
 			}
 			
 			
-			//XMPPSet.XMPPSendText("william1", "start " + (Axis_BRSserchArray_Index_X + 5) +
-				//	" " + Axis_BRSserchArray_Index_Y);
+			XMPPSet.XMPPSendText("william1", "start " + (Axis_BRSserchArray_Index_X + 5) +
+					" " + Axis_BRSserchArray_Index_Y);
 			
 		}
 		}

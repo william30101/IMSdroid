@@ -275,7 +275,12 @@ public class Game {//�t��k���O
 //					synchronized (gameView) {
 						
 						SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate = true;
-						
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						int count=0;
 						boolean flag=true;
 						int[][] start={

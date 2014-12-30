@@ -93,18 +93,20 @@ public class XMPPSetting {
 		                //Log.i(TAG, " Enter xmpp receive thread" );
 		                
 		                String[] inM = message.getBody().split("\\s+");
-//		                String start_string = "start";
-//		                if (inM[0].length() == 5 )
-//		                {
-//		                	if (SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate == false)
-//			                {
-//			                	Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" );
-//			                	game.source[0] = Integer.parseInt(inM[1]);
-//			                	game.source[1] = Integer.parseInt(inM[2]);
-//		                	}
-//		                }
-		                //else
-		                //{
+		                char[] inMChar = inM[0].toCharArray();
+		                if (inMChar[0] == 's' &&  inMChar[1] == 't' && inMChar[2] == 'a' 
+		                		&& inMChar[3] == 'r' && inMChar[4] == 't')	                {
+		                	if (SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate == false )
+			                {
+			                	Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" );
+			                	game.source[0] = Integer.parseInt(inM[1]);
+			                	game.source[1] = Integer.parseInt(inM[2]);
+			                	
+			                	
+		                	}
+		                }
+		                else
+		                {
 							try {
 								byte[] cmdByte = UCmd.GetAllByte(inM);
 								Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" + " Func num = " + cmdByte[1] + " Direc = " + cmdByte[2]);
@@ -118,7 +120,7 @@ public class XMPPSetting {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-		                //}
+		                }
 		                
 		                //We receive message here.
 		                
