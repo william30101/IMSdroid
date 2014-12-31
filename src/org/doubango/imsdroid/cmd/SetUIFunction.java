@@ -471,25 +471,42 @@ public class SetUIFunction {
 		public void onProgressChanged(SeekBar seekBar, int progress,
 				boolean fromUser) {
 
-			switch (progress) {
-			case 0:
-				// vsProgress.setText(progress+"");
+			if(progress < 1){
+				
 				try {
 					SendToBoard("stretch bottom");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				break;
-			case 1:
-				// vsProgress.setText(progress+"");
+			}else if (progress == 1){
 				try {
 					SendToBoard("stretch top");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				break;
-
 			}
+			
+			
+			
+//			switch (progress) {
+//			case 0:
+//				// vsProgress.setText(progress+"");
+//				try {
+//					SendToBoard("stretch bottom");
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//				break;
+//			case 1:
+//				// vsProgress.setText(progress+"");
+//				try {
+//					SendToBoard("stretch top");
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//				break;
+
+//			}
 		}
 
 		@Override
@@ -653,35 +670,36 @@ public class SetUIFunction {
 		
 		
 		// Temporary test function
-//		Thread background = new Thread(new Runnable(){
-//			public void run() {
-//				if (BLEDevCon == null) BLEDevCon = BLEDeviceControlActivity.getInstance();
-//				String status = BLEDevCon.ismConnected();
-//				Log.i("shinhua1","Dialog connectStatus " + status);
-//				
-//				Message msg = dialogHandler.obtainMessage(1, status);
-//				dialogHandler.sendMessage(msg);
-//			}
-//			
-//			private Handler dialogHandler = new Handler(){
-//				public void handlerMessage(Message msg){
-//					
-//					if(msg.obj != null){
-//						Log.i("shinhua1","**");
-//					}
-//					
-//					
-//					if( (String)msg.obj == "BLE connected"){
-//						Log.i("shinhua1","**********BLE connected");
-//						lightingSwitch.setEnabled(true);
-//					}else if ( (String)msg.obj == "BLE disconnected"){
-//						Log.i("shinhua1","**********BLE connected");
-//						lightingSwitch.setEnabled(false);
-//					}
-//				}
-//			};
-//			
-//		});
+		Thread background = new Thread(new Runnable(){
+			public void run() {
+				if (BLEDevCon == null) BLEDevCon = BLEDeviceControlActivity.getInstance();
+				String status = BLEDevCon.ismConnected();
+				Log.i("shinhua1","Dialog connectStatus " + status);
+				
+				Message msg = dialogHandler.obtainMessage(1, status);
+				dialogHandler.sendMessage(msg);
+			}
+			
+			private Handler dialogHandler = new Handler(){
+				public void handlerMessage(Message msg){
+					
+					if(msg.obj != null){
+						Log.i("shinhua1","**");
+					}
+					
+					
+					if( (String)msg.obj == "BLE connected"){
+						Log.i("shinhua1","**********BLE connected");
+						lightingSwitch.setEnabled(true);
+					}else if ( (String)msg.obj == "BLE disconnected"){
+						Log.i("shinhua1","**********BLE connected");
+						lightingSwitch.setEnabled(false);
+					}
+				}
+			};
+			
+		});
+		
 		//background.start();
 		
 /*		if (BLEDevCon == null) BLEDevCon = BLEDeviceControlActivity.getInstance();
