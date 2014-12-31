@@ -246,7 +246,7 @@ public class BLEDeviceControlActivity {
                        	 Log.i(TAG,"BLE write byte = "+write_byte[0]);
                        	 characteristic.setValue(write_byte);
                        	 mBluetoothLeService.writeCharacteristic(characteristic);
-                     }
+                     } 
             		
             		break;
             	case 1:

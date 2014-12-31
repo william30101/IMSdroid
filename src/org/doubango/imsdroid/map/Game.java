@@ -338,7 +338,7 @@ public class Game {//�t��k���O
 //					e.printStackTrace();
 //				}
 				
-				SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate = false;
+//				SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate = false;
 			
 		}
 	}

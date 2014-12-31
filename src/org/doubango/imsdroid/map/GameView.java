@@ -287,21 +287,21 @@ public class GameView extends View {
 		
 			if(event.getX() >= fixWidthMapData && event.getY() <= fixWidthMapData){
 				
-				//span = 30;
+				span = 30;
 				//span = 15;
-				//getMapSize();
+				getMapSize();
 	
-				//xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2)); 
-				//ycoordinate = (int) ((screenHeight / 2) - (mapHeight / 2));
+				xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2)); 
+				ycoordinate = (int) ((screenHeight / 2) - (mapHeight / 2));
 				
 				//fixWidthMapData = xcoordinate; 	// ZoomIn Screen in the right
-				//fixWidthMapData = 0; 			// ZoomIn Screen in the middle
-				//fixHeightMapData = ycoordinate;
+				fixWidthMapData = 0; 			// ZoomIn Screen in the middle
+				fixHeightMapData = ycoordinate;
 	
-				isZoom = false;
+				isZoom = true;
 				touchDown = true;
 	
-				//requestLayout();
+				requestLayout();
 			}
 			
 			drawZoomMap(event);
@@ -309,14 +309,14 @@ public class GameView extends View {
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
 			if (zoomout) {
 				
-				//isZoom = !isZoom;
-				//zoomout = false;
+				isZoom = !isZoom;
+				zoomout = false;
 
-				//span = 15;
-				//xcoordinate = ycoordinate = 5;
-				//fixWidthMapData = fixHeightMapData = 5;
+				span = 15;
+				xcoordinate = ycoordinate = 5;
+				fixWidthMapData = fixHeightMapData = 5;
 
-				//requestLayout();
+				requestLayout();
 				drawZoomMap(event);
 
 			}
@@ -351,7 +351,7 @@ public class GameView extends View {
 					MapList.target[0][0] = pos[0];
 					MapList.target[0][1] = pos[1];
 					Log.i("jamesdebug","touch target draw after");
-					//zoomout = true;
+					zoomout = true;
 				}
 
 				// Update Target bitmap position

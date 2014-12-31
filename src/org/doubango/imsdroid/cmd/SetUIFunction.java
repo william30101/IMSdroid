@@ -216,17 +216,17 @@ public class SetUIFunction {
 
 		/* Arc Menu */
 		/* Set layout size & position */
-		//setARClayoutSize(width);
-		//LayoutParams params = new RelativeLayout.LayoutParams(arcLayoutsize,
-		//		arcLayoutsize);
-		//Log.i("shinhua", "params width " + params.width + "params height"
-		//		+ params.height);
-		//RelativeLayout layout = (RelativeLayout) globalActivity
-		//		.findViewById(R.id.layout_robot);
+		setARClayoutSize(width);
+		LayoutParams params = new RelativeLayout.LayoutParams(arcLayoutsize,
+				arcLayoutsize);
+		Log.i("shinhua", "params width " + params.width + "params height"
+				+ params.height);
+		RelativeLayout layout = (RelativeLayout) globalActivity
+				.findViewById(R.id.layout_robot);
 
-		//arcMenu = (ArcMenu) globalActivity.findViewById(R.id.arc_menu);
-		//arcMenu.setLayoutParams(params);
-	//initArcMenu(arcMenu, ITEM_DRAWABLES, globalActivity);
+		arcMenu = (ArcMenu) globalActivity.findViewById(R.id.arc_menu);
+		arcMenu.setLayoutParams(params);
+		initArcMenu(arcMenu, ITEM_DRAWABLES, globalActivity);
 
 		/* Robot seekbar */
 		seekbar = (ScreenUIVerticalSeekBar) globalActivity
@@ -272,7 +272,7 @@ public class SetUIFunction {
 
 		
 		/* Temporary - Wifi */
-		bleConnect = (ImageView) globalActivity.findViewById(R.id.imageView2);
+		//bleConnect = (ImageView) globalActivity.findViewById(R.id.imageView2);
 		
 		WifiManager wifi = (WifiManager) globalActivity.getSystemService(mContext.WIFI_SERVICE);
 	
@@ -366,17 +366,17 @@ public class SetUIFunction {
 			indicator = v.getId();
 			switch (indicator) {
 			case R.id.bleSwitch:
-				if(isConnectBlueTooth == true){
+				//if(isConnectBlueTooth == true){
 					Log.i("shinhua", "Blue tooth onclick");
 					try {
 						SendToBoard("BLE " + "00");
-						BLEDevCon.CharacteristicWRN(2,1, 0, "00");
+						//BLEDevCon.CharacteristicWRN(2,1, 0, "00");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						Log.i(TAG, "BLE send data=" + " 00 " + " error");
 						e.printStackTrace();
 					}
-				}
+				//}
 				break;
 			
 			case R.id.getAxisBtn:
@@ -754,20 +754,20 @@ public class SetUIFunction {
 			public void onClick(DialogInterface dialog, int which) {
 				// Update color
 				if( which == -1){
-					if(isConnectBlueTooth == true){
+					//if(isConnectBlueTooth == true){
 						try{
 							Log.i("shinhua", "isConnectBlueTooth == true" + switchled(colorValue));
 							SendToBoard("BLE " + switchled(colorValue));
-							BLEDevCon.CharacteristicWRN(2,1, 0, switchled(colorValue));
+							//BLEDevCon.CharacteristicWRN(2,1, 0, switchled(colorValue));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							Log.i(TAG, "BLE send data=" + switchled(colorValue) + " error");
 							e.printStackTrace();
 						}
-					}else if(isConnectBlueTooth == false){
-						Log.i("shinhua", "isConnectBlueTooth == false");
-						Log.i("shinhua", "BLE send data=" + switchled(0) + " error");
-					}
+					//}else if(isConnectBlueTooth == false){
+					//	Log.i("shinhua", "isConnectBlueTooth == false");
+					//	Log.i("shinhua", "BLE send data=" + switchled(0) + " error");
+					//}
 				}
 			}
 		});
@@ -781,19 +781,19 @@ public class SetUIFunction {
 
 		switch (itor) {
 		case 0:
-			BLEData = "0E";
+			BLEData = "0e";
 			break;
 		case 1:
-			BLEData = "1D";
+			BLEData = "1d";
 			break;
 		case 2:
-			BLEData = "2C";
+			BLEData = "2c";
 			break;
 		case 3:
-			BLEData = "3B";
+			BLEData = "3b";
 			break;
 		case 4:
-			BLEData = "4A";
+			BLEData = "4a";
 			break;
 		case 5:
 			BLEData = "59";
@@ -811,22 +811,22 @@ public class SetUIFunction {
 			BLEData = "96";
 			break;
 		case 10:
-			BLEData = "A4";
+			BLEData = "a4";
 			break;
 		case 11:
-			BLEData = "B3";
+			BLEData = "b3";
 			break;
 		case 12:
-			BLEData = "C2";
+			BLEData = "c2";
 			break;
 		case 13:
-			BLEData = "D1";
+			BLEData = "d1";
 			break;
 		case 14:
-			BLEData = "E0";
+			BLEData = "e0";
 			break;
 		default:
-			BLEData = "D1";
+			BLEData = "d1";
 			break;
 		}
 		return BLEData;
@@ -936,10 +936,12 @@ public class SetUIFunction {
 							+ " The array index is : " + (Axis_BRSlow_X - 1));
 
 			Axis_BRSretIndexX = Axis_BRSlow_X - 1;
-			if( Axis_BRSretIndexX < 0 ){
+
+			if (Axis_BRSretIndexX > 14)
+			{
 				Axis_BRSretIndexX = 0;
 			}
-
+			
 		} else {
 			Log.d("jamesdebug", "Can't find the element less " + Axis_InputVarX);
 		}
@@ -1143,7 +1145,12 @@ public class SetUIFunction {
 		@Override
 		public void run() {
 			if (BLEDevCon == null) BLEDevCon =BLEDeviceControlActivity.getInstance();
-			
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			connectStatus = BLEDevCon.ismConnected();
 			Log.i("shinhua1","connectStatus " + connectStatus);
 			message = bluetoothUIHandler.obtainMessage(1, connectStatus);

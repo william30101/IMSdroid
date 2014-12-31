@@ -94,16 +94,12 @@ public class XMPPSetting {
 		                
 		                String[] inM = message.getBody().split("\\s+");
 		                char[] inMChar = inM[0].toCharArray();
-		                if (inMChar[0] == 's' &&  inMChar[1] == 't' && inMChar[2] == 'a' 
-		                		&& inMChar[3] == 'r' && inMChar[4] == 't')	                {
-		                	if (SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate == false )
-			                {
+		                if (SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate == false && inMChar[0] == 's' &&  inMChar[1] == 't' && inMChar[2] == 'a' 
+		                		&& inMChar[3] == 'r' && inMChar[4] == 't')
+		                { 
 			                	Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" );
 			                	game.source[0] = Integer.parseInt(inM[1]);
-			                	game.source[1] = Integer.parseInt(inM[2]);
-			                	
-			                	
-		                	}
+			                	game.source[1] = Integer.parseInt(inM[2]);  
 		                }
 		                else
 		                {
