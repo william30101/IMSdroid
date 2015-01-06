@@ -13,9 +13,11 @@ import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.BeaconUtils;
 import org.doubango.imsdroid.BLE.BLEDeviceControlActivity;
+import org.doubango.imsdroid.BLE.BLEDeviceScanActivity;
 import org.doubango.imsdroid.Screens.ScreenDraw;
 import org.doubango.imsdroid.Screens.ScreenUIJoyStick;
 import org.doubango.imsdroid.Screens.ScreenUIVerticalSeekBar;
+import org.doubango.imsdroid.UartReceive.EncoderWriteThread;
 import org.doubango.imsdroid.Utils.NetworkStatus;
 import org.doubango.imsdroid.map.Game;
 import org.doubango.imsdroid.map.GameView;
@@ -27,6 +29,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
@@ -69,10 +72,12 @@ public class SetUIFunction {
 	private NetworkStatus loggin;
 	public UartCmd uartCmd = UartCmd.getInstance();
 	
+	
 //	public UartCmd uartCmd;
 	
 	private UartReceive uartRec;
 
+	private BLEDeviceScanActivity BLEActivity;
 	private BLEDeviceControlActivity BLEDevCon;
 
 	// For map use
@@ -146,7 +151,10 @@ public class SetUIFunction {
 
 
 	private Handler handler = new Handler();
+	private Handler BLEhandler = new Handler();
 
+	Runnable rBLEScan = new bluetoothMonitorThread();
+	
 	/* Detect Robot Location */
 	Runnable Axis_trigger_thread = new Axis_thread();
 
@@ -161,7 +169,9 @@ public class SetUIFunction {
 	/* Beacon reset declare */
 	private final static String ResetInterface = "/sys/class/gpio/gpio175/value";
 	private BeaconUtils beaconUtils;
-	private Button BeaconReset;
+	private Button BeaconReset,right90AngleBtn,left90AngleBtn;
+	
+	private static boolean supportBLEDevice =false;
 	
 	/* Temporary declare */
 
@@ -194,11 +204,11 @@ public class SetUIFunction {
 
 		loggin = NetworkStatus.getInstance();
 
-		XMPPSet = new XMPPSetting();
-
-
 		gameView = (GameView) globalActivity.findViewById(R.id.gameView1);
 		game = new Game();
+		
+		XMPPSet = new XMPPSetting();
+		XMPPSet.setGameView(gameView);
 
 		SendAlgo = new SendCmdToBoardAlgorithm();
 
@@ -234,6 +244,8 @@ public class SetUIFunction {
 		seekbarlayout = (RelativeLayout) globalActivity
 				.findViewById(R.id.layout_seekbar);
 		setSeekbarParameter();
+		
+		supportBLEDevice = globalActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
 
 		/* DragDrop menu */
 		dragMenu = (ViewGroup) globalActivity.findViewById(R.id.mainlayout);
@@ -253,19 +265,21 @@ public class SetUIFunction {
 
 		// WiFi & BlueTooth Monitor 
 		wifiService.scheduleAtFixedRate(new wifiMonitorThread(), 5000, 5000, TimeUnit.MILLISECONDS);
-		bleService.scheduleAtFixedRate(new bluetoothMonitorThread(), 5000, 10000, TimeUnit.MILLISECONDS);
+		//bleService.scheduleAtFixedRate(new bluetoothMonitorThread(), 5000, 10000, TimeUnit.MILLISECONDS);
+		
+		//BLEhandler.postDelayed(rBLEScan, 1000);
 		
 		/* Set listener for Beacon reset */
-		beaconUtils = new BeaconUtils();
-		BeaconReset = (Button) globalActivity.findViewById(R.id.BeaconReset);
-		BeaconReset.setOnClickListener(onClickListener);
+		//beaconUtils = new BeaconUtils();
+		//BeaconReset = (Button) globalActivity.findViewById(R.id.BeaconReset);
+		//BeaconReset.setOnClickListener(onClickListener);
 
 		/*--------------------------------------------------*/
 		/* Temporary */
-		BLEWrite = (Button) globalActivity.findViewById(R.id.BLEWriteBtn);
-		BLEDataText = (EditText) globalActivity.findViewById(R.id.BLEDataText);
+		//BLEWrite = (Button) globalActivity.findViewById(R.id.BLEWriteBtn);
+		//BLEDataText = (EditText) globalActivity.findViewById(R.id.BLEDataText);
 
-		BLEWrite.setOnClickListener(onClickListener);
+		//BLEWrite.setOnClickListener(onClickListener);
 		Button getAxisBtn = (Button) globalActivity
 				.findViewById(R.id.getAxisBtn);
 		getAxisBtn.setOnClickListener(onClickListener);
@@ -276,6 +290,11 @@ public class SetUIFunction {
 		
 		WifiManager wifi = (WifiManager) globalActivity.getSystemService(mContext.WIFI_SERVICE);
 	
+		right90AngleBtn = (Button) globalActivity.findViewById(R.id.right90btn);
+		right90AngleBtn.setOnClickListener(onClickListener);
+		
+		left90AngleBtn = (Button) globalActivity.findViewById(R.id.left90btn);
+		left90AngleBtn.setOnClickListener(onClickListener);
 		
 		uartRec = new UartReceive();
 		uartRec.RunRecThread();
@@ -365,6 +384,22 @@ public class SetUIFunction {
 			// TODO Auto-generated method stub
 			indicator = v.getId();
 			switch (indicator) {
+			case R.id.right90btn:
+				try {
+					SendToBoard("RotateAngle P 90");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				break;
+			case R.id.left90btn:
+				try {
+					SendToBoard("RotateAngle N 90");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				break;
 			case R.id.bleSwitch:
 				//if(isConnectBlueTooth == true){
 					Log.i("shinhua", "Blue tooth onclick");
@@ -410,16 +445,16 @@ public class SetUIFunction {
 				 
 				break;
 
-			case R.id.BeaconReset:
-				if (beaconUtils.getLibState() == true) {
-					Log.i(TAG, "Beason reset by beaconUtils");
-					beaconUtils.BeasonReset(ResetInterface);
-				}else {
-					Log.i(TAG, "Beason reset by uartCmd");
-					uartCmd.BeasonReset(ResetInterface);
-				}
-
-				break;
+//			case R.id.BeaconReset:
+//				if (beaconUtils.getLibState() == true) {
+//					Log.i(TAG, "Beason reset by beaconUtils");
+//					beaconUtils.BeasonReset(ResetInterface);
+//				}else {
+//					Log.i(TAG, "Beason reset by uartCmd");
+//					uartCmd.BeasonReset(ResetInterface);
+//				}
+//
+//				break;
 
 			default:
 				break;
@@ -1019,10 +1054,27 @@ public class SetUIFunction {
 
 			try {
 
+				if( Axis_InputX_fromDW1000 < 0 )
+				{
+					Axis_InputX_fromDW1000 = 0;
+				}
+				
+				if( Axis_InputY_fromDW1000 < 0 )
+				{
+					Axis_InputY_fromDW1000 = 0;
+				}
+				
 				Axis_BRSserchArray_Index_Y = Axis_BRSlessY(Axis_InputY_fromDW1000);
+				
 				Axis_BRSserchArray_Index_X = Axis_BRSlessX(Axis_InputX_fromDW1000);
 //				Axis_BRSserchArray_Index_X = Axis_BRSlessX(200);
 
+				if(Axis_BRSserchArray_Index_X > 13 )
+					Axis_BRSserchArray_Index_X = 0;
+				
+				if( Axis_BRSserchArray_Index_Y == 9 )
+					Axis_BRSserchArray_Index_Y = 8;
+				
 				Log.d("jamesdebug", "***************Index[X][Y] is : [ "
 						+ Axis_BRSserchArray_Index_X + " ][ " + Axis_BRSserchArray_Index_Y
 						+ " ]");
@@ -1036,8 +1088,14 @@ public class SetUIFunction {
 			Log.d("jamesdebug", "===================Info======================");
 
 
-				game.source[0] = Axis_BRSserchArray_Index_X + 5;
+				game.source[0] = Axis_BRSserchArray_Index_X + 2;
 				game.source[1] = Axis_BRSserchArray_Index_Y;
+				
+				if( game.source[1] == 0 )
+					game.source[1] = 1;
+				
+			}
+			
 				gameView.postInvalidate();
 			
 				
@@ -1051,12 +1109,11 @@ public class SetUIFunction {
 			}
 			
 			
-			XMPPSet.XMPPSendText("william1", "start " + (Axis_BRSserchArray_Index_X + 5) +
-					" " + Axis_BRSserchArray_Index_Y);
+			XMPPSet.XMPPSendText("william1", "start " + game.source[0] +
+					" " + game.source[1]);
 			
 		}
 		}
-	}
 
 	/* Create ThreadPool to fix thread quantity */
 	private void useThreadPool(ExecutorService service, String Msg) {
@@ -1144,9 +1201,11 @@ public class SetUIFunction {
 		Message message;
 		@Override
 		public void run() {
+			
 			if (BLEDevCon == null) BLEDevCon =BLEDeviceControlActivity.getInstance();
+			
 			try {
-				Thread.sleep(500);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1155,6 +1214,22 @@ public class SetUIFunction {
 			Log.i("shinhua1","connectStatus " + connectStatus);
 			message = bluetoothUIHandler.obtainMessage(1, connectStatus);
 			bluetoothUIHandler.sendMessage(message);
+			
+			
+			if (supportBLEDevice && connectStatus != "BLE connected") {
+			    //Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+			    Log.i(TAG,"support BT 4.0");
+			    BLEActivity = BLEDeviceScanActivity.getInstance() ;
+				BLEActivity.BLEDeviceScanStart(globalActivity);
+				
+				BLEDevCon = BLEDeviceControlActivity.getInstance();
+				 
+				//BLEhandler.postDelayed(rBLEScan, 10000);
+
+			}
+			
+			
+			
 		}
 	}
 	

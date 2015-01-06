@@ -46,6 +46,8 @@ public class SendCmdToBoardAlgorithm {
 //	public static String Axis_SendeComAngle_to32 = "forward";
 
 	public int Axis_simulator_com = 0;
+//	public int Axis_simulator_com = 270;
+	
 	public static int [] Axis_eComAngle_Array = new int []
 			{0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -321,6 +323,7 @@ public class SendCmdToBoardAlgorithm {
 	}
 	
 	public String FindCompass_F(int dx , int dy)
+//	public String FindCompass_R(int dx , int dy)
 	{
 
 		if (dx == 0 && dy == 1) {
@@ -348,6 +351,7 @@ public class SendCmdToBoardAlgorithm {
 	}
 
 	public String FindCompass_B(int dx , int dy)
+//	public String FindCompass_L(int dx , int dy)
 	{
 
 		if (dx == 0 && dy == 1) {
@@ -373,6 +377,7 @@ public class SendCmdToBoardAlgorithm {
 	}
 	
 	public String FindCompass_L(int dx , int dy)
+//	public String FindCompass_F(int dx , int dy)
 	{
 
 		if (dx == 0 && dy == 1) {
@@ -398,6 +403,7 @@ public class SendCmdToBoardAlgorithm {
 	}
 	
 	public String FindCompass_R(int dx , int dy)
+//	public String FindCompass_B(int dx , int dy)
 	{
 		
 		if (dx == 0 && dy == 1) {
@@ -714,9 +720,10 @@ public class SendCmdToBoardAlgorithm {
 						int dy = nextY - originalY;
 												
 						String dir = getCompassTable(Axis_simulator_com, 0, dx, dy);
+//						String dir = getCompassTable(Axis_simulator_com, 270, dx, dy);
 						
 						//String dir = getCompassTable(UartReceive.tempInt[2], Axis_eComAngle_Array[0], dx, dy);
-						Direction_times(10, dir, inXMPPSet);
+						Direction_times(9, dir, inXMPPSet);
 					}
 
 					// Clear Target bitmap 

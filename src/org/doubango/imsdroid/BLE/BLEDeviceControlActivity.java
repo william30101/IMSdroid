@@ -55,7 +55,7 @@ public class BLEDeviceControlActivity {
 	private TextView mConnectionState;
     private TextView mDataField;
     private String mDeviceName;
-    private String mDeviceAddress;
+    private static String mDeviceAddress;
     private ExpandableListView mGattServicesList;
     private static BluetoothLeService mBluetoothLeService;
     private static ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
@@ -83,6 +83,7 @@ public class BLEDeviceControlActivity {
     //private AudioManager mAudioManager;
    // private ComponentName mRemoteControlResponder;
     public String ismConnected() {
+    	Log.i("william"," BLE connect = " + mConnected);
 		return mConnected ? "BLE connected": "BLE disconnected";
 	}
     
@@ -317,14 +318,17 @@ public class BLEDeviceControlActivity {
 		return mServiceConnection;
 	}
 
-
+    public void connectBLEDevice()
+    {
+    	mBluetoothLeService.connect(mDeviceAddress);
+    }
 	
     /*
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if (mBluetoothLeService != null) {
+        if (mBluetoothLeService != null) {t
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
         }

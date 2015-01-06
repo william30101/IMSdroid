@@ -55,6 +55,18 @@ public class BLEDeviceScanActivity extends ListActivity {
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
     
+    public static BLEDeviceScanActivity instance;
+    
+    public static BLEDeviceScanActivity getInstance() {
+		 if (instance == null){
+	            synchronized(BLEDeviceScanActivity.class){
+	                if(instance == null) {
+	                     instance = new BLEDeviceScanActivity();
+	                }
+	            }
+	        }
+	        return instance;
+	}
     public void BLEDeviceScanStart(Activity v)
     {
     	mHandler = new Handler();

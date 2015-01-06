@@ -29,6 +29,7 @@ public class XMPPSetting {
 	private boolean LogSuc = false;
 	
 	public Game game = new Game();
+	public GameView _gameView;
 
 	//public XMPPSetting(ScreenAV xmppClient)
 	public XMPPSetting()
@@ -36,14 +37,21 @@ public class XMPPSetting {
 		//this.xmppClient = xmppClient;
 	}
 
+	public void setGameView(GameView gameView)
+	{
+		_gameView = gameView;
+	}
+	
 	public boolean XMPPStart(String Name , String Pass)
 	{
 		// Hardcode here , we could modify later.
 		 String host = "61.222.245.149";
 	     String port = "5222";
+	     //For Alger1 test machine
+	    // String username = "alger1";
 	     String username = Name;
 	     String password = Pass;
-	     LogSuc = false;
+	     LogSuc = false;	
 	     // Create a connection
 
 	     ConnectionConfiguration connConfig =
@@ -100,6 +108,10 @@ public class XMPPSetting {
 			                	Log.i(TAG, "Got text [" + message.getBody() + "] from [" + fromName + "]" );
 			                	game.source[0] = Integer.parseInt(inM[1]);
 			                	game.source[1] = Integer.parseInt(inM[2]);  
+			                	
+			                	//_gameView.postInvalidate();
+								//try{Thread.sleep(100);}catch(Exception e){e.printStackTrace();}
+			                	
 		                }
 		                else
 		                {

@@ -92,7 +92,7 @@ public class ScreenDirection extends BaseScreen{
 		if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
 		    //Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
 		    Log.i(TAG,"support BT 4.0");
-		    BLEActivity = new BLEDeviceScanActivity();
+		    BLEActivity = BLEDeviceScanActivity.getInstance() ;
 			BLEActivity.BLEDeviceScanStart(this);
 			
 			BLEDevCon = BLEDeviceControlActivity.getInstance();

@@ -181,7 +181,6 @@ public class GameView extends View {
 		super.onDraw(canvas);
 
 		//canvas.drawColor(Color.GRAY); // gray background, annotate this line, the view don't show
-									
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Style.STROKE);
 		// canvas.drawRect(5, 55, 325, 376, paint);
@@ -189,18 +188,32 @@ public class GameView extends View {
 		// Log.i(TAG,"getting onMyDraw");
 		row = map.length;
 		col = map[0].length;
+		
+		
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				if (map[i][j] == 0) {
 					paint.setColor(Color.WHITE);
-					paint.setStyle(Style.FILL);
+					paint.setStyle(Style.FILL_AND_STROKE);
+					paint.setStrokeWidth(5); 
 					canvas.drawRect(fixWidthMapData + j * (span + 1),
 							fixHeightMapData + i * (span + 1), fixWidthMapData
 									+ j * (span + 1) + span, fixHeightMapData
 									+ i * (span + 1) + span, paint);
 				} else if (map[i][j] == 1) {// �¦�
 					paint.setColor(Color.BLACK);
-					paint.setStyle(Style.FILL);
+					//paint.setStyle(Style.FILL);
+					paint.setStyle(Style.FILL_AND_STROKE);
+					paint.setStrokeWidth(5); 
+					canvas.drawRect(fixWidthMapData + j * (span + 1),
+							fixHeightMapData + i * (span + 1), fixWidthMapData
+									+ j * (span + 1) + span, fixHeightMapData
+									+ i * (span + 1) + span, paint);
+				}else if (map[i][j] == 2) {// �¦�
+					paint.setColor(Color.LTGRAY);
+					//paint.setStyle(Style.FILL);
+					paint.setStyle(Style.FILL_AND_STROKE);
+					paint.setStrokeWidth(5); 
 					canvas.drawRect(fixWidthMapData + j * (span + 1),
 							fixHeightMapData + i * (span + 1), fixWidthMapData
 									+ j * (span + 1) + span, fixHeightMapData

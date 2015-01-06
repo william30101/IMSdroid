@@ -35,7 +35,7 @@ public class UartReceive {
 	private String ReStrEnco,ReStrNano;
 	
 	// We could modify here , to chage how many data should we get from queue.
-	public static int getNanoDataSize = 3 , getEncoderDataSize = 2 , beSentMessage = 13;
+	public static int getNanoDataSize = 3 , getEncoderDataSize = 1 , beSentMessage = 13;
 
 	private int nanoInterval = 100 , encoderWriteWiatInterval = 50 , 
 				encoderReadWaitInterval = 300 , encoderWaitInterval = 350, combineInterval = 400;
@@ -193,6 +193,13 @@ public class UartReceive {
 			Log.i(TAG, "EncoderThreadPool");
 			singleThreadExecutor.execute(rWEncoder);
 
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			singleThreadExecutor.execute(rREncoder);
 
 			if (encoderStart)

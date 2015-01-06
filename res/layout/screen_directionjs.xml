@@ -16,16 +16,15 @@
             android:layout_height="wrap_content" />
     </RelativeLayout>
 
-     <RelativeLayout
-         android:id="@+id/layout_joystick"
-         android:layout_width="100dp"
-         android:layout_height="100dp"
-         android:layout_alignParentBottom="true"
-         android:layout_alignParentRight="true"
-         android:layout_marginBottom="20dp"
-         android:layout_marginRight="20dp"
-         android:background="@drawable/joystickbg" >
-
+    <RelativeLayout
+        android:id="@+id/layout_joystick"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/joystickbg" >
     </RelativeLayout>
 
     <Button
@@ -82,16 +81,16 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/robotbody" />
-                     
+
             <ImageView
                 android:id="@+id/bluetooth_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/robotbody_ble" 
-                android:visibility="invisible"/>
-            
+                android:src="@drawable/robotbody_ble"
+                android:visibility="invisible" />
+
             <ImageView
                 android:id="@+id/wifi_status1"
                 android:layout_width="wrap_content"
@@ -127,62 +126,26 @@
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/robotwifi_status4"
                 android:visibility="invisible" />
-            
         </RelativeLayout>
     </LinearLayout>
 
-         <ImageView
-            android:id="@+id/screenmenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="273dp"
-            android:layout_toRightOf="@+id/linearLayout1"
-            android:src="@drawable/screenmenu" />
+    <ImageView
+        android:id="@+id/screenmenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="273dp"
+        android:layout_toRightOf="@+id/linearLayout1"
+        android:src="@drawable/screenmenu" />
 
-        <Button
-            android:id="@+id/BLEWriteBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/linearLayout1"
-            android:text="BLEwrite"/>
-
-        <EditText
-            android:id="@+id/BLEDataText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/BLEWriteBtn"
-            android:layout_alignLeft="@+id/BLEWriteBtn"
-            android:ems="2" >
-
-            <requestFocus />
-        </EditText>
-
-        <TextView
-            android:id="@+id/BLEconnectStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/BLEDataText"
-            android:layout_toRightOf="@+id/BLEWriteBtn"
-            android:text="BLE disconnected"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <Button
-            android:id="@+id/getAxisBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/BLEDataText"
-            android:layout_toRightOf="@+id/linearLayout1"
-            android:text="GetAxis" />
-
-        <Button
-            android:id="@+id/BeaconReset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/getAxisBtn"
-            android:layout_toRightOf="@+id/linearLayout1"
-            android:text="BeaconReset" />
+    <Button
+        android:id="@+id/BLEWriteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/linearLayout1"
+        android:text="BLEwrite"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/Axis_show_X"
@@ -190,40 +153,68 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/screenmenu"
         android:layout_alignLeft="@+id/BLEconnectStatus"
-        android:text="Axis_show_X" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
-        android:layout_below="@+id/editText1"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/Axis_show_Y"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/BLEDataText"
         android:text="Axis_show_Y" />
 
-<!--     <EditText
+    <!--
+         <EditText
         android:id="@+id/Axis_TestInputAxis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/Axis_show_X"
         android:layout_toLeftOf="@+id/navigation"
         android:ems="10" />
- -->
+    -->
+
+    <TextView
+        android:id="@+id/BLEconnectStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/BLEWriteBtn"
+        android:layout_below="@+id/Axis_show_X"
+        android:layout_marginLeft="44dp"
+        android:text="BLE disconnected"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/BLEconnectStatus"
-        android:layout_below="@+id/getAxisBtn"
-        android:layout_marginLeft="17dp"
+        android:layout_alignTop="@+id/layout_joystick"
+        android:layout_toRightOf="@+id/linearLayout1"
         android:text="Navigation" />
+
+    <Button
+        android:id="@+id/getAxisBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/BLEWriteBtn"
+        android:layout_below="@+id/BLEconnectStatus"
+        android:text="GetAxis" />
+
+    <Button
+        android:id="@+id/right90btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/runjs"
+        android:layout_toRightOf="@+id/runjs"
+        android:text="r90" />
+
+    <TextView
+        android:id="@+id/Axis_show_Y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/BLEconnectStatus"
+        android:layout_marginLeft="36dp"
+        android:layout_toRightOf="@+id/Axis_show_X"
+        android:text="Axis_show_X" />
+
+    <Button
+        android:id="@+id/left90btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/right90btn"
+        android:layout_alignBottom="@+id/right90btn"
+        android:layout_toRightOf="@+id/BLEWriteBtn"
+        android:text="l90" />
 
 </RelativeLayout>

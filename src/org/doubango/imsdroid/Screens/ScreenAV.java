@@ -31,6 +31,8 @@ import org.doubango.imsdroid.IMSDroid;
 import org.doubango.imsdroid.Main;
 import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.XMPPSetting;
+import org.doubango.imsdroid.BLE.BLEDeviceControlActivity;
+import org.doubango.imsdroid.BLE.BLEDeviceScanActivity;
 import org.doubango.imsdroid.Services.IScreenService;
 import org.doubango.imsdroid.Utils.DialerUtils;
 import org.doubango.imsdroid.cmd.SetBtnFun;
@@ -71,6 +73,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
@@ -114,6 +117,10 @@ public class ScreenAV extends BaseScreen{
 	
 	private String mRemotePartyDisplayName;
 	private Bitmap mRemotePartyPhoto;
+	
+	private BLEDeviceScanActivity BLEActivity;
+	private BLEDeviceControlActivity BLEDevCon;
+	public static TextView mConnectionState;
 	
 	private ViewType mCurrentView;
 	private LayoutInflater mInflater;
@@ -211,6 +218,8 @@ public class ScreenAV extends BaseScreen{
 		mapScreen = new MapScreen();
 
 		setUI = new SetUIFunction(this);
+		//setUI.StartUIFunction();
+		
 		mapScreenView = new MapScreenView();
 		
 		//XMPPThreadv = new XMPPThread();
@@ -1085,7 +1094,25 @@ public class ScreenAV extends BaseScreen{
 		
 	
 		setUI.StartUIFunction();
+		
+		if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+		    //Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+		    Log.i(TAG,"support BT 4.0");
+		    BLEActivity = new BLEDeviceScanActivity();
+			BLEActivity.BLEDeviceScanStart(this);
+			
+			BLEDevCon = BLEDeviceControlActivity.getInstance();
+		}
+		else{
+			Log.i(TAG,"not support BT 4.0");
+		}
+		
+		
 		mapScreenView.MapScreenView(host);
+		
+		
+		
+		mConnectionState = (TextView) findViewById(R.id.BLEconnectStatus);
 		
 		// Video Producer
 		startStopVideo(mAVSession.isSendingVideo());
@@ -1553,4 +1580,6 @@ public class ScreenAV extends BaseScreen{
 
     }
     */
+	
+	
 }
