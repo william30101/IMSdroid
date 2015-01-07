@@ -1015,105 +1015,28 @@ public class SetUIFunction {
 
 	public class Axis_thread implements Runnable {
 		@SuppressLint("UseValueOf") public void run() {
-			if (SendCmdToBoardAlgorithm.Axis_RunDrawCircle_StopUpdate == false)
-			{
-
-			Axis_show_X.setText(Float.toString(UartReceive.robotLocation[3] * 100));
-			Axis_show_Y.setText(Float.toString(UartReceive.robotLocation[2] * 100));
-
-//			Log.d("jamesdebug","Axis_showX: " + Float.toString(UartReceive.robotLocation[2] * 100));
-//			Log.d("jamesdebug","Axis_showY: " + Float.toString(UartReceive.robotLocation[3] * 100));
-			
-//			Float test = Float.parseFloat(Axis_TestAxisInput.getText().toString());
-			Float test = Float.parseFloat(Axis_show_Y.getText().toString());
-			Float test2 = Float.parseFloat(Axis_show_X.getText().toString());
-			Float D1 = new Float(test);
-			Float D2 = new Float(test2);
-			
-			
-			Axis_InputY_fromDW1000 = D1.intValue();
-			Axis_InputX_fromDW1000 = D2.intValue();
-
-			if (Axis_InputX_fromDW1000 < 0)
-			{
-				Axis_InputX_fromDW1000 = 0;
-			}
-			
-			if (Axis_InputY_fromDW1000 < 0)
-			{
-				Axis_InputY_fromDW1000 = 0;
-			}
-			Log.d("jamesdebug", "xxxxx:" + Axis_InputX_fromDW1000);
-			Log.d("jamesdebug", "yyyyy:" + Axis_InputY_fromDW1000);
-			
-//			Axis_InputY_fromDW1000 = Integer.parseInt(test);
-			
-			//Axis_InputY_fromDW1000 = Integer.parseInt(Axis_show_Y.getText().toString());
-
-			Log.d("jamesdebug", "The stream is: " + Axis_InputY_fromDW1000);
-
-			try {
-
-				if( Axis_InputX_fromDW1000 < 0 )
-				{
-					Axis_InputX_fromDW1000 = 0;
-				}
-				
-				if( Axis_InputY_fromDW1000 < 0 )
-				{
-					Axis_InputY_fromDW1000 = 0;
-				}
-				
-				Axis_BRSserchArray_Index_Y = Axis_BRSlessY(Axis_InputY_fromDW1000);
-				
-				Axis_BRSserchArray_Index_X = Axis_BRSlessX(Axis_InputX_fromDW1000);
-//				Axis_BRSserchArray_Index_X = Axis_BRSlessX(200);
-
-				if(Axis_BRSserchArray_Index_X > 13 )
-					Axis_BRSserchArray_Index_X = 0;
-				
-				if( Axis_BRSserchArray_Index_Y == 9 )
-					Axis_BRSserchArray_Index_Y = 8;
-				
-				Log.d("jamesdebug", "***************Index[X][Y] is : [ "
-						+ Axis_BRSserchArray_Index_X + " ][ " + Axis_BRSserchArray_Index_Y
-						+ " ]");
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 
 			handler.postDelayed(Axis_trigger_thread, Axis_GetPollTime);
 
 			Log.d("jamesdebug", "===================Info======================");
 
-
-				game.source[0] = Axis_BRSserchArray_Index_X + 2;
-				game.source[1] = Axis_BRSserchArray_Index_Y;
-				
-				if( game.source[1] == 0 )
-					game.source[1] = 1;
-				
-			}
 			
-				gameView.postInvalidate();
+			//XMPPSet.XMPPSendText("william1", "start " + game.source[0] +
+			//		" " + game.source[1]);
 			
-				
-				
+			gameView.postInvalidate();
+			
+			
+			
 			try {
-
+	
 				Thread.sleep(20);
-
+	
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			
-			XMPPSet.XMPPSendText("william1", "start " + game.source[0] +
-					" " + game.source[1]);
-			
 		}
-		}
+	}
 
 	/* Create ThreadPool to fix thread quantity */
 	private void useThreadPool(ExecutorService service, String Msg) {
