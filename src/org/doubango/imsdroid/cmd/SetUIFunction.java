@@ -1025,9 +1025,7 @@ public class SetUIFunction {
 			//		" " + game.source[1]);
 			
 			gameView.postInvalidate();
-			
-			
-			
+		
 			try {
 	
 				Thread.sleep(20);
