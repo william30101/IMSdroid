@@ -417,7 +417,7 @@ public class SetUIFunction {
 			case R.id.getAxisBtn:
 				SendCmdToBoardAlgorithm.SetCompass();
 				handler.postDelayed(Axis_trigger_thread, Axis_GetPollTime);
-				Log.d("jamesdebug", "touchBtn");
+//				Log.d("jamesdebug", "touchBtn");
 
 				// uartRec.RunRecThread();
 				break;
@@ -903,37 +903,19 @@ public class SetUIFunction {
 			}
 		}
 
-		Log.d("jamesdebug", "The times is:" + Axis_BRStimes_Y);
-
-		// if(Axis_low > 0)
-		// {
-		// Log.d("jamesdebug","The " + Axis_data[Axis_low - 1] + " is less " +
-		// Axis_InputVar +
-		// " The array index is : " + (Axis_low - 1));
-		// }else{
-		// Log.d("jamesdebug", "Can't find the element less " + Axis_InputVar);
-		// }
-
-		// if(Axis_low > 0)
-		// {
-		// Log.d("jamesdebug","The " + MapList.test[0][Axis_low - 1] +
-		// " is less " + Axis_InputVar +
-		// " The array index is : " + (Axis_low - 1));
-		// }else{
-		// Log.d("jamesdebug", "Can't find the element less " + Axis_InputVar);
-		// }
+//		Log.d("jamesdebug", "The times is:" + Axis_BRStimes_Y);
 
 		if (Axis_BRSArraylow > 0) {
 
-			Log.d("jamesdebug", "TheY "
-			        + MapList.Axis_GraduateY[Axis_BRSArraylow - 1]
-					+ " is less " + Axis_InputVarY + " The array index is : "
-					+ (Axis_BRSArraylow - 1));
+//			Log.d("jamesdebug", "TheY "
+//			        + MapList.Axis_GraduateY[Axis_BRSArraylow - 1]
+//					+ " is less " + Axis_InputVarY + " The array index is : "
+//					+ (Axis_BRSArraylow - 1));
 
 			Axis_BRSretIndexY = Axis_BRSArraylow;
 
 		} else {
-			Log.d("jamesdebug", "Can't find the element less " + Axis_InputVarY);
+//			Log.d("jamesdebug", "Can't find the element less " + Axis_InputVarY);
 		}
 		return Axis_BRSretIndexY;
 	}
@@ -961,14 +943,14 @@ public class SetUIFunction {
 			}
 		}
 
-		Log.d("jamesdebug", "The times is:" + Axis_BRStimes_X);
+//		Log.d("jamesdebug", "The times is:" + Axis_BRStimes_X);
 		
 		if (Axis_BRSlow_X > 0) {
 
-			Log.d("jamesdebug","TheX "
-							+ MapList.AxisX_Array[0][Axis_BRSserchArray_Index_Y][Axis_BRSlow_X - 1]
-							+ " is less " + Axis_InputVarX
-							+ " The array index is : " + (Axis_BRSlow_X - 1));
+//			Log.d("jamesdebug","TheX "
+//							+ MapList.AxisX_Array[0][Axis_BRSserchArray_Index_Y][Axis_BRSlow_X - 1]
+//							+ " is less " + Axis_InputVarX
+//							+ " The array index is : " + (Axis_BRSlow_X - 1));
 
 			Axis_BRSretIndexX = Axis_BRSlow_X - 1;
 
@@ -978,7 +960,7 @@ public class SetUIFunction {
 			}
 			
 		} else {
-			Log.d("jamesdebug", "Can't find the element less " + Axis_InputVarX);
+//			Log.d("jamesdebug", "Can't find the element less " + Axis_InputVarX);
 		}
 		return Axis_BRSretIndexX;
 	}
@@ -1018,11 +1000,7 @@ public class SetUIFunction {
 
 			handler.postDelayed(Axis_trigger_thread, Axis_GetPollTime);
 
-			Log.d("jamesdebug", "===================Info======================");
-
-			
-			//XMPPSet.XMPPSendText("william1", "start " + game.source[0] +
-			//		" " + game.source[1]);
+//			Log.d("jamesdebug", "===================Info======================");
 			
 			gameView.postInvalidate();
 		
@@ -1147,10 +1125,7 @@ public class SetUIFunction {
 				 
 				//BLEhandler.postDelayed(rBLEScan, 10000);
 
-			}*/
-			
-			
-			
+			}*/		
 		}
 	}
 	
@@ -1173,6 +1148,4 @@ public class SetUIFunction {
 			bleConnect.setVisibility(View.INVISIBLE);
 		}
 	}
-	
-
 }

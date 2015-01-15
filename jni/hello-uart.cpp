@@ -59,7 +59,8 @@ static float KkHk[8][8],KkHkPk_[8][8],Pk[8][8];
 //static float Xk_[8][1]={{0},{0},{-0.6},{0.4},{5.0},{0},{4.63},{4.1}};//modify the coordinate here(robot,anchor1,anchor2,anchor3)
 //static float Xk_[8][1]={{0},{0},{-0.6},{0.4},{4.9},{4.63},{5.0},{0}};//modify the coordinate here(robot,anchor1,anchor2,anchor3)
 //static float Xk_[8][1]={{0},{0},{0.41},{-0.38},{-0.61},{1.26},{0.65},{5.57}};
-static float Xk_[8][1]={{0},{0},{-0.58},{0},{0.63},{5.62},{0.67},{-0.42}};
+
+static float Xk_[8][1]={{0},{0},{-0.61},{-0.68},{3.63},{3.91},{4.95},{-1.01}};
 
 static float Pk_[8][8]={{1,0,0,0,0,0,0,0},{0,1,0,0,0,0,0,0},{0,0,1,0,0,0,0,0},{0,0,0,1,0,0,0,0},{0,0,0,0,1,0,0,0},{0,0,0,0,0,1,0,0},{0,0,0,0,0,0,1,0},{0,0,0,0,0,0,0,1}};
 
@@ -84,7 +85,6 @@ static int C=0;
 
 
 using namespace android;
-
 extern "C"
 {
 

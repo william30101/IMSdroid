@@ -121,7 +121,7 @@ public class SendCmdToBoardAlgorithm {
 			loopcount = 13;
 			correctStr = inString;
 		} else if (inString.equals("direction forward")) {
-			loopcount = 32;
+			loopcount = 25;
 			correctStr = inString;
 		}
 		// for 45 , 135 , 225 , 315 angle 
@@ -207,7 +207,6 @@ public class SendCmdToBoardAlgorithm {
 	
 	public static void SetCompass()
 	{
-		Log.d("jamescompass", "=========================compass_in======================================");
 		Axis_eComAngle_Array[0] = UartReceive.tempInt[2];
 		Axis_eComAngle_tmp = Axis_eComAngle_Array[0];
 
@@ -222,9 +221,6 @@ public class SendCmdToBoardAlgorithm {
 		};
 		
 		Axis_InitialCompass = Axis_eComAngle_Array[0];
-		Log.d("jamescompass", "=========================compass_in======================================");
-		Log.d("jamescompass", "=========================compass_in======================================");
-		Log.d("jamescompass", "=========================compass_in======================================");
 	}
 	
 	/*
@@ -273,11 +269,11 @@ public class SendCmdToBoardAlgorithm {
 		// compassBaseNumber(3) + 1 = 4
 		// use the forward table .
 
-		Log.d("jamesdebug","original compass: " + InitialCompass);
-		Log.d("jamesdebug","now compass: " + NowCompass);
-		Log.d("jamesdebug","Select compassID: " + compassTableSelected);
-		Log.d("jamesdebug","=============dx=============: " + dx);
-		Log.d("jamesdebug","=============dy=============: " + dy);
+//		Log.d("jamesdebug","original compass: " + InitialCompass);
+//		Log.d("jamesdebug","now compass: " + NowCompass);
+//		Log.d("jamesdebug","Select compassID: " + compassTableSelected);
+//		Log.d("jamesdebug","=============dx=============: " + dx);
+//		Log.d("jamesdebug","=============dy=============: " + dy);
 		
 		switch (compassTableSelected) {
 		
@@ -427,108 +423,6 @@ public class SendCmdToBoardAlgorithm {
 
 		return Axis_SendeComAngle_to32_R;
 	}
-	
-//	
-//	public String FindDirection(final XMPPSetting inXMPPSet, int inTheta)
-//	{
-//		if (inTheta == 0)
-//		{
-//			//Direction_forward_times(10);
-//			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == 45)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle P 45";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if ( inTheta == -45)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle N 45";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == 90)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle P 90";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if ( inTheta == -90)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle N 90";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == 135)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle P 135";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == -135)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle N 135";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == 180)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle P 180";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == -180)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle P 180";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == 225)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle P 225";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == -225)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle N 255";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == 270)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle P 270";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == -270)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle N 270";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == 315)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle P 315";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-//		else if (inTheta == -315)
-//		{
-//			Axis_SendeComAngle_to32 = "RotateAngle N 315";
-////			Axis_SendeComAngle_to32 = "direction forward";
-//		}
-////
-////		try {
-////			
-////			//setUIfunction.SendToBoard(Axis_SendeComAngle_to32);
-////			String[] inM = Axis_SendeComAngle_to32.split("\\s+");
-////			byte[] cmdByte = uartCmd.GetAllByte(inM);
-//////			 String decoded = new String(cmdByte, "ISO-8859-1");
-////			UartCmd.SendMsgUart(1, cmdByte);
-////			
-////		} catch (IOException e) {
-////			e.printStackTrace();
-////		}
-////		
-////		try {
-////			
-////			Thread.sleep(100);
-////			
-////		} catch (InterruptedException e) {
-////			e.printStackTrace();
-////		}
-//		
-//		return Axis_SendeComAngle_to32;
-//	}
 
 	public void Direction_times(int times, String xxx, XMPPSetting inXMPPSet)
 	{
@@ -536,35 +430,15 @@ public class SendCmdToBoardAlgorithm {
 		
 		if (xxx != "direction forward")
 		{
-			
-			
-				
-			
 			inXMPPSet.XMPPSendText("james1", xxx);
 			
-//			
-//				try {
-//				
-//				Log.d("jamesdebug", "Direction_" + xxx);
-////				String forward_string = "direction forward";
-//				//setUIfunction.SendToBoard("direction forward");
-//				String[] inM = xxx.split("\\s+");
-//				byte[] cmdByte = uartCmd.GetAllByte(inM);
-////				 String decoded = new String(cmdByte, "ISO-8859-1");
-//				UartCmd.SendMsgUart(1, cmdByte);
-				try {
-					
-					Thread.sleep(300);
-					
-				} catch (InterruptedException e) {
+			try {
+			
+				Thread.sleep(300);
+				
+			} catch (InterruptedException e) {
 					e.printStackTrace();
-				}
-				
-				//Axis_InitialCompass = UartReceive.tempInt[2];
-				
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
+			}
 
 
 			try {
@@ -574,11 +448,6 @@ public class SendCmdToBoardAlgorithm {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-		
-//			String forward_string = "direction forward";
-//			String[] inM = forward_string.split("\\s+");
-//			byte[] cmdByte;
 			
 			for (int i=0;i<10;i++)
 			{
@@ -591,25 +460,7 @@ public class SendCmdToBoardAlgorithm {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				
-//			try {
-//					cmdByte = uartCmd.GetAllByte(inM);
-//					UartCmd.SendMsgUart(1, cmdByte);
-//					Log.d("jamesdebug", "correct forward times= " + i);
-//					
-//					try {
-//						
-//						Thread.sleep(100);
-//						
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//					
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
 			}
-//			 String decoded = new String(cmdByte, "ISO-8859-1");
 		} else if (xxx == "direction forward"){
 			for( int i = 0; i < times; i++ )
 			{
@@ -624,30 +475,6 @@ public class SendCmdToBoardAlgorithm {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				
-//				try {
-//					
-//					
-////					String forward_string = "direction forward";
-//					//setUIfunction.SendToBoard("direction forward");
-//					
-//					
-//					
-//					String[] inM = xxx.split("\\s+");
-//					byte[] cmdByte = uartCmd.GetAllByte(inM);
-////					 String decoded = new String(cmdByte, "ISO-8859-1");
-//					UartCmd.SendMsgUart(1, cmdByte);
-//					try {
-//						
-//						Thread.sleep(300);
-//						
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//					
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
 			}
 		}
 	}
@@ -723,7 +550,7 @@ public class SendCmdToBoardAlgorithm {
 //						String dir = getCompassTable(Axis_simulator_com, 270, dx, dy);
 						
 						//String dir = getCompassTable(UartReceive.tempInt[2], Axis_eComAngle_Array[0], dx, dy);
-						Direction_times(9, dir, inXMPPSet);
+						Direction_times(5, dir, inXMPPSet);
 					}
 
 					// Clear Target bitmap 
