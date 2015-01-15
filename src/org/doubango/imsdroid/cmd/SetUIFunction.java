@@ -267,7 +267,7 @@ public class SetUIFunction {
 		wifiService.scheduleAtFixedRate(new wifiMonitorThread(), 5000, 5000, TimeUnit.MILLISECONDS);
 		//bleService.scheduleAtFixedRate(new bluetoothMonitorThread(), 5000, 10000, TimeUnit.MILLISECONDS);
 		
-		//BLEhandler.postDelayed(rBLEScan, 1000);
+		BLEhandler.postDelayed(rBLEScan, 5000);
 		
 		/* Set listener for Beacon reset */
 		//beaconUtils = new BeaconUtils();
@@ -1088,7 +1088,7 @@ public class SetUIFunction {
 			Log.d("jamesdebug", "===================Info======================");
 
 
-				game.source[0] = Axis_BRSserchArray_Index_X + 2;
+				game.source[0] = Axis_BRSserchArray_Index_X + 3;
 				game.source[1] = Axis_BRSserchArray_Index_Y;
 				
 				if( game.source[1] == 0 )
@@ -1211,11 +1211,11 @@ public class SetUIFunction {
 				e.printStackTrace();
 			}
 			connectStatus = BLEDevCon.ismConnected();
-			Log.i("shinhua1","connectStatus " + connectStatus);
+			Log.i("shinhua1","connectStatus " + connectStatus); 
 			message = bluetoothUIHandler.obtainMessage(1, connectStatus);
 			bluetoothUIHandler.sendMessage(message);
 			
-			
+			/*
 			if (supportBLEDevice && connectStatus != "BLE connected") {
 			    //Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
 			    Log.i(TAG,"support BT 4.0");
@@ -1226,7 +1226,7 @@ public class SetUIFunction {
 				 
 				//BLEhandler.postDelayed(rBLEScan, 10000);
 
-			}
+			}*/
 			
 			
 			

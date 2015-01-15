@@ -489,6 +489,7 @@ public class UartReceive {
 						robotLocation = UartCmd.EKF((float)dw1000NewData[0],(float)dw1000NewData[1],(float)dw1000NewData[2],(int) tempInt[0] ,(int) tempInt[1],(int) tempInt[2]);
 			///--------------------------------------------------------------------------------------------------
 						
+						robotLocation[2] = robotLocation[2] + (float)0.8;
 						byte[] sendAxisToDriving = new byte[11];
 						
 						if (robotLocation[0] < 0  )
