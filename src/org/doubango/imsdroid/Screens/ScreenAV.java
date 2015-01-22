@@ -55,14 +55,7 @@ import org.doubango.ngn.utils.NgnGraphicsUtils;
 import org.doubango.ngn.utils.NgnStringUtils;
 import org.doubango.ngn.utils.NgnTimer;
 import org.doubango.ngn.utils.NgnUriUtils;
-import org.jivesoftware.smack.PacketListener;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.filter.MessageTypeFilter;
-import org.jivesoftware.smack.filter.PacketFilter;
-import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.Packet;
-import org.jivesoftware.smack.util.StringUtils;
-import org.xmlpull.v1.XmlPullParser;
+
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -1094,20 +1087,7 @@ public class ScreenAV extends BaseScreen{
 		
 	
 		setUI.StartUIFunction();
-		
-		if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-		    //Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
-		    Log.i(TAG,"support BT 4.0");
-		    BLEActivity = new BLEDeviceScanActivity();
-			BLEActivity.BLEDeviceScanStart(this);
-			
-			BLEDevCon = BLEDeviceControlActivity.getInstance();
-		}
-		else{
-			Log.i(TAG,"not support BT 4.0");
-		}
-		
-		
+
 		mapScreenView.MapScreenView(host);
 		
 		

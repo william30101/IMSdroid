@@ -9,15 +9,11 @@ import java.util.zip.Inflater;
 
 import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.UartCmd;
-import org.doubango.imsdroid.UartReceive;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.BeaconUtils;
-import org.doubango.imsdroid.BLE.BLEDeviceControlActivity;
-import org.doubango.imsdroid.BLE.BLEDeviceScanActivity;
 import org.doubango.imsdroid.Screens.ScreenDraw;
 import org.doubango.imsdroid.Screens.ScreenUIJoyStick;
 import org.doubango.imsdroid.Screens.ScreenUIVerticalSeekBar;
-import org.doubango.imsdroid.UartReceive.EncoderWriteThread;
 import org.doubango.imsdroid.Utils.NetworkStatus;
 import org.doubango.imsdroid.map.Game;
 import org.doubango.imsdroid.map.GameView;
@@ -74,10 +70,10 @@ public class SetUIFunction {
 
 	// public UartCmd uartCmd;
 
-	private UartReceive uartRec;
+	//private UartReceive uartRec;
 
-	private BLEDeviceScanActivity BLEActivity;
-	private BLEDeviceControlActivity BLEDevCon;
+	//private BLEDeviceScanActivity BLEActivity;
+	//private BLEDeviceControlActivity BLEDevCon;
 
 	// For map use
 	private Button jsRunBtn;
@@ -149,9 +145,9 @@ public class SetUIFunction {
 	private boolean isConnectBlueTooth;
 
 	private Handler handler = new Handler();
-	private Handler BLEhandler = new Handler();
+	//private Handler BLEhandler = new Handler();
 
-	Runnable rBLEScan = new bluetoothMonitorThread();
+	//Runnable rBLEScan = new bluetoothMonitorThread();
 
 	/* Detect Robot Location */
 	Runnable Axis_trigger_thread = new Axis_thread();
@@ -249,14 +245,12 @@ public class SetUIFunction {
 		wifistatus2 = (ImageView) globalActivity.findViewById(R.id.wifi_status2);
 		wifistatus3 = (ImageView) globalActivity.findViewById(R.id.wifi_status3);
 		wifistatus4 = (ImageView) globalActivity.findViewById(R.id.wifi_status4);
-		bleConnect = (ImageView) globalActivity
-				.findViewById(R.id.bluetooth_status);
-
+		
 		// WiFi & BlueTooth Monitor
 		wifiService.scheduleAtFixedRate(new wifiMonitorThread(), 5000, 5000,
 				TimeUnit.MILLISECONDS);
 
-		BLEhandler.postDelayed(rBLEScan, 5000);
+		//BLEhandler.postDelayed(rBLEScan, 5000);
 
 		/* Set listener for Beacon reset */
 		// beaconUtils = new BeaconUtils();
@@ -281,14 +275,14 @@ public class SetUIFunction {
 		WifiManager wifi = (WifiManager) globalActivity
 				.getSystemService(mContext.WIFI_SERVICE);
 
-		right90AngleBtn = (Button) globalActivity.findViewById(R.id.right90btn);
-		right90AngleBtn.setOnClickListener(onClickListener);
+		//right90AngleBtn = (Button) globalActivity.findViewById(R.id.right90btn);
+		//right90AngleBtn.setOnClickListener(onClickListener);
 
-		left90AngleBtn = (Button) globalActivity.findViewById(R.id.left90btn);
-		left90AngleBtn.setOnClickListener(onClickListener);
+		//left90AngleBtn = (Button) globalActivity.findViewById(R.id.left90btn);
+		//left90AngleBtn.setOnClickListener(onClickListener);
 
-		uartRec = new UartReceive();
-		uartRec.RunRecThread();
+		//uartRec = new UartReceive();
+		//uartRec.RunRecThread();
 	}
 
 	@SuppressLint("NewApi")
@@ -393,15 +387,15 @@ public class SetUIFunction {
 				break;
 			case R.id.bleSwitch:
 				// if(isConnectBlueTooth == true){
-				Log.i("shinhua", "Blue tooth onclick");
-				try {
-					SendToBoard("BLE " + "00");
-					// BLEDevCon.CharacteristicWRN(2,1, 0, "00");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					Log.i(TAG, "BLE send data=" + " 00 " + " error");
-					e.printStackTrace();
-				}
+//				Log.i("shinhua", "Blue tooth onclick");
+//				try {
+//					SendToBoard("BLE " + "00");
+//					// BLEDevCon.CharacteristicWRN(2,1, 0, "00");
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					Log.i(TAG, "BLE send data=" + " 00 " + " error");
+//					e.printStackTrace();
+//				}
 				// }
 				break;
 
@@ -554,35 +548,35 @@ public class SetUIFunction {
 		lightingSwitch.setOnClickListener(onClickListener);
 
 		// Temporary test function
-		Thread background = new Thread(new Runnable() {
-			public void run() {
-				if (BLEDevCon == null)
-					BLEDevCon = BLEDeviceControlActivity.getInstance();
-				String status = BLEDevCon.ismConnected();
-				Log.i("shinhua1", "Dialog connectStatus " + status);
-
-				Message msg = dialogHandler.obtainMessage(1, status);
-				dialogHandler.sendMessage(msg);
-			}
-
-			private Handler dialogHandler = new Handler() {
-				public void handlerMessage(Message msg) {
-
-					if (msg.obj != null) {
-						Log.i("shinhua1", "**");
-					}
-
-					if ((String) msg.obj == "BLE connected") {
-						Log.i("shinhua1", "**********BLE connected");
-						lightingSwitch.setEnabled(true);
-					} else if ((String) msg.obj == "BLE disconnected") {
-						Log.i("shinhua1", "**********BLE connected");
-						lightingSwitch.setEnabled(false);
-					}
-				}
-			};
-
-		});
+//		Thread background = new Thread(new Runnable() {
+//			public void run() {
+//				if (BLEDevCon == null)
+//					BLEDevCon = BLEDeviceControlActivity.getInstance();
+//				String status = BLEDevCon.ismConnected();
+//				Log.i("shinhua1", "Dialog connectStatus " + status);
+//
+//				Message msg = dialogHandler.obtainMessage(1, status);
+//				dialogHandler.sendMessage(msg);
+//			}
+//
+//			private Handler dialogHandler = new Handler() {
+//				public void handlerMessage(Message msg) {
+//
+//					if (msg.obj != null) {
+//						Log.i("shinhua1", "**");
+//					}
+//
+//					if ((String) msg.obj == "BLE connected") {
+//						Log.i("shinhua1", "**********BLE connected");
+//						lightingSwitch.setEnabled(true);
+//					} else if ((String) msg.obj == "BLE disconnected") {
+//						Log.i("shinhua1", "**********BLE connected");
+//						lightingSwitch.setEnabled(false);
+//					}
+//				}
+//			};
+//
+//		});
 
 		// background.start();
 
@@ -937,59 +931,59 @@ public class SetUIFunction {
 	}
 
 	/* Monitor bluetooth signal */
-	private class bluetoothMonitorThread implements Runnable {
-		String connectStatus;
-		Message message;
-
-		@Override
-		public void run() {
-
-			if (BLEDevCon == null)
-				BLEDevCon = BLEDeviceControlActivity.getInstance();
-
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			connectStatus = BLEDevCon.ismConnected();
-			Log.i("shinhua1", "connectStatus " + connectStatus);
-			message = bluetoothUIHandler.obtainMessage(1, connectStatus);
-			bluetoothUIHandler.sendMessage(message);
-
-			/*
-			 * if (supportBLEDevice && connectStatus != "BLE connected") {
-			 * //Toast.makeText(this, R.string.ble_not_supported,
-			 * Toast.LENGTH_SHORT).show(); Log.i(TAG,"support BT 4.0");
-			 * BLEActivity = BLEDeviceScanActivity.getInstance() ;
-			 * BLEActivity.BLEDeviceScanStart(globalActivity);
-			 * 
-			 * BLEDevCon = BLEDeviceControlActivity.getInstance();
-			 * 
-			 * //BLEhandler.postDelayed(rBLEScan, 10000);
-			 * 
-			 * }
-			 */
-		}
-	}
-
-	/* BlueTooth UI Handler */
-	private Handler bluetoothUIHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			bluetoothIconStatus((String) msg.obj);
-		}
-	};
-
-	/* Bluetooth signal display icon */
-	private void bluetoothIconStatus(String itor) {
-		if (itor == "BLE connected") {
-			isConnectBlueTooth = true;
-			bleConnect.setVisibility(View.VISIBLE);
-		} else if (itor == "BLE disconnected") {
-			isConnectBlueTooth = false;
-			bleConnect.setVisibility(View.INVISIBLE);
-		}
-	}
+//	private class bluetoothMonitorThread implements Runnable {
+//		String connectStatus;
+//		Message message;
+//
+//		@Override
+//		public void run() {
+//
+//			if (BLEDevCon == null)
+//				BLEDevCon = BLEDeviceControlActivity.getInstance();
+//
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			connectStatus = BLEDevCon.ismConnected();
+//			Log.i("shinhua1", "connectStatus " + connectStatus);
+//			message = bluetoothUIHandler.obtainMessage(1, connectStatus);
+//			bluetoothUIHandler.sendMessage(message);
+//
+//			/*
+//			 * if (supportBLEDevice && connectStatus != "BLE connected") {
+//			 * //Toast.makeText(this, R.string.ble_not_supported,
+//			 * Toast.LENGTH_SHORT).show(); Log.i(TAG,"support BT 4.0");
+//			 * BLEActivity = BLEDeviceScanActivity.getInstance() ;
+//			 * BLEActivity.BLEDeviceScanStart(globalActivity);
+//			 * 
+//			 * BLEDevCon = BLEDeviceControlActivity.getInstance();
+//			 * 
+//			 * //BLEhandler.postDelayed(rBLEScan, 10000);
+//			 * 
+//			 * }
+//			 */
+//		}
+//	}
+//
+//	/* BlueTooth UI Handler */
+//	private Handler bluetoothUIHandler = new Handler() {
+//		public void handleMessage(Message msg) {
+//			super.handleMessage(msg);
+//			bluetoothIconStatus((String) msg.obj);
+//		}
+//	};
+//
+//	/* Bluetooth signal display icon */
+//	private void bluetoothIconStatus(String itor) {
+//		if (itor == "BLE connected") {
+//			isConnectBlueTooth = true;
+//			bleConnect.setVisibility(View.VISIBLE);
+//		} else if (itor == "BLE disconnected") {
+//			isConnectBlueTooth = false;
+//			bleConnect.setVisibility(View.INVISIBLE);
+//		}
+//	}
 }
