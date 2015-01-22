@@ -27,15 +27,6 @@
         android:background="@drawable/joystickbg" >
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/runjs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/navigation"
-        android:layout_alignBottom="@+id/navigation"
-        android:layout_toLeftOf="@+id/navigation"
-        android:text="run" />
-
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
@@ -129,31 +120,8 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/screenmenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="273dp"
-        android:layout_toRightOf="@+id/linearLayout1"
-        android:src="@drawable/screenmenu" />
 
-    <Button
-        android:id="@+id/BLEWriteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/linearLayout1"
-        android:text="BLEwrite"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/Axis_show_X"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/screenmenu"
-        android:layout_alignLeft="@+id/BLEconnectStatus"
-        android:text="Axis_show_Y" />
+    
 
     <!--
          <EditText
@@ -166,55 +134,63 @@
     -->
 
     <TextView
-        android:id="@+id/BLEconnectStatus"
+        android:id="@+id/Axis_show_Y"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/BLEWriteBtn"
-        android:layout_below="@+id/Axis_show_X"
-        android:layout_marginLeft="44dp"
-        android:text="BLE disconnected"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_alignBaseline="@+id/Axis_show_X"
+        android:layout_alignBottom="@+id/Axis_show_X"
+        android:layout_marginLeft="34dp"
+        android:layout_toRightOf="@+id/Axis_show_X"
+        android:text="Axis_show_X" />
+
+    <Button
+        android:id="@+id/runjs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/getAxisBtn"
+        android:layout_alignTop="@+id/navigation"
+        android:text="run" />
 
     <Button
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/layout_joystick"
-        android:layout_toRightOf="@+id/linearLayout1"
+        android:layout_toRightOf="@+id/runjs"
         android:text="Navigation" />
 
     <Button
         android:id="@+id/getAxisBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/BLEWriteBtn"
-        android:layout_below="@+id/BLEconnectStatus"
+        android:layout_above="@+id/navigation"
+        android:layout_marginLeft="33dp"
+        android:layout_toRightOf="@+id/linearLayout1"
         android:text="GetAxis" />
+
+    <Button
+        android:id="@+id/left90btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/runjs"
+        android:layout_below="@+id/runjs"
+        android:text="l90" />
 
     <Button
         android:id="@+id/right90btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/runjs"
-        android:layout_toRightOf="@+id/runjs"
+        android:layout_toRightOf="@+id/left90btn"
         android:text="r90" />
 
     <TextView
-        android:id="@+id/Axis_show_Y"
+        android:id="@+id/Axis_show_X"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/BLEconnectStatus"
-        android:layout_marginLeft="36dp"
-        android:layout_toRightOf="@+id/Axis_show_X"
-        android:text="Axis_show_X" />
-
-    <Button
-        android:id="@+id/left90btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/right90btn"
-        android:layout_alignBottom="@+id/right90btn"
-        android:layout_toRightOf="@+id/BLEWriteBtn"
-        android:text="l90" />
+        android:layout_above="@+id/getAxisBtn"
+        android:layout_alignRight="@+id/right90btn"
+        android:layout_marginBottom="42dp"
+        android:text="Axis_show_Y" />
 
 </RelativeLayout>

@@ -71,10 +71,9 @@ public class SetUIFunction {
 	private XMPPSetting XMPPSet;
 	private NetworkStatus loggin;
 	public UartCmd uartCmd = UartCmd.getInstance();
-	
-	
-//	public UartCmd uartCmd;
-	
+
+	// public UartCmd uartCmd;
+
 	private UartReceive uartRec;
 
 	private BLEDeviceScanActivity BLEActivity;
@@ -82,13 +81,12 @@ public class SetUIFunction {
 
 	// For map use
 	private Button jsRunBtn;
-	
 
 	GameView gameView;
 	TextView Axis_show_X, Axis_show_Y;
 	EditText Axis_TestAxisInput;
 	Game game;
-	
+
 	// End for Map use
 	MapList map = new MapList();
 
@@ -99,8 +97,10 @@ public class SetUIFunction {
 
 	private ExecutorService newService = Executors.newFixedThreadPool(1);
 	private ExecutorService cleanService = Executors.newFixedThreadPool(1);
-	private ScheduledExecutorService wifiService = Executors.newScheduledThreadPool(1);
-	private ScheduledExecutorService bleService = Executors.newScheduledThreadPool(1);
+	private ScheduledExecutorService wifiService = Executors
+			.newScheduledThreadPool(1);
+	private ScheduledExecutorService bleService = Executors
+			.newScheduledThreadPool(1);
 
 	/* Parameter declare */
 	private volatile boolean isContinue = false;
@@ -109,9 +109,7 @@ public class SetUIFunction {
 			"backward", "bacLeft", "left", "forLeft" };
 	private int instructor; /* Robot Commands Direction Instructor */
 	int colorValue;
-	
-	
-	
+
 	/* JoyStick object declare */
 	RelativeLayout layout_joystick, layout_menu, layout_robot;
 	ScreenUIJoyStick js;
@@ -126,7 +124,7 @@ public class SetUIFunction {
 
 	/* Robot vertical seekbar object declare */
 	ScreenUIVerticalSeekBar seekbar = null;
-	
+
 	/* TextView vsProgress; */
 	RelativeLayout seekbarlayout;
 	LayoutParams seekbarparams, seekBarlayoutparams;
@@ -145,20 +143,20 @@ public class SetUIFunction {
 	public String BLEData = null;
 
 	/* Robot body - WiFI & BlueTooth */
-	private ImageView bleConnect, wifistatus1, wifistatus2, wifistatus3, wifistatus4;
+	private ImageView bleConnect, wifistatus1, wifistatus2, wifistatus3,
+			wifistatus4;
 	private Button lightingSwitch;
 	private boolean isConnectBlueTooth;
-
 
 	private Handler handler = new Handler();
 	private Handler BLEhandler = new Handler();
 
 	Runnable rBLEScan = new bluetoothMonitorThread();
-	
+
 	/* Detect Robot Location */
 	Runnable Axis_trigger_thread = new Axis_thread();
 
-	/* Navigation parameter */ 
+	/* Navigation parameter */
 	public int Axis_InputY_fromDW1000;
 	public int Axis_InputX_fromDW1000;
 	public int Axis_BRSserchArray_Index_Y = 0;
@@ -169,44 +167,43 @@ public class SetUIFunction {
 	/* Beacon reset declare */
 	private final static String ResetInterface = "/sys/class/gpio/gpio175/value";
 	private BeaconUtils beaconUtils;
-	private Button BeaconReset,right90AngleBtn,left90AngleBtn;
-	
-	private static boolean supportBLEDevice =false;
-	
+	private Button BeaconReset, right90AngleBtn, left90AngleBtn;
+
+	private static boolean supportBLEDevice = false;
+
 	/* Temporary declare */
 
-
 	private static SetUIFunction instance;
-	
+
 	public SetUIFunction(Activity activity) {
 		globalActivity = activity;
 		mContext = activity.getWindow().getDecorView().getContext();
 	}
-	
-	public static SetUIFunction getInstance() {
-		 if (instance == null){
-	            synchronized(SetUIFunction.class){
-	                if(instance == null) {
-	                     instance = new SetUIFunction(globalActivity);
-	                }
-	            }
-	        }
-	        return instance;
-	}
-	
 
-	@SuppressLint("NewApi") public void StartUIFunction() {
+	public static SetUIFunction getInstance() {
+		if (instance == null) {
+			synchronized (SetUIFunction.class) {
+				if (instance == null) {
+					instance = new SetUIFunction(globalActivity);
+				}
+			}
+		}
+		return instance;
+	}
+
+	@SuppressLint("NewApi")
+	public void StartUIFunction() {
 
 		Axis_show_X = (TextView) globalActivity.findViewById(R.id.Axis_show_X);
 		Axis_show_Y = (TextView) globalActivity.findViewById(R.id.Axis_show_Y);
-		//Axis_TestAxisInput = (EditText) globalActivity
-			//	.findViewById(R.id.Axis_TestInputAxis);
+		// Axis_TestAxisInput = (EditText) globalActivity
+		// .findViewById(R.id.Axis_TestInputAxis);
 
 		loggin = NetworkStatus.getInstance();
 
 		gameView = (GameView) globalActivity.findViewById(R.id.gameView1);
 		game = new Game();
-		
+
 		XMPPSet = new XMPPSetting();
 		XMPPSet.setGameView(gameView);
 
@@ -215,8 +212,7 @@ public class SetUIFunction {
 		getScreenSize(globalActivity);
 
 		/* Joy Stick */
-		layout_joystick = (RelativeLayout) globalActivity
-				.findViewById(R.id.layout_joystick);
+		layout_joystick = (RelativeLayout) globalActivity.findViewById(R.id.layout_joystick);
 		setJoyStickParameter(globalActivity);
 		layout_joystick.setOnTouchListener(joystickListener);
 
@@ -227,8 +223,7 @@ public class SetUIFunction {
 		/* Arc Menu */
 		/* Set layout size & position */
 		setARClayoutSize(width);
-		LayoutParams params = new RelativeLayout.LayoutParams(arcLayoutsize,
-				arcLayoutsize);
+		LayoutParams params = new RelativeLayout.LayoutParams(arcLayoutsize, arcLayoutsize);
 		Log.i("shinhua", "params width " + params.width + "params height"
 				+ params.height);
 		RelativeLayout layout = (RelativeLayout) globalActivity
@@ -239,63 +234,59 @@ public class SetUIFunction {
 		initArcMenu(arcMenu, ITEM_DRAWABLES, globalActivity);
 
 		/* Robot seekbar */
-		seekbar = (ScreenUIVerticalSeekBar) globalActivity
-				.findViewById(R.id.robotseekbar);
-		seekbarlayout = (RelativeLayout) globalActivity
-				.findViewById(R.id.layout_seekbar);
+		seekbar = (ScreenUIVerticalSeekBar) globalActivity.findViewById(R.id.robotseekbar);
+		seekbarlayout = (RelativeLayout) globalActivity.findViewById(R.id.layout_seekbar);
 		setSeekbarParameter();
 		
-		supportBLEDevice = globalActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
 
-		/* DragDrop menu */
-		dragMenu = (ViewGroup) globalActivity.findViewById(R.id.mainlayout);
-		img = (ImageView) globalActivity.findViewById(R.id.screenmenu);
+		supportBLEDevice = globalActivity.getPackageManager().hasSystemFeature(
+				PackageManager.FEATURE_BLUETOOTH_LE);
 
-		dragMenu.setOnDragListener(dragListener);
-		img.setOnTouchListener(imgListener);
-		selected_item = (View) globalActivity.findViewById(R.id.screenmenu);
-		
-		
+
+
 		/* Temporary - Wifi & bluetooth */
 		wifistatus1 = (ImageView) globalActivity.findViewById(R.id.wifi_status1);
 		wifistatus2 = (ImageView) globalActivity.findViewById(R.id.wifi_status2);
 		wifistatus3 = (ImageView) globalActivity.findViewById(R.id.wifi_status3);
 		wifistatus4 = (ImageView) globalActivity.findViewById(R.id.wifi_status4);
-		bleConnect = (ImageView) globalActivity.findViewById(R.id.bluetooth_status);
+		bleConnect = (ImageView) globalActivity
+				.findViewById(R.id.bluetooth_status);
 
-		// WiFi & BlueTooth Monitor 
-		wifiService.scheduleAtFixedRate(new wifiMonitorThread(), 5000, 5000, TimeUnit.MILLISECONDS);
-		//bleService.scheduleAtFixedRate(new bluetoothMonitorThread(), 5000, 10000, TimeUnit.MILLISECONDS);
-		
+		// WiFi & BlueTooth Monitor
+		wifiService.scheduleAtFixedRate(new wifiMonitorThread(), 5000, 5000,
+				TimeUnit.MILLISECONDS);
+
 		BLEhandler.postDelayed(rBLEScan, 5000);
-		
+
 		/* Set listener for Beacon reset */
-		//beaconUtils = new BeaconUtils();
-		//BeaconReset = (Button) globalActivity.findViewById(R.id.BeaconReset);
-		//BeaconReset.setOnClickListener(onClickListener);
+		// beaconUtils = new BeaconUtils();
+		// BeaconReset = (Button) globalActivity.findViewById(R.id.BeaconReset);
+		// BeaconReset.setOnClickListener(onClickListener);
 
 		/*--------------------------------------------------*/
 		/* Temporary */
-		//BLEWrite = (Button) globalActivity.findViewById(R.id.BLEWriteBtn);
-		//BLEDataText = (EditText) globalActivity.findViewById(R.id.BLEDataText);
+		// BLEWrite = (Button) globalActivity.findViewById(R.id.BLEWriteBtn);
+		// BLEDataText = (EditText)
+		// globalActivity.findViewById(R.id.BLEDataText);
 
-		//BLEWrite.setOnClickListener(onClickListener);
+		// BLEWrite.setOnClickListener(onClickListener);
 		Button getAxisBtn = (Button) globalActivity
 				.findViewById(R.id.getAxisBtn);
 		getAxisBtn.setOnClickListener(onClickListener);
 
-		
 		/* Temporary - Wifi */
-		//bleConnect = (ImageView) globalActivity.findViewById(R.id.imageView2);
-		
-		WifiManager wifi = (WifiManager) globalActivity.getSystemService(mContext.WIFI_SERVICE);
-	
+		// bleConnect = (ImageView)
+		// globalActivity.findViewById(R.id.imageView2);
+
+		WifiManager wifi = (WifiManager) globalActivity
+				.getSystemService(mContext.WIFI_SERVICE);
+
 		right90AngleBtn = (Button) globalActivity.findViewById(R.id.right90btn);
 		right90AngleBtn.setOnClickListener(onClickListener);
-		
+
 		left90AngleBtn = (Button) globalActivity.findViewById(R.id.left90btn);
 		left90AngleBtn.setOnClickListener(onClickListener);
-		
+
 		uartRec = new UartReceive();
 		uartRec.RunRecThread();
 	}
@@ -323,8 +314,8 @@ public class SetUIFunction {
 		js.setLayoutSize(300, 300);
 		js.setLayoutAlpha(150);
 		js.setoffset(70);
-		js.setMinimumDistance(70); /* JoyStick Sensitivity */
-		js.drawStickDefault(); /* Draw JoyStick function */
+		js.setMinimumDistance(70); 
+		js.drawStickDefault();
 	}
 
 	private void setSeekbarParameter() {
@@ -401,23 +392,23 @@ public class SetUIFunction {
 				}
 				break;
 			case R.id.bleSwitch:
-				//if(isConnectBlueTooth == true){
-					Log.i("shinhua", "Blue tooth onclick");
-					try {
-						SendToBoard("BLE " + "00");
-						//BLEDevCon.CharacteristicWRN(2,1, 0, "00");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						Log.i(TAG, "BLE send data=" + " 00 " + " error");
-						e.printStackTrace();
-					}
-				//}
+				// if(isConnectBlueTooth == true){
+				Log.i("shinhua", "Blue tooth onclick");
+				try {
+					SendToBoard("BLE " + "00");
+					// BLEDevCon.CharacteristicWRN(2,1, 0, "00");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Log.i(TAG, "BLE send data=" + " 00 " + " error");
+					e.printStackTrace();
+				}
+				// }
 				break;
-			
+
 			case R.id.getAxisBtn:
 				SendCmdToBoardAlgorithm.SetCompass();
 				handler.postDelayed(Axis_trigger_thread, Axis_GetPollTime);
-//				Log.d("jamesdebug", "touchBtn");
+				// Log.d("jamesdebug", "touchBtn");
 
 				// uartRec.RunRecThread();
 				break;
@@ -426,35 +417,27 @@ public class SetUIFunction {
 				synchronized (SendAlgo) {
 					try {
 						SendAlgo.RobotStart(gameView, game, XMPPSet);
-					
-						
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
-				//SendCmdToBoardAlgorithm.SetCompass();
+				// SendCmdToBoardAlgorithm.SetCompass();
 				jsRunBtn.setEnabled(false);
 
 				break;
 
-			case R.id.BLEWriteBtn:
-				
-				 if (BLEDevCon == null) // Add BLE control 
-					 BLEDevCon =BLEDeviceControlActivity.getInstance(); // Parent , Childselected item mode 0 = write
-				 BLEDevCon.CharacteristicWRN(2,1, 0, BLEDataText.getText().toString());
-				 
-				break;
 
-//			case R.id.BeaconReset:
-//				if (beaconUtils.getLibState() == true) {
-//					Log.i(TAG, "Beason reset by beaconUtils");
-//					beaconUtils.BeasonReset(ResetInterface);
-//				}else {
-//					Log.i(TAG, "Beason reset by uartCmd");
-//					uartCmd.BeasonReset(ResetInterface);
-//				}
-//
-//				break;
+			// case R.id.BeaconReset:
+			// if (beaconUtils.getLibState() == true) {
+			// Log.i(TAG, "Beason reset by beaconUtils");
+			// beaconUtils.BeasonReset(ResetInterface);
+			// }else {
+			// Log.i(TAG, "Beason reset by uartCmd");
+			// uartCmd.BeasonReset(ResetInterface);
+			// }
+			//
+			// break;
 
 			default:
 				break;
@@ -464,6 +447,7 @@ public class SetUIFunction {
 
 	};
 
+	
 	/* Arc Menu */
 	private void initArcMenu(final ArcMenu menu, int[] itemDrawables, Activity v) {
 		final int itemCount = itemDrawables.length;
@@ -523,42 +507,20 @@ public class SetUIFunction {
 		public void onProgressChanged(SeekBar seekBar, int progress,
 				boolean fromUser) {
 
-			if(progress < 1){
-				
+			if (progress < 1) {
+
 				try {
 					SendToBoard("stretch bottom");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}else if (progress == 1){
+			} else if (progress == 1) {
 				try {
 					SendToBoard("stretch top");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			
-			
-			
-//			switch (progress) {
-//			case 0:
-//				// vsProgress.setText(progress+"");
-//				try {
-//					SendToBoard("stretch bottom");
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//				break;
-//			case 1:
-//				// vsProgress.setText(progress+"");
-//				try {
-//					SendToBoard("stretch top");
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//				break;
-
-//			}
 		}
 
 		@Override
@@ -573,203 +535,75 @@ public class SetUIFunction {
 
 	};
 
-	/* DragDrap Menu Listener */
-	View.OnTouchListener imgListener = new OnTouchListener() {
-
-		@SuppressLint("NewApi")
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-
-			if (event.getAction() == MotionEvent.ACTION_DOWN) {
-				Log.i("shinhua1","ACTION_DOWN");
-				cleanThread(cleanService);
-				clickCount++;
-				if(clickCount == 2){
-					executeColorPicker(v);
-					clickCount = 0;
-				}				
-				return true;
-			}
-			if(event.getAction() == MotionEvent.ACTION_MOVE){
-				Log.i("shinhua1","ACTION_MOVE");
-				offset_x = (int) event.getX();
-				offset_y = (int) event.getY();
-				DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-				v.startDrag(null, shadowBuilder, v, 0);
-				v.setVisibility(View.INVISIBLE);
-				
-				return true;
-			}
-			else {
-				v.setVisibility(View.VISIBLE);
-				return false;
-			}
-
-		}
-		
-	
-		
-		
-		
-//		public void run() {
-//			if (BLEDevCon == null) BLEDevCon =BLEDeviceControlActivity.getInstance();
-//			
-//			connectStatus = BLEDevCon.ismConnected();
-//			Log.i("shinhua1","connectStatus " + connectStatus);
-//			message = bluetoothUIHandler.obtainMessage(1, connectStatus);
-//			bluetoothUIHandler.sendMessage(message);
-//		}
-		
-		
-		
-		
-
-	};
-	
-
-	@SuppressLint("NewApi") View.OnDragListener dragListener = new OnDragListener() {
-
-		@SuppressLint("NewApi") @Override
-		public boolean onDrag(View v, DragEvent event) {
-			// TODO Auto-generated method stub
-			int action = event.getAction();
-			switch (action) {
-			case DragEvent.ACTION_DROP:
-
-				int x = (int) event.getX() - offset_x;
-				int y = (int) event.getY() - offset_y;
-
-				int w = width - 100;
-				int h = height - 100;
-				if (x < 250)
-					x = 250;
-				if (y < 80)
-					y = 80;
-
-				if (x > w)
-					x = w;
-				if (y > h)
-					y = h;
-
-				/*
-				 * LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				 * new ViewGroup.MarginLayoutParams(
-				 * LinearLayout.LayoutParams.WRAP_CONTENT,
-				 * LinearLayout.LayoutParams.WRAP_CONTENT));
-				 */
-				/*
-				 * FrameLayout.LayoutParams fp = new FrameLayout.LayoutParams(
-				 * new ViewGroup.MarginLayoutParams(
-				 * FrameLayout.LayoutParams.WRAP_CONTENT,
-				 * FrameLayout.LayoutParams.WRAP_CONTENT));
-				 */
-				
-				RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-						new ViewGroup.MarginLayoutParams(
-								RelativeLayout.LayoutParams.WRAP_CONTENT,
-								RelativeLayout.LayoutParams.WRAP_CONTENT));
-
-				lp.setMargins(x, y, 0, 0);
-				// lp.setMargins(left, top, right, bottom)
-
-				selected_item.setLayoutParams(lp);
-				v = (View)event.getLocalState();
-				v.setVisibility(View.VISIBLE);
-				break;
-			case DragEvent.ACTION_DRAG_STARTED:
-				Log.d("xyz", "Drag event started");
-				break;
-			case DragEvent.ACTION_DRAG_ENTERED:
-				Log.d("xyz", "Drag event entered into ");
-				break;
-			case DragEvent.ACTION_DRAG_EXITED:
-				Log.d("xyz", "Drag event exited from ");
-
-			case DragEvent.ACTION_DRAG_ENDED:
-				RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(
-						new ViewGroup.MarginLayoutParams(
-								RelativeLayout.LayoutParams.WRAP_CONTENT,
-								RelativeLayout.LayoutParams.WRAP_CONTENT));
-
-				lp1.setMargins(250, 80, 0, 0);
-				
-				v = (View)event.getLocalState();
-				v.setVisibility(View.VISIBLE);
-				break;
-
-			}
-			return true;
-		}
-
-	};
 
 	/* Color Picker */
 	private void executeColorPicker(View v) {
 
 		// Context mContext = v.getContext();
-		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) mContext
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		// Create color picker view
 		View view = inflater.inflate(R.layout.color_picker_dialog, null);
-		
-		if (v == null) return;
-		
+
+		if (v == null)
+			return;
+
 		final ColorPicker picker = (ColorPicker) view.findViewById(R.id.picker);
 		lightingSwitch = (Button) view.findViewById(R.id.bleSwitch);
 		lightingSwitch.setOnClickListener(onClickListener);
-		
-		
-		
-		
+
 		// Temporary test function
-		Thread background = new Thread(new Runnable(){
+		Thread background = new Thread(new Runnable() {
 			public void run() {
-				if (BLEDevCon == null) BLEDevCon = BLEDeviceControlActivity.getInstance();
+				if (BLEDevCon == null)
+					BLEDevCon = BLEDeviceControlActivity.getInstance();
 				String status = BLEDevCon.ismConnected();
-				Log.i("shinhua1","Dialog connectStatus " + status);
-				
+				Log.i("shinhua1", "Dialog connectStatus " + status);
+
 				Message msg = dialogHandler.obtainMessage(1, status);
 				dialogHandler.sendMessage(msg);
 			}
-			
-			private Handler dialogHandler = new Handler(){
-				public void handlerMessage(Message msg){
-					
-					if(msg.obj != null){
-						Log.i("shinhua1","**");
+
+			private Handler dialogHandler = new Handler() {
+				public void handlerMessage(Message msg) {
+
+					if (msg.obj != null) {
+						Log.i("shinhua1", "**");
 					}
-					
-					
-					if( (String)msg.obj == "BLE connected"){
-						Log.i("shinhua1","**********BLE connected");
+
+					if ((String) msg.obj == "BLE connected") {
+						Log.i("shinhua1", "**********BLE connected");
 						lightingSwitch.setEnabled(true);
-					}else if ( (String)msg.obj == "BLE disconnected"){
-						Log.i("shinhua1","**********BLE connected");
+					} else if ((String) msg.obj == "BLE disconnected") {
+						Log.i("shinhua1", "**********BLE connected");
 						lightingSwitch.setEnabled(false);
 					}
 				}
 			};
-			
+
 		});
-		
-		//background.start();
-		
-/*		if (BLEDevCon == null) BLEDevCon = BLEDeviceControlActivity.getInstance();
-		String bleConnectedStatusString = BLEDevCon.ismConnected();
-		mConnectState.setText(bleConnectedStatusString);
-		bluetoothIconStatus(bleConnectedStatusString);*/
-		
-		
+
+		// background.start();
+
+		/*
+		 * if (BLEDevCon == null) BLEDevCon =
+		 * BLEDeviceControlActivity.getInstance(); String
+		 * bleConnectedStatusString = BLEDevCon.ismConnected();
+		 * mConnectState.setText(bleConnectedStatusString);
+		 * bluetoothIconStatus(bleConnectedStatusString);
+		 */
+
 		// shinhua add
-		final TextView colorLevel = (TextView) view.findViewById(R.id.color_level);
-		
-		
+		final TextView colorLevel = (TextView) view
+				.findViewById(R.id.color_level);
+
 		// picker.addSVBar(svBar);
 		// picker.addOpacityBar(opacityBar);
 		picker.setOnColorChangedListener(new ColorPicker.OnColorChangedListener() {
 			@Override
 			public void onColorChanged(int intColor) {
-				
+
 				colorValue = Math.abs((int) (intColor / 18));
 				String color = Integer.toString(colorValue).toUpperCase();
 				colorLevel.setText("Current LED LEVEL" + color);
@@ -777,7 +611,6 @@ public class SetUIFunction {
 			}
 		});
 
-		
 		// Config dialog
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 		builder.setView(view);
@@ -788,28 +621,31 @@ public class SetUIFunction {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// Update color
-				if( which == -1){
-					//if(isConnectBlueTooth == true){
-						try{
-							Log.i("shinhua", "isConnectBlueTooth == true" + switchled(colorValue));
-							SendToBoard("BLE " + switchled(colorValue));
-							//BLEDevCon.CharacteristicWRN(2,1, 0, switchled(colorValue));
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							Log.i(TAG, "BLE send data=" + switchled(colorValue) + " error");
-							e.printStackTrace();
-						}
-					//}else if(isConnectBlueTooth == false){
-					//	Log.i("shinhua", "isConnectBlueTooth == false");
-					//	Log.i("shinhua", "BLE send data=" + switchled(0) + " error");
-					//}
+				if (which == -1) {
+					// if(isConnectBlueTooth == true){
+					try {
+						Log.i("shinhua", "isConnectBlueTooth == true"
+								+ switchled(colorValue));
+						SendToBoard("BLE " + switchled(colorValue));
+						// BLEDevCon.CharacteristicWRN(2,1, 0,
+						// switchled(colorValue));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						Log.i(TAG, "BLE send data=" + switchled(colorValue)
+								+ " error");
+						e.printStackTrace();
+					}
+					// }else if(isConnectBlueTooth == false){
+					// Log.i("shinhua", "isConnectBlueTooth == false");
+					// Log.i("shinhua", "BLE send data=" + switchled(0) +
+					// " error");
+					// }
 				}
 			}
 		});
-		
+
 		builder.create().show();
 	}
-	
 
 	/* Send BlueTooth Command */
 	private String switchled(int itor) {
@@ -869,14 +705,14 @@ public class SetUIFunction {
 
 	/* XMPP Sendfunction */
 	public void SendToBoard(String inStr) throws IOException {
-		 Log.i(TAG," loggin status = " + loggin.GetLogStatus());
+		Log.i(TAG, " loggin status = " + loggin.GetLogStatus());
 
 		if (loggin.GetLogStatus())
 			XMPPSet.XMPPSendText("james1", inStr);
 		else {
 			String[] inM = inStr.split("\\s+");
 			byte[] cmdByte = uartCmd.GetAllByte(inM);
-//			 String decoded = new String(cmdByte, "ISO-8859-1");
+			// String decoded = new String(cmdByte, "ISO-8859-1");
 			UartCmd.SendMsgUart(1, cmdByte);
 		}
 	}
@@ -888,10 +724,10 @@ public class SetUIFunction {
 		int Axis_BRSretIndexY = 0;
 		int Axis_BRShigh = MapList.Axis_GraduateY.length - 1;
 		int Axis_BRSArraylow = 0;
-		
+
 		while (Axis_BRSArraylow <= Axis_BRShigh) {
 
-			Axis_BRStimes_Y ++;
+			Axis_BRStimes_Y++;
 			Axis_BRSArraymiddle = ((Axis_BRSArraylow + Axis_BRShigh) / 2);
 
 			if (Axis_InputVarY <= MapList.Axis_GraduateY[Axis_BRSArraymiddle]) {
@@ -903,19 +739,20 @@ public class SetUIFunction {
 			}
 		}
 
-//		Log.d("jamesdebug", "The times is:" + Axis_BRStimes_Y);
+		// Log.d("jamesdebug", "The times is:" + Axis_BRStimes_Y);
 
 		if (Axis_BRSArraylow > 0) {
 
-//			Log.d("jamesdebug", "TheY "
-//			        + MapList.Axis_GraduateY[Axis_BRSArraylow - 1]
-//					+ " is less " + Axis_InputVarY + " The array index is : "
-//					+ (Axis_BRSArraylow - 1));
+			// Log.d("jamesdebug", "TheY "
+			// + MapList.Axis_GraduateY[Axis_BRSArraylow - 1]
+			// + " is less " + Axis_InputVarY + " The array index is : "
+			// + (Axis_BRSArraylow - 1));
 
 			Axis_BRSretIndexY = Axis_BRSArraylow;
 
 		} else {
-//			Log.d("jamesdebug", "Can't find the element less " + Axis_InputVarY);
+			// Log.d("jamesdebug", "Can't find the element less " +
+			// Axis_InputVarY);
 		}
 		return Axis_BRSretIndexY;
 	}
@@ -927,7 +764,7 @@ public class SetUIFunction {
 		int Axis_BRSlow_X = 0;
 		int Axis_BRShigh_X = 0;
 		int Axis_BRSretIndexX = 0;
-		
+
 		Axis_BRShigh_X = MapList.AxisX_Array[0][Axis_BRSserchArray_Index_Y].length - 1;
 
 		while (Axis_BRSlow_X <= Axis_BRShigh_X) {
@@ -943,24 +780,26 @@ public class SetUIFunction {
 			}
 		}
 
-//		Log.d("jamesdebug", "The times is:" + Axis_BRStimes_X);
-		
+		// Log.d("jamesdebug", "The times is:" + Axis_BRStimes_X);
+
 		if (Axis_BRSlow_X > 0) {
 
-//			Log.d("jamesdebug","TheX "
-//							+ MapList.AxisX_Array[0][Axis_BRSserchArray_Index_Y][Axis_BRSlow_X - 1]
-//							+ " is less " + Axis_InputVarX
-//							+ " The array index is : " + (Axis_BRSlow_X - 1));
+			// Log.d("jamesdebug","TheX "
+			// +
+			// MapList.AxisX_Array[0][Axis_BRSserchArray_Index_Y][Axis_BRSlow_X
+			// - 1]
+			// + " is less " + Axis_InputVarX
+			// + " The array index is : " + (Axis_BRSlow_X - 1));
 
 			Axis_BRSretIndexX = Axis_BRSlow_X - 1;
 
-			if (Axis_BRSretIndexX > 14)
-			{
+			if (Axis_BRSretIndexX > 14) {
 				Axis_BRSretIndexX = 0;
 			}
-			
+
 		} else {
-//			Log.d("jamesdebug", "Can't find the element less " + Axis_InputVarX);
+			// Log.d("jamesdebug", "Can't find the element less " +
+			// Axis_InputVarX);
 		}
 		return Axis_BRSretIndexX;
 	}
@@ -996,18 +835,20 @@ public class SetUIFunction {
 	}
 
 	public class Axis_thread implements Runnable {
-		@SuppressLint("UseValueOf") public void run() {
+		@SuppressLint("UseValueOf")
+		public void run() {
 
 			handler.postDelayed(Axis_trigger_thread, Axis_GetPollTime);
 
-//			Log.d("jamesdebug", "===================Info======================");
-			
+			// Log.d("jamesdebug",
+			// "===================Info======================");
+
 			gameView.postInvalidate();
-		
+
 			try {
-	
+
 				Thread.sleep(20);
-	
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -1020,7 +861,7 @@ public class SetUIFunction {
 	}
 
 	/* Clean drag & drop menu click count */
-	private class cThread implements Runnable{
+	private class cThread implements Runnable {
 
 		@Override
 		public void run() {
@@ -1032,77 +873,80 @@ public class SetUIFunction {
 			}
 		}
 	}
-	
-	/* Create thread service.execute for clean button click count */ 
-	private void cleanThread(ExecutorService service){
+
+	/* Create thread service.execute for clean button click count */
+	private void cleanThread(ExecutorService service) {
 		service.execute(new cThread());
 	}
-	
+
 	/* Monitor wifi signal */
-	private class wifiMonitorThread implements Runnable{
+	private class wifiMonitorThread implements Runnable {
 		int rssi, level;
 		String tempString;
 		Message message;
-		
+
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			WifiManager wifi = (WifiManager) globalActivity.getSystemService(mContext.WIFI_SERVICE);
+			WifiManager wifi = (WifiManager) globalActivity
+					.getSystemService(mContext.WIFI_SERVICE);
 			rssi = wifi.getConnectionInfo().getRssi();
 			level = wifi.calculateSignalLevel(rssi, 4);
 			tempString = Integer.toString(rssi);
 			Log.i("shinhua1", "level " + tempString);
-		
-			message = wifiUIHandler.obtainMessage(1,tempString);
+
+			message = wifiUIHandler.obtainMessage(1, tempString);
 			wifiUIHandler.sendMessage(message);
 		}
-		
+
 	}
-		
+
 	/* Update UI Handler */
-	private Handler wifiUIHandler = new Handler(){
-		public void handleMessage(Message msg){
+	private Handler wifiUIHandler = new Handler() {
+		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			/* Change wifi UI display */ 
-			wifiIconStatus( Integer.valueOf((String)msg.obj) );
+			/* Change wifi UI display */
+			wifiIconStatus(Integer.valueOf((String) msg.obj));
 		}
 	};
-	
+
 	/* WiFi signal display icon */
-	private void wifiIconStatus(int level){
-		
-		if(level < 0 && level >= -50){
+	private void wifiIconStatus(int level) {
+
+		if (level < 0 && level >= -50) {
 			wifistatus1.setVisibility(View.VISIBLE);
 			wifistatus2.setVisibility(View.VISIBLE);
 			wifistatus3.setVisibility(View.VISIBLE);
 			wifistatus4.setVisibility(View.VISIBLE);
-		}else if(level < -50 && level >= -100){
+		} else if (level < -50 && level >= -100) {
 			wifistatus1.setVisibility(View.VISIBLE);
 			wifistatus2.setVisibility(View.VISIBLE);
 			wifistatus3.setVisibility(View.VISIBLE);
 			wifistatus4.setVisibility(View.INVISIBLE);
-		}else if(level < -100 && level >= -150){
+		} else if (level < -100 && level >= -150) {
 			wifistatus1.setVisibility(View.VISIBLE);
 			wifistatus2.setVisibility(View.VISIBLE);
 			wifistatus3.setVisibility(View.INVISIBLE);
 			wifistatus4.setVisibility(View.INVISIBLE);
-		}else if(level < -150 && level >= -200){
+		} else if (level < -150 && level >= -200) {
 			wifistatus1.setVisibility(View.VISIBLE);
 			wifistatus2.setVisibility(View.INVISIBLE);
 			wifistatus3.setVisibility(View.INVISIBLE);
 			wifistatus4.setVisibility(View.INVISIBLE);
 		}
 	}
-	
+
 	/* Monitor bluetooth signal */
-	private class bluetoothMonitorThread implements Runnable{
+	private class bluetoothMonitorThread implements Runnable {
 		String connectStatus;
 		Message message;
+
 		@Override
 		public void run() {
-			
-			if (BLEDevCon == null) BLEDevCon =BLEDeviceControlActivity.getInstance();
-			
+
+			if (BLEDevCon == null)
+				BLEDevCon = BLEDeviceControlActivity.getInstance();
+
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -1110,40 +954,40 @@ public class SetUIFunction {
 				e.printStackTrace();
 			}
 			connectStatus = BLEDevCon.ismConnected();
-			Log.i("shinhua1","connectStatus " + connectStatus); 
+			Log.i("shinhua1", "connectStatus " + connectStatus);
 			message = bluetoothUIHandler.obtainMessage(1, connectStatus);
 			bluetoothUIHandler.sendMessage(message);
-			
-			/*
-			if (supportBLEDevice && connectStatus != "BLE connected") {
-			    //Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
-			    Log.i(TAG,"support BT 4.0");
-			    BLEActivity = BLEDeviceScanActivity.getInstance() ;
-				BLEActivity.BLEDeviceScanStart(globalActivity);
-				
-				BLEDevCon = BLEDeviceControlActivity.getInstance();
-				 
-				//BLEhandler.postDelayed(rBLEScan, 10000);
 
-			}*/		
+			/*
+			 * if (supportBLEDevice && connectStatus != "BLE connected") {
+			 * //Toast.makeText(this, R.string.ble_not_supported,
+			 * Toast.LENGTH_SHORT).show(); Log.i(TAG,"support BT 4.0");
+			 * BLEActivity = BLEDeviceScanActivity.getInstance() ;
+			 * BLEActivity.BLEDeviceScanStart(globalActivity);
+			 * 
+			 * BLEDevCon = BLEDeviceControlActivity.getInstance();
+			 * 
+			 * //BLEhandler.postDelayed(rBLEScan, 10000);
+			 * 
+			 * }
+			 */
 		}
 	}
-	
+
 	/* BlueTooth UI Handler */
-	private Handler bluetoothUIHandler = new Handler(){
-		public void handleMessage(Message msg){
+	private Handler bluetoothUIHandler = new Handler() {
+		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			bluetoothIconStatus( (String)msg.obj );
+			bluetoothIconStatus((String) msg.obj);
 		}
 	};
-	
+
 	/* Bluetooth signal display icon */
-	private void bluetoothIconStatus(String itor){
-		if(itor == "BLE connected"){
+	private void bluetoothIconStatus(String itor) {
+		if (itor == "BLE connected") {
 			isConnectBlueTooth = true;
 			bleConnect.setVisibility(View.VISIBLE);
-		}
-		else if(itor == "BLE disconnected"){
+		} else if (itor == "BLE disconnected") {
 			isConnectBlueTooth = false;
 			bleConnect.setVisibility(View.INVISIBLE);
 		}

@@ -1112,7 +1112,7 @@ public class ScreenAV extends BaseScreen{
 		
 		
 		
-		mConnectionState = (TextView) findViewById(R.id.BLEconnectStatus);
+		//mConnectionState = (TextView) findViewById(R.id.BLEconnectStatus);
 		
 		// Video Producer
 		startStopVideo(mAVSession.isSendingVideo());

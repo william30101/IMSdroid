@@ -100,7 +100,7 @@ public class ScreenDirection extends BaseScreen{
 		else{
 			Log.i(TAG,"not support BT 4.0");
 		}
-		mConnectionState = (TextView) findViewById(R.id.BLEconnectStatus);
+		//mConnectionState = (TextView) findViewById(R.id.BLEconnectStatus);
 
 		
 	}
@@ -112,7 +112,7 @@ public class ScreenDirection extends BaseScreen{
 		if ( BLEActivity != null)
 		{
 			BLEActivity.scanLeDeviceStart(true);
-			mConnectionState.setText(BLEDevCon.ismConnected());
+			//mConnectionState.setText(BLEDevCon.ismConnected());
 			
 		}
 	}
