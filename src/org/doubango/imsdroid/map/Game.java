@@ -317,7 +317,7 @@ public class Game {//�t��k���O
 								if(i==0&&j==0){continue;}
 								if(currRow+i>=0&&currRow+i<MapList.map[mapId].length
 										&&currCol+j>=0&&currCol+j<MapList.map[mapId][0].length&&
-								map[currRow+i][currCol+j]!=1){
+								map[currRow+i][currCol+j]!=1 && map[currRow+i][currCol+j]!=2){
 									int[][] tempEdge={
 										{tempTarget[0],tempTarget[1]},
 										{currCol+j,currRow+i}

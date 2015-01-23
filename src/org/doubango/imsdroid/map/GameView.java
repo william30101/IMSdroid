@@ -7,7 +7,9 @@ import java.util.concurrent.Executors;
 
 import org.doubango.imsdroid.R;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -94,6 +96,9 @@ public class GameView extends View {
 	int width, height, screenWidth, screenHeight, mapWidth, mapHeight;
 	int xcoordinate = 5, ycoordinate = 5;
 	private boolean touchDown = false, zoomout = false, isZoom = false;
+
+	private CharSequence[] scenario_options = new CharSequence[]
+			{"Source", "Target", "Obstacle", "Ground"};
 
 	private Handler myHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -319,7 +324,7 @@ public class GameView extends View {
 			
 			drawZoomMap(event);
 			
-		} else if (event.getAction() == MotionEvent.ACTION_UP) {
+		}/* else if (event.getAction() == MotionEvent.ACTION_UP) {
 			if (zoomout) {
 				
 				isZoom = !isZoom;
@@ -333,7 +338,7 @@ public class GameView extends View {
 				//drawZoomMap(event);
 
 			}
-		}
+		}*/
 		return true;
 
 	}
@@ -361,14 +366,16 @@ public class GameView extends View {
 				// Setting net Target postion
 			//	if (touchDown && pos[0] != -1 && pos[1] != -1) {
 				if ( pos[0] != -1 && pos[1] != -1) {
-					MapList.target[0][0] = pos[0];
+					ShowChooseDialog();
+
+					/*MapList.target[0][0] = pos[0];
 					MapList.target[0][1] = pos[1];
 					Log.i("jamesdebug","touch target draw after");
-					zoomout = true;
+					zoomout = true;*/
 				}
 
 				// Update Target bitmap position
-				postInvalidate();
+				//postInvalidate();
 
 				// Log.i(TAG,"Thread ID = " + android.os.Process.myTid());
 
@@ -382,6 +389,55 @@ public class GameView extends View {
 				}
 			}
 		}
+	}
+
+	private void ShowChooseDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+		builder.setTitle("Choose the position scenario");
+	    builder.setItems(scenario_options,
+	            new DialogInterface.OnClickListener() {
+	                public void onClick(DialogInterface dialog, int which) {
+	                    // The 'which' argument contains the index position
+	                    // of the selected item
+	                    switch (which) {
+	                        case 0:
+								MapList.source[0] = gridX;
+								MapList.source[1] = gridY;
+	                            break;
+	                        case 1:
+								MapList.target[0][0] = gridX;
+								MapList.target[0][1] = gridY;										
+	                            break;
+	                        case 2:
+	                        	map[gridY][gridX] = 2;
+	                            break;
+	                        case 3:
+	                        	map[gridY][gridX] = 0;
+	                            break;
+	                    }
+
+	                    // re-run algorithm if already run it before
+	                    if (game.runButton.isEnabled()) {
+	                    	game.runAlgorithm();
+	                    	game.runButton.setEnabled(false);
+	                    	game.goButton.setEnabled(false);
+	                    }
+
+						// Let map screen change back into small size 
+						isZoom = !isZoom;
+						zoomout = false;
+
+						span = 15;
+						xcoordinate = ycoordinate = 5;
+						fixWidthMapData = fixHeightMapData = 5;
+
+						requestLayout();
+						postInvalidate();
+	                }
+	            });
+	    AlertDialog alertDialog = builder.create();
+	    alertDialog.show();
+	    alertDialog.getWindow().setLayout(400, 400);
 	}
 
 	public int[] getPos(MotionEvent e) {// ±N®y¼Ð´«ºâ¦¨°}¦Cªººû¼Æ
@@ -426,7 +482,7 @@ public class GameView extends View {
 			// Avoid map object be used on onMyDraw function
 			synchronized (map) {
 				try {
-					if (map[yPos][xPos] == 0) {
+					if (map[yPos][xPos] == 0 || map[yPos][xPos] == 2) {
 						// Log.i(TAG, "draw on map[yPos][xPos]= "
 						// + map[yPos][xPos] + "( xPos , yPos ) = ( "
 						// + xPos + " , " + yPos + " )");
