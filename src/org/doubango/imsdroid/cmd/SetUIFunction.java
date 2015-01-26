@@ -220,10 +220,7 @@ public class SetUIFunction {
 		/* Set layout size & position */
 		setARClayoutSize(width);
 		LayoutParams params = new RelativeLayout.LayoutParams(arcLayoutsize, arcLayoutsize);
-		Log.i("shinhua", "params width " + params.width + "params height"
-				+ params.height);
-		RelativeLayout layout = (RelativeLayout) globalActivity
-				.findViewById(R.id.layout_robot);
+		RelativeLayout layout = (RelativeLayout) globalActivity.findViewById(R.id.layout_robot);
 
 		arcMenu = (ArcMenu) globalActivity.findViewById(R.id.arc_menu);
 		arcMenu.setLayoutParams(params);
@@ -236,7 +233,7 @@ public class SetUIFunction {
 		
 
 		supportBLEDevice = globalActivity.getPackageManager().hasSystemFeature(
-				PackageManager.FEATURE_BLUETOOTH_LE);
+				PackageManager.FEATURE_BLUETOOTH);
 
 
 
@@ -339,7 +336,6 @@ public class SetUIFunction {
 			case MotionEvent.ACTION_MOVE:
 				isContinue = true;
 				instructor = js.get8Direction();
-				Log.i("shinhua1", str[instructor]);
 				if (instructor != 0) {
 					useThreadPool(newService, str[instructor]);
 				}
@@ -370,33 +366,10 @@ public class SetUIFunction {
 			indicator = v.getId();
 			switch (indicator) {
 			case R.id.right90btn:
-				try {
-					SendToBoard("RotateAngle P 90");
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				sendCommand("RotateAngle P 90");
 				break;
 			case R.id.left90btn:
-				try {
-					SendToBoard("RotateAngle N 90");
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				break;
-			case R.id.bleSwitch:
-				// if(isConnectBlueTooth == true){
-//				Log.i("shinhua", "Blue tooth onclick");
-//				try {
-//					SendToBoard("BLE " + "00");
-//					// BLEDevCon.CharacteristicWRN(2,1, 0, "00");
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					Log.i(TAG, "BLE send data=" + " 00 " + " error");
-//					e.printStackTrace();
-//				}
-				// }
+				sendCommand("RotateAngle N 90");
 				break;
 
 			case R.id.getAxisBtn:
@@ -469,30 +442,22 @@ public class SetUIFunction {
 		switch (position) {
 		case 0:
 			Log.i(TAG, "angleBottom");
-			try {
-				SendToBoard("pitchAngle bottom");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			sendCommand("pitchAngle bottom");
 			break;
+			
 		case 1:
 			Log.i(TAG, "angleMiddle");
-			try {
-				SendToBoard("pitchAngle middle");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			sendCommand("pitchAngle middle");
 			break;
+		
 		case 2:
 			Log.i(TAG, "angleTop");
-			try {
-				SendToBoard("pitchAngle top");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			sendCommand("pitchAngle top");
 			break;
 		}
 	}
+	
+	
 
 	/* Robot Seekbar Listener */
 	SeekBar.OnSeekBarChangeListener seekbarListener = new OnSeekBarChangeListener() {
@@ -502,18 +467,9 @@ public class SetUIFunction {
 				boolean fromUser) {
 
 			if (progress < 1) {
-
-				try {
-					SendToBoard("stretch bottom");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				sendCommand("stretch bottom");
 			} else if (progress == 1) {
-				try {
-					SendToBoard("stretch top");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				sendCommand("stretch top");
 			}
 		}
 
@@ -530,173 +486,6 @@ public class SetUIFunction {
 	};
 
 
-	/* Color Picker */
-	private void executeColorPicker(View v) {
-
-		// Context mContext = v.getContext();
-		LayoutInflater inflater = (LayoutInflater) mContext
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		// Create color picker view
-		View view = inflater.inflate(R.layout.color_picker_dialog, null);
-
-		if (v == null)
-			return;
-
-		final ColorPicker picker = (ColorPicker) view.findViewById(R.id.picker);
-		lightingSwitch = (Button) view.findViewById(R.id.bleSwitch);
-		lightingSwitch.setOnClickListener(onClickListener);
-
-		// Temporary test function
-//		Thread background = new Thread(new Runnable() {
-//			public void run() {
-//				if (BLEDevCon == null)
-//					BLEDevCon = BLEDeviceControlActivity.getInstance();
-//				String status = BLEDevCon.ismConnected();
-//				Log.i("shinhua1", "Dialog connectStatus " + status);
-//
-//				Message msg = dialogHandler.obtainMessage(1, status);
-//				dialogHandler.sendMessage(msg);
-//			}
-//
-//			private Handler dialogHandler = new Handler() {
-//				public void handlerMessage(Message msg) {
-//
-//					if (msg.obj != null) {
-//						Log.i("shinhua1", "**");
-//					}
-//
-//					if ((String) msg.obj == "BLE connected") {
-//						Log.i("shinhua1", "**********BLE connected");
-//						lightingSwitch.setEnabled(true);
-//					} else if ((String) msg.obj == "BLE disconnected") {
-//						Log.i("shinhua1", "**********BLE connected");
-//						lightingSwitch.setEnabled(false);
-//					}
-//				}
-//			};
-//
-//		});
-
-		// background.start();
-
-		/*
-		 * if (BLEDevCon == null) BLEDevCon =
-		 * BLEDeviceControlActivity.getInstance(); String
-		 * bleConnectedStatusString = BLEDevCon.ismConnected();
-		 * mConnectState.setText(bleConnectedStatusString);
-		 * bluetoothIconStatus(bleConnectedStatusString);
-		 */
-
-		// shinhua add
-		final TextView colorLevel = (TextView) view
-				.findViewById(R.id.color_level);
-
-		// picker.addSVBar(svBar);
-		// picker.addOpacityBar(opacityBar);
-		picker.setOnColorChangedListener(new ColorPicker.OnColorChangedListener() {
-			@Override
-			public void onColorChanged(int intColor) {
-
-				colorValue = Math.abs((int) (intColor / 18));
-				String color = Integer.toString(colorValue).toUpperCase();
-				colorLevel.setText("Current LED LEVEL" + color);
-
-			}
-		});
-
-		// Config dialog
-		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-		builder.setView(view);
-		builder.setTitle("Choose Smart Lighting color");
-		builder.setCancelable(true);
-		builder.setNegativeButton("Cancel", null);
-		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// Update color
-				if (which == -1) {
-					// if(isConnectBlueTooth == true){
-					try {
-						Log.i("shinhua", "isConnectBlueTooth == true"
-								+ switchled(colorValue));
-						SendToBoard("BLE " + switchled(colorValue));
-						// BLEDevCon.CharacteristicWRN(2,1, 0,
-						// switchled(colorValue));
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						Log.i(TAG, "BLE send data=" + switchled(colorValue)
-								+ " error");
-						e.printStackTrace();
-					}
-					// }else if(isConnectBlueTooth == false){
-					// Log.i("shinhua", "isConnectBlueTooth == false");
-					// Log.i("shinhua", "BLE send data=" + switchled(0) +
-					// " error");
-					// }
-				}
-			}
-		});
-
-		builder.create().show();
-	}
-
-	/* Send BlueTooth Command */
-	private String switchled(int itor) {
-
-		switch (itor) {
-		case 0:
-			BLEData = "0e";
-			break;
-		case 1:
-			BLEData = "1d";
-			break;
-		case 2:
-			BLEData = "2c";
-			break;
-		case 3:
-			BLEData = "3b";
-			break;
-		case 4:
-			BLEData = "4a";
-			break;
-		case 5:
-			BLEData = "59";
-			break;
-		case 6:
-			BLEData = "68";
-			break;
-		case 7:
-			BLEData = "77";
-			break;
-		case 8:
-			BLEData = "86";
-			break;
-		case 9:
-			BLEData = "96";
-			break;
-		case 10:
-			BLEData = "a4";
-			break;
-		case 11:
-			BLEData = "b3";
-			break;
-		case 12:
-			BLEData = "c2";
-			break;
-		case 13:
-			BLEData = "d1";
-			break;
-		case 14:
-			BLEData = "e0";
-			break;
-		default:
-			BLEData = "d1";
-			break;
-		}
-		return BLEData;
-	}
-
 	/* XMPP Sendfunction */
 	public void SendToBoard(String inStr) throws IOException {
 		Log.i(TAG, " loggin status = " + loggin.GetLogStatus());
@@ -710,6 +499,18 @@ public class SetUIFunction {
 			UartCmd.SendMsgUart(1, cmdByte);
 		}
 	}
+	
+	private void sendCommand(String message){
+		
+		try {
+			SendToBoard(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
 
 	private int Axis_BRSlessY(int Axis_InputVarY) throws IOException {
 
@@ -854,25 +655,6 @@ public class SetUIFunction {
 		service.execute(new MyThread(Msg));
 	}
 
-	/* Clean drag & drop menu click count */
-	private class cThread implements Runnable {
-
-		@Override
-		public void run() {
-			try {
-				Thread.sleep(450);
-				clickCount = 0;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	/* Create thread service.execute for clean button click count */
-	private void cleanThread(ExecutorService service) {
-		service.execute(new cThread());
-	}
-
 	/* Monitor wifi signal */
 	private class wifiMonitorThread implements Runnable {
 		int rssi, level;
@@ -887,7 +669,6 @@ public class SetUIFunction {
 			rssi = wifi.getConnectionInfo().getRssi();
 			level = wifi.calculateSignalLevel(rssi, 4);
 			tempString = Integer.toString(rssi);
-			Log.i("shinhua1", "level " + tempString);
 
 			message = wifiUIHandler.obtainMessage(1, tempString);
 			wifiUIHandler.sendMessage(message);
@@ -930,60 +711,5 @@ public class SetUIFunction {
 		}
 	}
 
-	/* Monitor bluetooth signal */
-//	private class bluetoothMonitorThread implements Runnable {
-//		String connectStatus;
-//		Message message;
-//
-//		@Override
-//		public void run() {
-//
-//			if (BLEDevCon == null)
-//				BLEDevCon = BLEDeviceControlActivity.getInstance();
-//
-//			try {
-//				Thread.sleep(1000);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			connectStatus = BLEDevCon.ismConnected();
-//			Log.i("shinhua1", "connectStatus " + connectStatus);
-//			message = bluetoothUIHandler.obtainMessage(1, connectStatus);
-//			bluetoothUIHandler.sendMessage(message);
-//
-//			/*
-//			 * if (supportBLEDevice && connectStatus != "BLE connected") {
-//			 * //Toast.makeText(this, R.string.ble_not_supported,
-//			 * Toast.LENGTH_SHORT).show(); Log.i(TAG,"support BT 4.0");
-//			 * BLEActivity = BLEDeviceScanActivity.getInstance() ;
-//			 * BLEActivity.BLEDeviceScanStart(globalActivity);
-//			 * 
-//			 * BLEDevCon = BLEDeviceControlActivity.getInstance();
-//			 * 
-//			 * //BLEhandler.postDelayed(rBLEScan, 10000);
-//			 * 
-//			 * }
-//			 */
-//		}
-//	}
-//
-//	/* BlueTooth UI Handler */
-//	private Handler bluetoothUIHandler = new Handler() {
-//		public void handleMessage(Message msg) {
-//			super.handleMessage(msg);
-//			bluetoothIconStatus((String) msg.obj);
-//		}
-//	};
-//
-//	/* Bluetooth signal display icon */
-//	private void bluetoothIconStatus(String itor) {
-//		if (itor == "BLE connected") {
-//			isConnectBlueTooth = true;
-//			bleConnect.setVisibility(View.VISIBLE);
-//		} else if (itor == "BLE disconnected") {
-//			isConnectBlueTooth = false;
-//			bleConnect.setVisibility(View.INVISIBLE);
-//		}
-//	}
+
 }
