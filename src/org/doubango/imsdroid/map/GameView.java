@@ -97,8 +97,9 @@ public class GameView extends View {
 	int xcoordinate = 5, ycoordinate = 5;
 	private boolean touchDown = false, zoomout = false, isZoom = false;
 
-	private CharSequence[] scenario_options = new CharSequence[]
-			{"Source", "Target", "Obstacle", "Ground"};
+	private CharSequence[] scenarioOptions = new CharSequence[]
+	        {"Source", "Target", "Obstacle", "Ground"};
+	public boolean isInitMap = false;
 
 	private Handler myHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -304,8 +305,9 @@ public class GameView extends View {
 			Log.i("shinhua", "x: " + event.getX() + " y: " + event.getY());
 		
 			if(event.getX() >= fixWidthMapData && event.getY() <= fixWidthMapData){
-				
-				span = 30;
+			    changeMapZoomIn(true);
+
+				/*span = 30;
 				//span = 15;
 				getMapSize();
 	
@@ -317,9 +319,9 @@ public class GameView extends View {
 				fixHeightMapData = ycoordinate;
 	
 				isZoom = true;
-				touchDown = true;
+				touchDown = true;*/
 	
-				requestLayout();
+				//requestLayout();
 			}
 			
 			drawZoomMap(event);
@@ -366,7 +368,22 @@ public class GameView extends View {
 				// Setting net Target postion
 			//	if (touchDown && pos[0] != -1 && pos[1] != -1) {
 				if ( pos[0] != -1 && pos[1] != -1) {
-					ShowChooseDialog();
+				    if (isInitMap) {
+				        switch(map[gridY][gridX]) {
+				            case 0:
+				                map[gridY][gridX] = 1;
+				                break;
+				            case 1:
+				                map[gridY][gridX] = 2;
+				                break;
+				            case 2:
+				                map[gridY][gridX] = 0;
+				        }
+
+				        postInvalidate();
+				    } else {
+				        ShowChooseDialog();
+				    }
 
 					/*MapList.target[0][0] = pos[0];
 					MapList.target[0][1] = pos[1];
@@ -392,53 +409,85 @@ public class GameView extends View {
 	}
 
 	private void ShowChooseDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-		builder.setTitle("Choose the position scenario");
-	    builder.setItems(scenario_options,
+	    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+	    builder.setTitle("Choose the position scenario");
+	    builder.setItems(scenarioOptions,
 	            new DialogInterface.OnClickListener() {
 	                public void onClick(DialogInterface dialog, int which) {
 	                    // The 'which' argument contains the index position
 	                    // of the selected item
 	                    switch (which) {
 	                        case 0:
-								MapList.source[0] = gridX;
-								MapList.source[1] = gridY;
+	                            MapList.source[0] = gridX;
+	                            MapList.source[1] = gridY;
 	                            break;
 	                        case 1:
-								MapList.target[0][0] = gridX;
-								MapList.target[0][1] = gridY;										
+	                            MapList.target[0][0] = gridX;
+	                            MapList.target[0][1] = gridY;
 	                            break;
 	                        case 2:
-	                        	map[gridY][gridX] = 2;
+	                            map[gridY][gridX] = 2;
 	                            break;
 	                        case 3:
-	                        	map[gridY][gridX] = 0;
+	                            map[gridY][gridX] = 0;
 	                            break;
 	                    }
 
 	                    // re-run algorithm if already run it before
 	                    if (game.runButton.isEnabled()) {
-	                    	game.runAlgorithm();
-	                    	game.runButton.setEnabled(false);
-	                    	game.goButton.setEnabled(false);
+	                        game.runAlgorithm();
+	                        game.runButton.setEnabled(false);
+	                        game.goButton.setEnabled(false);
 	                    }
 
-						// Let map screen change back into small size 
-						isZoom = !isZoom;
-						zoomout = false;
+	                    changeMapZoomIn(false);
+	                    postInvalidate();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        alertDialog.getWindow().setLayout(400, 400);
+    }
 
-						span = 15;
-						xcoordinate = ycoordinate = 5;
-						fixWidthMapData = fixHeightMapData = 5;
-
-						requestLayout();
-						postInvalidate();
-	                }
-	            });
-	    AlertDialog alertDialog = builder.create();
-	    alertDialog.show();
-	    alertDialog.getWindow().setLayout(400, 400);
+	public void execInitMap(boolean initMap) {
+	    if (initMap) {
+	        game.clearState();         //clear algorithm
+	        changeMapZoomIn(true);
+            isInitMap = true;
+            game.goButton.setEnabled(false);
+            game.runButton.setEnabled(false);
+	    } else {
+            changeMapZoomIn(false);
+            isInitMap = false;
+            game.goButton.setEnabled(true);
+	    }
 	}
+
+    public void changeMapZoomIn(boolean zoomIn) {
+        if (zoomIn) {
+            span = 30;
+            getMapSize();
+
+            xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2)); 
+            ycoordinate = (int) ((screenHeight / 2) - (mapHeight / 2));
+
+            //fixWidthMapData = xcoordinate;    // ZoomIn Screen in the right
+            fixWidthMapData = 0;            // ZoomIn Screen in the middle
+            fixHeightMapData = ycoordinate;
+
+            isZoom = true;
+            touchDown = true;
+        }else {
+            // Let map screen change back into small size
+            isZoom = !isZoom;
+            zoomout = false;
+
+            span = 15;
+            xcoordinate = ycoordinate = 5;
+            fixWidthMapData = fixHeightMapData = 5;
+        }
+        requestLayout();
+    }
 
 	public int[] getPos(MotionEvent e) {// ±N®y¼Ð´«ºâ¦¨°}¦Cªººû¼Æ
 		int[] pos = new int[2];
@@ -482,7 +531,7 @@ public class GameView extends View {
 			// Avoid map object be used on onMyDraw function
 			synchronized (map) {
 				try {
-					if (map[yPos][xPos] == 0 || map[yPos][xPos] == 2) {
+					if (map[yPos][xPos] == 0 || map[yPos][xPos] == 2 || isInitMap) {
 						// Log.i(TAG, "draw on map[yPos][xPos]= "
 						// + map[yPos][xPos] + "( xPos , yPos ) = ( "
 						// + xPos + " , " + yPos + " )");
