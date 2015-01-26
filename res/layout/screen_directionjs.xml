@@ -193,4 +193,12 @@
         android:layout_marginBottom="42dp"
         android:text="Axis_show_Y" />
 
+	<Button
+        android:id="@+id/init_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/runjs"
+        android:layout_below="@+id/left90btn"
+        android:text="InitialMap" />
+
 </RelativeLayout>

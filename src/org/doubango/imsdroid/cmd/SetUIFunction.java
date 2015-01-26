@@ -164,6 +164,7 @@ public class SetUIFunction {
 	private final static String ResetInterface = "/sys/class/gpio/gpio175/value";
 	private BeaconUtils beaconUtils;
 	private Button BeaconReset, right90AngleBtn, left90AngleBtn;
+	private Button InitMap;
 
 	private static boolean supportBLEDevice = false;
 
@@ -277,6 +278,9 @@ public class SetUIFunction {
 
 		//left90AngleBtn = (Button) globalActivity.findViewById(R.id.left90btn);
 		//left90AngleBtn.setOnClickListener(onClickListener);
+
+		InitMap = (Button) globalActivity.findViewById(R.id.init_map);
+		InitMap.setOnClickListener(onClickListener);
 
 		//uartRec = new UartReceive();
 		//uartRec.RunRecThread();
@@ -394,6 +398,18 @@ public class SetUIFunction {
 
 				break;
 
+			case R.id.init_map:
+			    if (!gameView.isInitMap) {
+			        gameView.execInitMap(true);
+			        InitMap.setText("Done");
+			    }
+			    else {
+			        gameView.execInitMap(false);
+			        InitMap.setText("InitialMap");
+			    }
+			    //Log.i("Terry", "gameView.isInitMap= "+gameView.isInitMap);
+
+			    break;
 
 			// case R.id.BeaconReset:
 			// if (beaconUtils.getLibState() == true) {
