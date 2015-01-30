@@ -372,6 +372,8 @@ public class ScreenAV extends BaseScreen{
 		if (mListener != null && mListener.canDetectOrientation()) {
 			mListener.disable();
 		}
+		
+		 mAVSession.hangUpCall();
 	}
 
 	@Override
@@ -392,6 +394,9 @@ public class ScreenAV extends BaseScreen{
 		if (mListener != null && mListener.canDetectOrientation()) {
 			mListener.enable();
 		}
+		
+		//HangUp AV session when press Back Btn.
+		mAVSession.hangUpCall();
 	}
 
 	@Override
@@ -696,7 +701,7 @@ public class ScreenAV extends BaseScreen{
 		}
 	}
 	
-	private boolean hangUpCall(){
+	public boolean hangUpCall(){
 		if(mAVSession != null){
 			return mAVSession.hangUpCall();
 		}
@@ -1087,7 +1092,8 @@ public class ScreenAV extends BaseScreen{
 		
 	
 		setUI.StartUIFunction();
-
+		setUI.SaveAVSession(this);
+		
 		mapScreenView.MapScreenView(host);
 		
 		
