@@ -14,6 +14,7 @@ import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.BeaconUtils;
 import org.doubango.imsdroid.BLE.BLEDeviceControlActivity;
 import org.doubango.imsdroid.BLE.BLEDeviceScanActivity;
+import org.doubango.imsdroid.Screens.ScreenAV;
 import org.doubango.imsdroid.Screens.ScreenDraw;
 import org.doubango.imsdroid.Screens.ScreenUIJoyStick;
 import org.doubango.imsdroid.Screens.ScreenUIVerticalSeekBar;
@@ -81,8 +82,7 @@ public class SetUIFunction {
 	private BLEDeviceControlActivity BLEDevCon;
 
 	// For map use
-	private Button jsRunBtn;
-	
+	private Button jsRunBtn,btHang;
 
 	GameView gameView;
 	TextView Axis_show_X, Axis_show_Y;
@@ -169,10 +169,13 @@ public class SetUIFunction {
 	/* Beacon reset declare */
 	private final static String ResetInterface = "/sys/class/gpio/gpio175/value";
 	private BeaconUtils beaconUtils;
-	private Button BeaconReset,right90AngleBtn,left90AngleBtn;
+	private Button BeaconReset, right90AngleBtn, left90AngleBtn;
+	private Button InitMap;
+
+	ScreenAV _ScreenAV;
 	
-	private static boolean supportBLEDevice =false;
-	
+	private static boolean supportBLEDevice = false;
+
 	/* Temporary declare */
 
 
@@ -194,6 +197,10 @@ public class SetUIFunction {
 	        return instance;
 	}
 	
+	public void SaveAVSession(ScreenAV screenAV)
+	{
+		_ScreenAV = screenAV;
+	}
 
 	@SuppressLint("NewApi") public void StartUIFunction() {
 
@@ -224,6 +231,9 @@ public class SetUIFunction {
 		jsRunBtn = (Button) globalActivity.findViewById(R.id.runjs);
 		jsRunBtn.setOnClickListener(onClickListener);
 
+		btHang = (Button)globalActivity.findViewById(R.id.hangupbtn);
+		btHang.setOnClickListener(onClickListener);
+		
 		/* Arc Menu */
 		/* Set layout size & position */
 		setARClayoutSize(width);
@@ -384,6 +394,10 @@ public class SetUIFunction {
 			// TODO Auto-generated method stub
 			indicator = v.getId();
 			switch (indicator) {
+			case R.id.hangupbtn:
+				if (_ScreenAV != null)
+					_ScreenAV.hangUpCall();
+				break;
 			case R.id.right90btn:
 				try {
 					SendToBoard("RotateAngle P 90");
