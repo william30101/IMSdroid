@@ -201,4 +201,12 @@
         android:layout_below="@+id/left90btn"
         android:text="InitialMap" />
 
+	<Button
+	    android:id="@+id/hangupbtn"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/layout_joystick"
+	    android:layout_toRightOf="@+id/right90btn"
+	    android:text="hangup" />
+
 </RelativeLayout>
