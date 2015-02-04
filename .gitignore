@@ -23,5 +23,6 @@ gen/com/larswerkman/holocolorpicker/R.java
 gen/org/doubango/imsdroid/R.java
 gen/org/doubango/ngn/R.java
 libs/armeabi/libhello-uart.so
+default.properties
 !.gitignore
 !*/
