@@ -54,10 +54,6 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.capricorn.ArcMenu;
-import com.larswerkman.holocolorpicker.ColorPicker;
-import com.larswerkman.holocolorpicker.OpacityBar;
-import com.larswerkman.holocolorpicker.SVBar;
-import com.larswerkman.holocolorpicker.ValueBar;
 
 public class SetUIFunction {
 
@@ -94,14 +90,12 @@ public class SetUIFunction {
 
 	private ExecutorService newService = Executors.newFixedThreadPool(1);
 	private ExecutorService cleanService = Executors.newFixedThreadPool(1);
-	private ScheduledExecutorService wifiService = Executors
-			.newScheduledThreadPool(1);
-	private ScheduledExecutorService bleService = Executors
-			.newScheduledThreadPool(1);
+	private ScheduledExecutorService wifiService = Executors.newScheduledThreadPool(1);
+	private ScheduledExecutorService bleService = Executors.newScheduledThreadPool(1);
 
 	/* Parameter declare */
 	private volatile boolean isContinue = false;
-	private int joystickAction, menuAction, navigationAction;
+	private int joystickAction;
 	private String[] str = { "stop", "forward", "forRig", "right", "bacRig",
 			"backward", "bacLeft", "left", "forLeft" };
 	private int instructor; /* Robot Commands Direction Instructor */
@@ -134,17 +128,10 @@ public class SetUIFunction {
 	ImageView img;
 	int clickCount = 0;
 
-	/* BlueTooth temporary declare */
-	private Button BLEWrite;
-	public static EditText BLEDataText;
-	public String BLEData = null;
-
 	/* Robot body - WiFI & BlueTooth */
 	private ImageView bleConnect, wifistatus1, wifistatus2, wifistatus3,
 			wifistatus4;
-	private Button lightingSwitch;
 	private boolean isConnectBlueTooth;
-
 	private Handler handler = new Handler();
 	//private Handler BLEhandler = new Handler();
 
@@ -165,7 +152,7 @@ public class SetUIFunction {
 	private final static String ResetInterface = "/sys/class/gpio/gpio175/value";
 	private BeaconUtils beaconUtils;
 	private Button BeaconReset, right90AngleBtn, left90AngleBtn;
-	private Button InitMap;
+	private Button InitMap, DrawPath;
 
 	ScreenAV _ScreenAV;
 	
@@ -199,8 +186,8 @@ public class SetUIFunction {
 	@SuppressLint("NewApi")
 	public void StartUIFunction() {
 
-		Axis_show_X = (TextView) globalActivity.findViewById(R.id.Axis_show_X);
-		Axis_show_Y = (TextView) globalActivity.findViewById(R.id.Axis_show_Y);
+/*		Axis_show_X = (TextView) globalActivity.findViewById(R.id.Axis_show_X);
+		Axis_show_Y = (TextView) globalActivity.findViewById(R.id.Axis_show_Y);*/
 		// Axis_TestAxisInput = (EditText) globalActivity
 		// .findViewById(R.id.Axis_TestInputAxis);
 
@@ -267,12 +254,7 @@ public class SetUIFunction {
 		// BeaconReset.setOnClickListener(onClickListener);
 
 		/*--------------------------------------------------*/
-		/* Temporary */
-		// BLEWrite = (Button) globalActivity.findViewById(R.id.BLEWriteBtn);
-		// BLEDataText = (EditText)
-		// globalActivity.findViewById(R.id.BLEDataText);
-
-		// BLEWrite.setOnClickListener(onClickListener);
+		
 		Button getAxisBtn = (Button) globalActivity
 				.findViewById(R.id.getAxisBtn);
 		getAxisBtn.setOnClickListener(onClickListener);
@@ -293,6 +275,10 @@ public class SetUIFunction {
 		InitMap = (Button) globalActivity.findViewById(R.id.init_map);
 		InitMap.setOnClickListener(onClickListener);
 
+		DrawPath = (Button) globalActivity.findViewById(R.id.draw_path);
+		DrawPath.setOnClickListener(onClickListener);
+		
+		
 		//uartRec = new UartReceive();
 		//uartRec.RunRecThread();
 	}
@@ -417,14 +403,32 @@ public class SetUIFunction {
 			    if (!gameView.isInitMap) {
 			        gameView.execInitMap(true);
 			        InitMap.setText("Done");
+			        DrawPath.setEnabled(false);
 			    }
 			    else {
 			        gameView.execInitMap(false);
 			        InitMap.setText("InitialMap");
+			        DrawPath.setEnabled(true);
 			    }
 			    //Log.i("Terry", "gameView.isInitMap= "+gameView.isInitMap);
 
 			    break;
+		   
+			case R.id.draw_path:
+			    if (!gameView.isInitPath) {
+			        gameView.execDrawPath(true);
+			        DrawPath.setText("Done");
+			        InitMap.setEnabled(false);
+			    }
+			    else {
+			        gameView.execDrawPath(false);
+			        DrawPath.setText("DrawPath");
+			        InitMap.setEnabled(true);
+			    }
+				break;
+				
+			    
+			    
 
 			// case R.id.BeaconReset:
 			// if (beaconUtils.getLibState() == true) {

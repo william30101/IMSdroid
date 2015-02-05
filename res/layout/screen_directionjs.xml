@@ -120,9 +120,6 @@
         </RelativeLayout>
     </LinearLayout>
 
-
-    
-
     <!--
          <EditText
         android:id="@+id/Axis_TestInputAxis"
@@ -133,48 +130,55 @@
         android:ems="10" />
     -->
 
-    <TextView
-        android:id="@+id/Axis_show_Y"
+    <Button
+        android:id="@+id/getAxisBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Axis_show_X"
-        android:layout_alignBottom="@+id/Axis_show_X"
-        android:layout_marginLeft="34dp"
-        android:layout_toRightOf="@+id/Axis_show_X"
-        android:text="Axis_show_X" />
+        android:layout_above="@+id/runjs"
+        android:layout_marginLeft="37dp"
+        android:layout_toRightOf="@+id/linearLayout1"
+        android:text="GetAxis" />
 
     <Button
         android:id="@+id/runjs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/left90btn"
         android:layout_alignLeft="@+id/getAxisBtn"
-        android:layout_alignTop="@+id/navigation"
         android:text="run" />
 
     <Button
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/layout_joystick"
+        android:layout_above="@+id/right90btn"
         android:layout_toRightOf="@+id/runjs"
         android:text="Navigation" />
 
     <Button
-        android:id="@+id/getAxisBtn"
+        android:id="@+id/init_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/navigation"
-        android:layout_marginLeft="33dp"
-        android:layout_toRightOf="@+id/linearLayout1"
-        android:text="GetAxis" />
+        android:layout_alignLeft="@+id/left90btn"
+        android:layout_below="@+id/left90btn"
+        android:text="InitialMap" />
+    
 
     <Button
         android:id="@+id/left90btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/layout_joystick"
         android:layout_alignLeft="@+id/runjs"
-        android:layout_below="@+id/runjs"
         android:text="l90" />
+
+    <Button
+        android:id="@+id/hangupbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/init_map"
+        android:layout_below="@+id/init_map"
+        android:text="hangup" />
 
     <Button
         android:id="@+id/right90btn"
@@ -184,29 +188,12 @@
         android:layout_toRightOf="@+id/left90btn"
         android:text="r90" />
 
-    <TextView
-        android:id="@+id/Axis_show_X"
+    <Button
+        android:id="@+id/draw_path"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/getAxisBtn"
-        android:layout_alignRight="@+id/right90btn"
-        android:layout_marginBottom="42dp"
-        android:text="Axis_show_Y" />
-
-	<Button
-        android:id="@+id/init_map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/runjs"
-        android:layout_below="@+id/left90btn"
-        android:text="InitialMap" />
-
-	<Button
-	    android:id="@+id/hangupbtn"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignBottom="@+id/layout_joystick"
-	    android:layout_toRightOf="@+id/right90btn"
-	    android:text="hangup" />
+        android:layout_above="@+id/hangupbtn"
+        android:layout_toRightOf="@+id/init_map"
+        android:text="DrawPath" />
 
 </RelativeLayout>

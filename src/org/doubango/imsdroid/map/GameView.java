@@ -100,6 +100,7 @@ public class GameView extends View {
 	private CharSequence[] scenarioOptions = new CharSequence[]
 	        {"Source", "Target", "Obstacle", "Ground"};
 	public boolean isInitMap = false;
+	public boolean isInitPath = false;
 
 	private Handler myHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -120,8 +121,6 @@ public class GameView extends View {
 		st = new ShowThread();
 
 		getScreenSize();
-		Log.i("shinhua", "GameView Constructor");
-
 	}
 
 	protected void onDraw(Canvas canvas) {
@@ -306,41 +305,17 @@ public class GameView extends View {
 		
 			if(event.getX() >= fixWidthMapData && event.getY() <= fixWidthMapData){
 			    changeMapZoomIn(true);
-
-				/*span = 30;
-				//span = 15;
-				getMapSize();
-	
-				xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2)); 
-				ycoordinate = (int) ((screenHeight / 2) - (mapHeight / 2));
-				
-				//fixWidthMapData = xcoordinate; 	// ZoomIn Screen in the right
-				fixWidthMapData = 0; 			// ZoomIn Screen in the middle
-				fixHeightMapData = ycoordinate;
-	
-				isZoom = true;
-				touchDown = true;*/
-	
-				//requestLayout();
 			}
-			
 			drawZoomMap(event);
 			
-		}/* else if (event.getAction() == MotionEvent.ACTION_UP) {
-			if (zoomout) {
-				
-				isZoom = !isZoom;
-				zoomout = false;
-
-				span = 15;
-				xcoordinate = ycoordinate = 5;
-				fixWidthMapData = fixHeightMapData = 5;
-
-				requestLayout();
-				//drawZoomMap(event);
-
+		}
+		else if(event.getAction() == MotionEvent.ACTION_MOVE){
+			if(event.getX() >= fixWidthMapData && event.getY() <= fixWidthMapData){
+			    changeMapZoomIn(true);
 			}
-		}*/
+			drawPathMap(event);
+		}
+		
 		return true;
 
 	}
@@ -379,9 +354,16 @@ public class GameView extends View {
 				            case 2:
 				                map[gridY][gridX] = 0;
 				        }
-
+				        
+				    	// Update Target bitmap position
 				        postInvalidate();
-				    } else {
+				    }else if (isInitPath){ 
+				    	Log.i("shinhua", "drawMap");
+				    }
+				    
+				    
+				    
+				    else {
 				        ShowChooseDialog();
 				    }
 
@@ -391,23 +373,58 @@ public class GameView extends View {
 					zoomout = true;*/
 				}
 
-				// Update Target bitmap position
-				//postInvalidate();
 
 				// Log.i(TAG,"Thread ID = " + android.os.Process.myTid());
+				avoidThreadCompetition(20);
 
-				// Avoid thread competition , when user touch 2 points at
-				// the same time
-				try {
-					Thread.sleep(20);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 		}
 	}
+	
+	private void drawPathMap(MotionEvent event) {
+		int pointerCount = event.getPointerCount();
+		// Avoid thread competition , when user touch 2 points at the same time
+		// only one touch point can enter this scope.
+		if (pointerCount > 1)
+			pointerCount = 1;
+		{
+			for (int i = 0; i < pointerCount; i++) {
+				touchX = (int) event.getX();
+				touchY = (int) event.getY();
 
+				tempwidth = touchX - x;
+				tempheight = touchY - y;
+
+				int[] pos = getPosW(event);
+				// Draw Grid position on canvas
+				gridX = pos[0];
+				gridY = pos[1];
+		
+				if(pos[0] != -1 && pos[1] != -1) {
+					if (isInitPath){ 
+				    	Log.i("shinhua", "drawMap");
+				    } else {
+				        ShowChooseDialog();
+				    }
+				}
+				avoidThreadCompetition(20);
+			}
+		}
+	}
+	
+	
+	
+	// Avoid thread competition , when user touch 2 points at the same time
+	private void avoidThreadCompetition(long millis){ 
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 	private void ShowChooseDialog() {
 	    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 	    builder.setTitle("Choose the position scenario");
@@ -462,6 +479,22 @@ public class GameView extends View {
             game.goButton.setEnabled(true);
 	    }
 	}
+	
+	public void execDrawPath(boolean initPath){
+		if(initPath){
+			game.clearState();
+			changeMapZoomIn(true);
+			isInitPath = true;
+            game.goButton.setEnabled(false);
+            game.runButton.setEnabled(false);
+			
+		}else{
+			changeMapZoomIn(false);
+			isInitPath = false;
+            game.goButton.setEnabled(true);
+		}
+	}
+
 
     public void changeMapZoomIn(boolean zoomIn) {
         if (zoomIn) {
