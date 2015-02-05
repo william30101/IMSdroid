@@ -7,7 +7,7 @@
         android:name="android.test.InstrumentationTestRunner"
         android:targetPackage="org.doubango.imsdroid" />
     
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="11" />
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="11" />
 
      <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
 

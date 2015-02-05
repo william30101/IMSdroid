@@ -60,6 +60,7 @@ import com.larswerkman.holocolorpicker.SVBar;
 import com.larswerkman.holocolorpicker.ValueBar;
 
 public class SetUIFunction {
+    public static final boolean IS_SERVER_SIDE = false;
 
 	static Activity globalActivity;
 	Context mContext;

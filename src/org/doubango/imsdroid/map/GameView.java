@@ -1,11 +1,14 @@
    package org.doubango.imsdroid.map;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.doubango.imsdroid.R;
+import org.doubango.imsdroid.cmd.SetUIFunction;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -38,7 +41,7 @@ public class GameView extends View {
 	GameView GV;
 	public Spinner mySpinner;// Spinner���ޥ�
 	public TextView CDTextView;
-	int span = 16;
+	int span = 15;
 	int theta = 0;
 	public static boolean drawCircleFlag = false, turnToBigMap = false;
 
@@ -100,6 +103,7 @@ public class GameView extends View {
 	private CharSequence[] scenarioOptions = new CharSequence[]
 	        {"Source", "Target", "Obstacle", "Ground"};
 	public boolean isInitMap = false;
+	private int cusRow = 0, cusCol = 0;
 
 	private Handler myHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -190,11 +194,8 @@ public class GameView extends View {
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Style.STROKE);
 		// canvas.drawRect(5, 55, 325, 376, paint);
-		map = game.map;
-		// Log.i(TAG,"getting onMyDraw");
-		row = map.length;
-		col = map[0].length;
-		
+
+		getMapSize();
 		
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
@@ -298,49 +299,15 @@ public class GameView extends View {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		// TODO Auto-generated method stub
-		// Log.i("william","test");
-
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			Log.i("shinhua", "x: " + event.getX() + " y: " + event.getY());
+			//Log.i("shinhua", "x: " + event.getX() + " y: " + event.getY());
 		
 			if(event.getX() >= fixWidthMapData && event.getY() <= fixWidthMapData){
 			    changeMapZoomIn(true);
-
-				/*span = 30;
-				//span = 15;
-				getMapSize();
-	
-				xcoordinate = (int) ((screenWidth / 2) - (mapWidth / 2)); 
-				ycoordinate = (int) ((screenHeight / 2) - (mapHeight / 2));
-				
-				//fixWidthMapData = xcoordinate; 	// ZoomIn Screen in the right
-				fixWidthMapData = 0; 			// ZoomIn Screen in the middle
-				fixHeightMapData = ycoordinate;
-	
-				isZoom = true;
-				touchDown = true;*/
-	
-				//requestLayout();
 			}
-			
+
 			drawZoomMap(event);
-			
-		}/* else if (event.getAction() == MotionEvent.ACTION_UP) {
-			if (zoomout) {
-				
-				isZoom = !isZoom;
-				zoomout = false;
-
-				span = 15;
-				xcoordinate = ycoordinate = 5;
-				fixWidthMapData = fixHeightMapData = 5;
-
-				requestLayout();
-				//drawZoomMap(event);
-
-			}
-		}*/
+		}
 		return true;
 
 	}
@@ -364,9 +331,8 @@ public class GameView extends View {
 				// Draw Grid position on canvas
 				gridX = pos[0];
 				gridY = pos[1];
-				Log.i("jamesdebug","touch target draw before");
+				//Log.i("jamesdebug","touch target draw before");
 				// Setting net Target postion
-			//	if (touchDown && pos[0] != -1 && pos[1] != -1) {
 				if ( pos[0] != -1 && pos[1] != -1) {
 				    if (isInitMap) {
 				        switch(map[gridY][gridX]) {
@@ -384,11 +350,6 @@ public class GameView extends View {
 				    } else {
 				        ShowChooseDialog();
 				    }
-
-					/*MapList.target[0][0] = pos[0];
-					MapList.target[0][1] = pos[1];
-					Log.i("jamesdebug","touch target draw after");
-					zoomout = true;*/
 				}
 
 				// Update Target bitmap position
@@ -451,15 +412,18 @@ public class GameView extends View {
 
 	public void execInitMap(boolean initMap) {
 	    if (initMap) {
-	        game.clearState();         //clear algorithm
+	        cusRow = cusCol = 0;
+	        game.map = MapList.resetMap(0);    //mapId is 0
+	        game.clearState();                 //clear algorithm
 	        changeMapZoomIn(true);
-            isInitMap = true;
-            game.goButton.setEnabled(false);
-            game.runButton.setEnabled(false);
+	        isInitMap = true;
+	        game.goButton.setEnabled(false);
+	        game.runButton.setEnabled(false);
 	    } else {
-            changeMapZoomIn(false);
-            isInitMap = false;
-            game.goButton.setEnabled(true);
+	        updateMapSize();
+	        changeMapZoomIn(false);
+	        isInitMap = false;
+	        game.goButton.setEnabled(true);
 	    }
 	}
 
@@ -487,6 +451,97 @@ public class GameView extends View {
             fixWidthMapData = fixHeightMapData = 5;
         }
         requestLayout();
+    }
+
+    private void updateMapSize() {
+        boolean trackWallDone = false;
+
+        //done:for (int originX = 1; originX < col; originX++) {    // First row is as beginner
+        done:for (int originX = col - 1; originX >= 1; originX--) {    // First row is as beginner
+            if (map[1][originX] == 1) {
+                //Log.i("Terry", "map[1]["+originX+"]");
+
+                // Track vertical wall at column i which is black
+                for (int originY = 2; originY < row; originY++) {
+                    if (originY == row -1 && originX == col - 1) break;
+                    // Case for normal row
+                    else if (map[originY][originX] != 1) {
+                        //Log.i("Terry", "    map["+originY+"]["+originX+"] is white");
+                        trackWallDone = trackColumnWall(originX , originY-1);     //Track horizontal wall at row j-1
+
+                        if (trackWallDone) break done;
+                        else break;
+
+                    // Case for the last column
+                    } else if (map[originY][originX] == 1
+                            && originY == row -1 || originX == col - 1) {
+                        //Log.i("Terry", "    map["+originY+"]["+originX+"]");
+                        trackWallDone = trackColumnWall(originX , originY);     //Track horizontal wall at the last row j     
+
+                        if (trackWallDone) break done;
+                        else continue;
+                    }
+                }
+            }
+        }
+        //Log.i("Terry", "barrier= "+cusRow+", "+cusCol);
+
+        if (SetUIFunction.IS_SERVER_SIDE && cusRow != 0 && cusCol != 0) {
+            setAxisArray();
+        }
+
+        postInvalidate();
+    }
+
+    private boolean trackColumnWall(int endcolumn ,int rowTracker) {
+        int blackCount = 0;
+        int wallSize = endcolumn - 1;
+
+        for (int colume = 1; colume < endcolumn; colume++) {
+            if (map[rowTracker][colume] == 1) {
+                //Log.i("Terry", "        map["+rowTracker+"]["+colume+"]");
+                blackCount++;
+
+                // Determine if the wall is continuous
+                if (blackCount == wallSize) {
+                    //Log.i("Terry", "blackCount= "+blackCount);
+                    cusRow = rowTracker + 1;
+                    cusCol = endcolumn + 1;
+                    return true;
+                }
+            } else break;
+        }
+
+        return false;
+    }
+
+    private void setAxisArray() {
+        // Create by default max Axis array
+        int[] tmpY = new int [cusRow - 2];
+        int[] tmpX = new int [cusCol];
+
+        // Set AxisY
+        tmpY = Arrays.copyOfRange(MapList.Axis_GraduateY, 0, tmpY.length);
+        MapList.Axis_GraduateY = Arrays.copyOfRange(tmpY, 0, tmpY.length);
+        // For debug
+        /*for (int i = 0; i < MapList.Axis_GraduateY.length; i++) {
+            Log.i("Terry", "Axis_GraduateY["+i+"]= "+MapList.Axis_GraduateY[i]);
+        }*/
+
+        // Set AxisX
+        tmpX = Arrays.copyOfRange(MapList.AxisX_Array[0][1], 0, cusCol);
+        tmpX[cusCol - 1] = 1;
+
+        MapList.AxisX_Array[0] = new int [cusRow][cusCol];
+        for (int i = 0; i < MapList.AxisX_Array[0].length; i++) {
+            if (i == 0 || i == MapList.AxisX_Array[0].length -1) Arrays.fill(MapList.AxisX_Array[0][i], 1);
+            else MapList.AxisX_Array[0][i] = Arrays.copyOfRange(tmpX, 0, tmpX.length);
+
+            // For debug
+            /*for (int j = 0; j < MapList.AxisX_Array[0][i].length; j++) {
+                Log.i("Terry", "AxisX_Array[0]["+i+"]["+j+"]= "+MapList.AxisX_Array[0][i][j]);
+            }*/
+        }
     }
 
 	public int[] getPos(MotionEvent e) {// ±N®y¼Ð´«ºâ¦¨°}¦Cªººû¼Æ
@@ -617,8 +672,15 @@ public class GameView extends View {
 
 	public void getMapSize() {
 		map = game.map;
-		row = map.length;
-		col = map[0].length;
+
+		if(cusRow != 0 && cusCol != 0) {
+		    row = cusRow;
+		    col = cusCol;
+		}else {
+		    row = map.length;
+		    col = map[0].length;
+		}
+
 		mapWidth = (col * (span + 1));
 		mapHeight = (row * (span + 1));
 		//Log.i("shinhua", "MapSize: " + mapWidth + " & " + mapHeight);
@@ -626,9 +688,7 @@ public class GameView extends View {
 
 	public void setGridSize(){
 		/* The setGridSize */
-		map = game.map;
-		row = map.length;
-		col = map[0].length;
+	    getMapSize();
 		
 		/* Draw Map position on the upper left */
 		if(isZoom){
