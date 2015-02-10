@@ -1,7 +1,9 @@
 package org.doubango.imsdroid.map;										//�ŧi�M��y�y
 public class MapList {									//�����O���a�����O 
     public static final int MAP_SCALE = 30;
+    public static final int MINIMUM_GRIDS_OF_MAP = 4;     //Two black and two white grids
 
+    // If map changed, you need to update resetMap function's map, too.
 	public static int[] source={1,1};
 	public static int[][] target={								//�ؼ��I�y�а}�C
 		{9,8},{4,22},{0,11},{9,10},{21,22}
@@ -96,6 +98,10 @@ public class MapList {									//�����O���a�����O
 			};
 
 	public static int[][] resetMap(int mapId) {
+	    source[0] = 1;
+	    source[1] = 1;
+	    target[0][0] = 9;
+	    target[0][1] = 8;
 	    customized_map2 = new int[][][]
             {
                 {

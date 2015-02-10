@@ -55,8 +55,10 @@ public class Game {//�t��k���O
 	private Handler myHandler = new Handler(){//�Ψӧ�sUI�����
         public void handleMessage(Message msg){
         	if(msg.what == 1){//���ܫ��s���A
+        	    boolean result = (Boolean)msg.obj;
+        	    if (!result) gameView.showToastMessage("Can't navigate form source to target!");
         		goButton.setEnabled(true);
-        		runButton.setEnabled(true);
+        		runButton.setEnabled(result);
         	}
         	else if(msg.what == 2){//���ܨB�ƪ�TextView����
         		//BSTextView.setText("" +
@@ -281,22 +283,29 @@ public class Game {//�t��k���O
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						int count=0;
+						//int count=0;
 						boolean flag=true;
+						boolean isPathExist = false;
 						int[][] start={
 							{source[0],source[1]},
 							{source[0],source[1]}
 						};
 						queue.offer(start);
-						Log.i("jamesdebug", "source =" + start[0][0] +" " + start[0][1] + " " + start[1][0] + " " + start[1][1]);
-						while(flag){					
+						//Log.i("jamesdebug", "source =" + start[0][0] +" " + start[0][1] + " " + start[1][0] + " " + start[1][1]);
+						while(flag){
+						    if (queue.isEmpty()) {
+						        //Log.i("Terry", "Can't find the way to target");
+						        isPathExist = false;
+						        break;
+						    }
+
 							int[][] currentEdge=queue.poll();//�q������X��
 							int[] tempTarget=currentEdge[1];//��X���䪺�ت��I
 							//�P�_�ت��I�O�_�h�L�A�Y�h�L�h�����i�J�U���j��
 							if(visited[tempTarget[1]][tempTarget[0]]==1){
 								continue;
 							}
-							count++;
+							//count++;
 							visited[tempTarget[1]][tempTarget[0]]=1;//���ѥت��I���X�ݹL
 							getSearchProcess().add(currentEdge);//�N�{�ɥت��I�[�J�j���L�{��
 							//�O���{�ɥت��I�����`�I
@@ -306,7 +315,9 @@ public class Game {//�t��k���O
 							try{Thread.sleep(timeSpan);}catch(Exception e){e.printStackTrace();}
 			 				//�P�_���_���ت��I
 							if(tempTarget[0]==target[0]&&tempTarget[1]==target[1]){
-								break;
+							    //Log.i("Terry", "Find the way to target");
+							    isPathExist = true;
+							    break;
 							}
 							//�N�Ҧ��i�઺��J��C
 							int currCol=tempTarget[0];
@@ -326,13 +337,13 @@ public class Game {//�t��k���O
 								}
 							}
 						}
-						setPathFlag(true);
+						setPathFlag(isPathExist);
 						
 						gameView.postInvalidate();
-						Message msg1 = myHandler.obtainMessage(1);
+						Message msg1 = myHandler.obtainMessage(1, isPathExist);
 						myHandler.sendMessage(msg1);//�]�w���s���i�Ω�
-						Message msg2 = myHandler.obtainMessage(2, count);
-						myHandler.sendMessage(msg2);//����TextView��r
+						//Message msg2 = myHandler.obtainMessage(2, count);
+						//myHandler.sendMessage(msg2);//����TextView��r
 //					}
 //				} catch (Exception e) {
 //					e.printStackTrace();
