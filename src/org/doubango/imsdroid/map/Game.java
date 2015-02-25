@@ -44,14 +44,26 @@ public class Game {//�t��k���O
 //		{-1,1},{-1,-1},
 //		{1,-1},{1,1}
 	};
-	private static boolean pathFlag=false;//true ���F���|
+	private static boolean pathFlag=false;	// true, Update Map Path
 	int timeSpan=10;//�ɶ����j
 	
 	BFSThread BFST;
 	private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
-	
 	private Handler handler = new Handler();
+
+	// Temporary code
+	private static boolean manualdrawFlag = false;
+
+	public boolean isManualdrawFlag() {
+		return manualdrawFlag;
+	}
+
+	public void setManualdrawFlag(boolean manualdrawFlag) {
+		Game.manualdrawFlag = manualdrawFlag;
+	}
+
 	
+	/*--------------------------------------------------------------*/
 	private Handler myHandler = new Handler(){//�Ψӧ�sUI�����
         public void handleMessage(Message msg){
         	if(msg.what == 1){//���ܫ��s���A
@@ -594,4 +606,9 @@ public class Game {//�t��k���O
 	public void setSearchProcess(ArrayList<int[][]> searchProcess) {
 		this.searchProcess = searchProcess;
 	}
+	
+	public int[] getSource() {
+		return source;
+	}
+	
 }

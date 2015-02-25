@@ -56,6 +56,7 @@ import android.widget.TextView;
 import com.capricorn.ArcMenu;
 
 public class SetUIFunction {
+    public static final boolean IS_SERVER_SIDE = false;
 
 	static Activity globalActivity;
 	Context mContext;
