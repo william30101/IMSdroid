@@ -3,6 +3,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -30,6 +31,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GameView extends View {
 
@@ -114,6 +116,8 @@ public class GameView extends View {
 	int [] StartingPoint = { 0, 0 }; // Record starting Point of each , StartingPoint[0]: X axis , StartingPoint[1]: Y axis
 	int [] EndPoint = { 0, 0 };
 	
+
+	private Toast toast;
 
 	private Handler myHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -382,7 +386,8 @@ public class GameView extends View {
 				gridY = pos[1];
 				//Log.i("jamesdebug","touch target draw before");
 				// Setting net Target postion
-				if ( pos[0] != -1 && pos[1] != -1) {
+				if ( pos[0] != -1 && pos[1] != -1 && gridY != 0
+				        && gridX != 0 && gridY != row - 1 && gridX != col - 1) {
 				    if (isInitMap) {
 				        switch(map[gridY][gridX]) {
 				            case 0:
@@ -561,30 +566,39 @@ public class GameView extends View {
     private void updateMapSize() {
         boolean trackWallDone = false;
 
-        //done:for (int originX = 1; originX < col; originX++) {    // First row is as beginner
-        done:for (int originX = col - 1; originX >= 1; originX--) {    // First row is as beginner
-            if (map[1][originX] == 1) {
-                //Log.i("Terry", "map[1]["+originX+"]");
+        done:for (int originX = col - 1; originX >= 1; originX--) {
+            if (originX == col - 1) {     // First row is as beginner
+                // Track vertical wall at last column
+                for (int originY = 2; originY < row - 1; originY++) {       //Ignore row - 1
+                    //Log.i("Terry", "    map["+originY+"]["+originX+"]");
+                    trackWallDone = trackColumnWall(originX , originY);     //Track horizontal wall at the row originY
 
-                // Track vertical wall at column i which is black
+                    if (trackWallDone) break done;
+                    else continue;
+                }
+            } else if (originX < col - 1 && map[1][originX] == 1 && map[1][originX + 1] != 1) {
+                // Track vertical wall at column originX which is black
                 for (int originY = 2; originY < row; originY++) {
-                    if (originY == row -1 && originX == col - 1) break;
                     // Case for normal row
-                    else if (map[originY][originX] != 1) {
+                    if (map[originY][originX] != 1) {
                         //Log.i("Terry", "    map["+originY+"]["+originX+"] is white");
-                        trackWallDone = trackColumnWall(originX , originY-1);     //Track horizontal wall at row j-1
+                        trackWallDone = trackColumnWall(originX , originY-1);     //Track horizontal wall at row originY-1
 
                         if (trackWallDone) break done;
                         else break;
 
-                    // Case for the last column
-                    } else if (map[originY][originX] == 1
-                            && originY == row -1 || originX == col - 1) {
+                    // Case for the last row
+                    } else if (originY == row -1 && map[originY][originX] == 1) {
                         //Log.i("Terry", "    map["+originY+"]["+originX+"]");
-                        trackWallDone = trackColumnWall(originX , originY);     //Track horizontal wall at the last row j     
+                        trackWallDone = trackColumnWall(originX , originY);     //Track horizontal wall at the last row originY
 
                         if (trackWallDone) break done;
                         else continue;
+
+                    // Case to ignore
+                    } else if (map[originY][originX] == 1 && map[originY][originX + 1] == 1) {
+                        //Log.i("Terry", "    map["+originY+"]["+originX+"]");
+                        break;
                     }
                 }
             }
@@ -602,19 +616,25 @@ public class GameView extends View {
         int blackCount = 0;
         int wallSize = endcolumn - 1;
 
-        for (int colume = 1; colume < endcolumn; colume++) {
-            if (map[rowTracker][colume] == 1) {
-                //Log.i("Terry", "        map["+rowTracker+"]["+colume+"]");
-                blackCount++;
+        if (rowTracker == row - 1) {
+            verifyNewMap(rowTracker + 1, endcolumn + 1);
 
-                // Determine if the wall is continuous
-                if (blackCount == wallSize) {
-                    //Log.i("Terry", "blackCount= "+blackCount);
-                    cusRow = rowTracker + 1;
-                    cusCol = endcolumn + 1;
-                    return true;
-                }
-            } else break;
+            return true;
+        } else if (rowTracker < row - 1) {
+            for (int colume = 1; colume < endcolumn; colume++) {
+                if (map[rowTracker][colume] == 1 && map[rowTracker + 1][colume] != 1) {
+                    //Log.i("Terry", "        map["+rowTracker+"]["+colume+"]");
+                    blackCount++;
+
+                    // Determine if the wall is continuous
+                    if (blackCount == wallSize) {
+                        //Log.i("Terry", "blackCount= "+blackCount);
+                        verifyNewMap(rowTracker + 1, endcolumn + 1);
+
+                        return true;
+                    }
+                } else break;
+            }
         }
 
         return false;
@@ -647,6 +667,68 @@ public class GameView extends View {
                 Log.i("Terry", "AxisX_Array[0]["+i+"]["+j+"]= "+MapList.AxisX_Array[0][i][j]);
             }*/
         }
+    }
+
+    private void verifyNewMap(int newRow, int newCol) {
+        //Log.i("Terry", "verifyNewMap newRow= "+newRow+", newCol= "+newCol);
+        if (newRow >= MapList.MINIMUM_GRIDS_OF_MAP
+                || newCol >= MapList.MINIMUM_GRIDS_OF_MAP) {
+            cusRow = newRow;
+            cusCol = newCol;
+
+            // If map size is smaller than target position, update new target position automatically
+            if (MapList.target[0][0] >= cusCol - 1 || MapList.target[0][1] >= cusRow - 1) {
+                reviseTargetPos(cusRow - 1, cusCol - 1);
+            }
+        }else {
+            game.map = MapList.resetMap(0);    //mapId is 0
+            showToastMessage("The Map is too small!");
+        }
+    }
+
+    private void reviseTargetPos(int row, int col) {
+        LinkedList<int[]> queue=new LinkedList<int[]>();
+        int[][] visited=new int[col][row];
+        int[] start = {col-1, row-1};
+        int[][] sequence={{0,-1}, {-1,0}};
+        //Log.i("Terry", "start= "+start[0]+", "+start[1]);
+
+        queue.offer(start);
+        while(true) {
+            int[] currentPos = queue.poll();
+            if(visited[currentPos[0]][currentPos[1]] == 1){
+                continue;
+            }
+            visited[currentPos[0]][currentPos[1]]=1;
+
+            if(map[currentPos[1]][currentPos[0]] == 0){
+                MapList.target[0][0] = currentPos[0];
+                MapList.target[0][1] = currentPos[1];
+                break;
+            }
+
+            int currCol = currentPos[0];
+            int currRow = currentPos[1];
+            for(int[] rc:sequence){
+                int i=rc[1];
+                int j=rc[0];
+                if(currRow+i >= 1 && currCol+j >= 1){
+                    int[] tempPos = {currCol+j, currRow+i};
+                    queue.offer(tempPos);
+                }
+            }
+        }
+        //Log.i("Terry", "target= "+MapList.target[0][0]+", "+MapList.target[0][1]);
+    }
+
+    public void showToastMessage(CharSequence text) {
+        if (toast == null) {
+            toast = Toast.makeText(mContext, text, Toast.LENGTH_SHORT);
+        } else {
+            toast.setText(text);
+            toast.setDuration(Toast.LENGTH_SHORT);
+        }
+        toast.show();
     }
 
 	public int[] getPos(MotionEvent e) {// ±N®y¼Ð´«ºâ¦¨°}¦Cªººû¼Æ
