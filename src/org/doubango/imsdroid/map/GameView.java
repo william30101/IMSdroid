@@ -109,10 +109,7 @@ public class GameView extends View {
 	
 	/* Temporary code */
 	public boolean isInitPath = false;
-	
-	
 	ArrayList<int[][]> manualDrawPath = new ArrayList<int[][]>();
-	
 	int [] StartingPoint = { 0, 0 }; // Record starting Point of each , StartingPoint[0]: X axis , StartingPoint[1]: Y axis
 	int [] EndPoint = { 0, 0 };
 	
@@ -241,19 +238,18 @@ public class GameView extends View {
 			}
 		}
 
-//		ArrayList<int[][]> searchProcess = game.getSearchProcess();
-//		for (int k = 0; k < searchProcess.size(); k++) {
-//			int[][] edge = searchProcess.get(k);
-//			paint.setColor(Color.BLACK);
-//			paint.setStrokeWidth(1);
-//			canvas.drawLine(edge[0][0] * (span + 1) + span / 2
-//					+ fixWidthMapData, edge[0][1] * (span + 1) + span / 2
-//					+ fixHeightMapData, edge[1][0] * (span + 1) + span / 2
-//					+ fixWidthMapData, edge[1][1] * (span + 1) + span / 2
-//					+ fixHeightMapData, paint);
-//		}
+		ArrayList<int[][]> searchProcess = game.getSearchProcess();
+		for (int k = 0; k < searchProcess.size(); k++) {
+			int[][] edge = searchProcess.get(k);
+			paint.setColor(Color.BLACK);
+			paint.setStrokeWidth(1);
+			canvas.drawLine(edge[0][0] * (span + 1) + span / 2
+					+ fixWidthMapData, edge[0][1] * (span + 1) + span / 2
+					+ fixHeightMapData, edge[1][0] * (span + 1) + span / 2
+					+ fixWidthMapData, edge[1][1] * (span + 1) + span / 2
+					+ fixHeightMapData, paint);
+		}
 
-		// Refer to below code, shinhua
 		if (game.isPathFlag()) {
 			HashMap<String, int[][]> hm = game.hm;
 			int[] temp = game.target;
@@ -265,7 +261,6 @@ public class GameView extends View {
 				paint.setColor(Color.BLACK);
 				paint.setStyle(Style.STROKE);
 				paint.setStrokeWidth(2);
-				Log.i("shinhua", "Drawline count");
 				canvas.drawLine(tempA[0][0] * (span + 1) + span / 2 + fixWidthMapData,
 								tempA[0][1] * (span + 1) + span / 2 + fixHeightMapData,
 								tempA[1][0] * (span + 1) + span / 2 + fixWidthMapData, 
@@ -275,7 +270,6 @@ public class GameView extends View {
 				for(int i=0; i<tempA.length; i++){
 					for(int j=0; j<tempA[i].length; j++){
 						String msg = Integer.toString(tempA[i][j]);
-						Log.i("shinhua", msg);
 					}
 				}
 				
@@ -303,15 +297,11 @@ public class GameView extends View {
 		
 		// Manual drawing the path
 		if(game.isManualdrawFlag()){
-			int size = manualDrawPath.size();
 			paint.setColor(Color.RED);
 			paint.setStyle(Style.STROKE);
 			paint.setStrokeWidth(2);
-			
-			for(int i=0 ; i<manualDrawPath.size(); i++){
-				int [][] path = manualDrawPath.get(i);
-				drawMaunalPathOn(canvas, path);
-			}
+
+			drawMaunalPathOn(canvas, paint);
 		}
 		
 		// Canvas drawBitmap: Source
@@ -336,14 +326,19 @@ public class GameView extends View {
 
 	}
 
-	private void drawMaunalPathOn(Canvas canvas, int [][] path){
-		canvas.drawLine( path[0][0] * (span + 1) + span / 2 + fixWidthMapData,
-						 path[0][1] * (span + 1) + span / 2 + fixHeightMapData,
-						 path[1][0] * (span + 1) + span / 2 + fixWidthMapData, 
-						 path[1][1] * (span + 1) + span / 2 + fixHeightMapData,
-						 paint);
+	private void drawMaunalPathOn(Canvas canvas, Paint paint){
+		int size = manualDrawPath.size();
+		int [][] path;
+		
+		for(int i=0; i<size; i++){
+			path = manualDrawPath.get(i);
+			canvas.drawLine( path[0][0] * (span + 1) + span / 2 + fixWidthMapData,
+							 path[0][1] * (span + 1) + span / 2 + fixHeightMapData,
+							 path[1][0] * (span + 1) + span / 2 + fixWidthMapData, 
+							 path[1][1] * (span + 1) + span / 2 + fixHeightMapData,
+							 paint);
+		}
 	}
-	
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -403,19 +398,9 @@ public class GameView extends View {
 				    	// Update Target bitmap position
 				        postInvalidate();
 				    }else if (isInitPath){ 
-				    	Log.i("shinhua", "git:" + gridX + " & " + gridY);
-				   
-				    	manualDrawPath.remove(manualDrawPath.size()-1);
-				    	
-				    	int [][] lineSection = { { gridX , gridY }, { StartingPoint[0], StartingPoint[1] } };
-				    	manualDrawPath.add(lineSection);
-				    	setNextSection(gridX, gridY);
-				    	
-				    	int [][] endSection = { { EndPoint[0] , EndPoint[1] }, { StartingPoint[0], StartingPoint[1] } };
-				    	manualDrawPath.add(endSection);
-				    	
-				    	
+				    	recordManualDrawPath(gridX, gridY);
 				    	postInvalidate();
+				    	
 				    }else {
 				        ShowChooseDialog();
 				    }
@@ -428,7 +413,21 @@ public class GameView extends View {
 		}
 	}
 	
-	public void setNextSection(int x, int y) {
+	
+	private void recordManualDrawPath(int gridX, int gridY){
+		
+	 	int lastPositionIndex = manualDrawPath.size()-1;
+    	manualDrawPath.remove(lastPositionIndex);
+    	
+    	int [][] lineSection = { { gridX , gridY }, { StartingPoint[0], StartingPoint[1] } };
+    	manualDrawPath.add(lineSection);
+    	setNextSection(gridX, gridY);
+    	
+    	int [][] endSection = { { EndPoint[0] , EndPoint[1] }, { StartingPoint[0], StartingPoint[1] } };
+    	manualDrawPath.add(endSection);
+	}
+	
+	private void setNextSection(int x, int y) {
 		StartingPoint[0] = x;
 		StartingPoint[1] = y;
 	}
@@ -781,7 +780,7 @@ public class GameView extends View {
 						pos[1] = yPos;
 					} else {
 
-						// Log.i(TAG, "can't draw on map[yPos][xPos]= "
+						// Log.i(TAG, "can't draw odn map[yPos][xPos]= "
 						// + map[yPos][xPos] + "( xPos , yPos ) = ( "
 						// + xPos + " , " + yPos + " )");
 						pos[0] = -1;

@@ -95,7 +95,6 @@ public class ScreenXYZsignin extends BaseScreen {
 		float dpi = getResources().getDisplayMetrics().densityDpi;
 		setdisplayparams();
 
-		Log.i("shinhua", "desity: "+ desity + "dpi: " + dpi);
 	}
 	
 	public void setdisplayparams(){	
@@ -104,7 +103,6 @@ public class ScreenXYZsignin extends BaseScreen {
 		display.getSize(size);
 		Screen_width  = size.x;
 		Screen_height = size.y;
-		Log.i("shinhua", "Width: "+ Screen_width + "Height: " + Screen_height);
 	}
 	
 	
