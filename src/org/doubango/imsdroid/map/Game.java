@@ -52,15 +52,6 @@ public class Game {//�t��k���O
 	private Handler handler = new Handler();
 
 	// Temporary code
-	private static boolean manualdrawFlag = false;
-
-	public boolean isManualdrawFlag() {
-		return manualdrawFlag;
-	}
-
-	public void setManualdrawFlag(boolean manualdrawFlag) {
-		Game.manualdrawFlag = manualdrawFlag;
-	}
 
 	
 	/*--------------------------------------------------------------*/

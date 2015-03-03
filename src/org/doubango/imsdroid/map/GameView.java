@@ -113,7 +113,9 @@ public class GameView extends View {
 	int [] StartingPoint = { 0, 0 }; // Record starting Point of each , StartingPoint[0]: X axis , StartingPoint[1]: Y axis
 	int [] EndPoint = { 0, 0 };
 	
-
+	int [] originalPoint = { 0, 0 };
+	
+	
 	private Toast toast;
 
 	private Handler myHandler = new Handler() {
@@ -296,13 +298,11 @@ public class GameView extends View {
 		
 		
 		// Manual drawing the path
-		if(game.isManualdrawFlag()){
-			paint.setColor(Color.RED);
-			paint.setStyle(Style.STROKE);
-			paint.setStrokeWidth(2);
+		paint.setColor(Color.RED);
+		paint.setStyle(Style.STROKE);
+		paint.setStrokeWidth(2);
+		drawMaunalPathOn(canvas, paint);
 
-			drawMaunalPathOn(canvas, paint);
-		}
 		
 		// Canvas drawBitmap: Source
 		canvas.drawBitmap(source,
@@ -326,6 +326,7 @@ public class GameView extends View {
 
 	}
 
+	
 	private void drawMaunalPathOn(Canvas canvas, Paint paint){
 		int size = manualDrawPath.size();
 		int [][] path;
@@ -338,7 +339,21 @@ public class GameView extends View {
 							 path[1][1] * (span + 1) + span / 2 + fixHeightMapData,
 							 paint);
 		}
+		
 	}
+	
+	private void inverseDataIntoPathQueue(){
+		int n = manualDrawPath.size()-1;
+		int [][] path;
+		
+		for(int i=n; i>=0; i--){
+			path = manualDrawPath.get(i);
+			getPathQueue().add(path);
+		}
+		
+		algorithmDone = true;  
+	}
+	
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -355,10 +370,12 @@ public class GameView extends View {
 			}
 			drawZoomMap(event);
 		}
-
+			
 		return true;
 
 	}
+	
+
 
 	private void drawZoomMap(MotionEvent event) {
 		int pointerCount = event.getPointerCount();
@@ -400,8 +417,8 @@ public class GameView extends View {
 				    }else if (isInitPath){ 
 				    	recordManualDrawPath(gridX, gridY);
 				    	postInvalidate();
-				    	
-				    }else {
+				    }
+				    else {
 				        ShowChooseDialog();
 				    }
 				}
@@ -413,25 +430,42 @@ public class GameView extends View {
 		}
 	}
 	
-	
 	private void recordManualDrawPath(int gridX, int gridY){
 		
-	 	int lastPositionIndex = manualDrawPath.size()-1;
-    	manualDrawPath.remove(lastPositionIndex);
-    	
-    	int [][] lineSection = { { gridX , gridY }, { StartingPoint[0], StartingPoint[1] } };
-    	manualDrawPath.add(lineSection);
-    	setNextSection(gridX, gridY);
-    	
-    	int [][] endSection = { { EndPoint[0] , EndPoint[1] }, { StartingPoint[0], StartingPoint[1] } };
-    	manualDrawPath.add(endSection);
+		if(judgementAroundPoint(gridX, gridY)){
+	    	int [][] lineSection = { { gridX , gridY }, { StartingPoint[0], StartingPoint[1] } };
+	    	manualDrawPath.add(lineSection);
+	    	setNextSection(gridX, gridY);
+	     	
+	    	/* Set final target */
+	    	game.target[0] = gridX;
+	    	game.target[1] = gridY;
+		}
+		
 	}
 	
+	private boolean judgementAroundPoint(int nextX, int nextY){
+		
+		int [][] matrix = { {originalPoint[0]-1, originalPoint[1]-1}, { originalPoint[0]-1, originalPoint[1]}, {originalPoint[0]-1, originalPoint[1]+1},
+							{originalPoint[0]  , originalPoint[1]-1},                                          {originalPoint[0]  , originalPoint[1]+1},
+							{originalPoint[0]+1, originalPoint[1]-1}, { originalPoint[0]+1, originalPoint[1]}, {originalPoint[0]+1, originalPoint[1]+1}, };
+		
+		for(int i=0; i<8; i++){
+			if(matrix[i][0] == nextX && matrix[i][1] == nextY){
+				originalPoint[0] = nextX;
+				originalPoint[1] = nextY;
+				return true;
+			}
+		}
+		return false;
+		
+	}
+
 	private void setNextSection(int x, int y) {
 		StartingPoint[0] = x;
 		StartingPoint[1] = y;
 	}
-
+	
 	// Avoid thread competition , when user touch 2 points at the same time
 	private void avoidThreadCompetition(long millis){ 
 		try {
@@ -505,36 +539,30 @@ public class GameView extends View {
 			game.clearState();
 			changeMapZoomIn(true);
 			
-		
 			manualDrawPath.clear();
 			getPathCoordinate();
+			
 			
 			isInitPath = true;
             game.goButton.setEnabled(false);
             game.runButton.setEnabled(false);
-            game.setManualdrawFlag(true);
           
 		}else{
 			changeMapZoomIn(false);
 			isInitPath = false;
             game.goButton.setEnabled(true);
-            game.setManualdrawFlag(false);
+            inverseDataIntoPathQueue();
+            
 		}
 	}
 	
 	private void getPathCoordinate(){
 		// Starting Point
-		StartingPoint[0] = game.source[0];
-		StartingPoint[1] = game.source[1];
-		
-		// End Point
-		EndPoint[0] = game.target[0];
-		EndPoint[1] = game.target[1];
-		
-	 	int [][] Section = { { EndPoint[0] , EndPoint[1] }, { StartingPoint[0], StartingPoint[1] } };
-    	manualDrawPath.add(Section);
+		for(int i=0; i<2; i++){
+			StartingPoint[i] = game.source[i];
+			originalPoint[i] = game.source[i];
+		}
 	}
-
 
     public void changeMapZoomIn(boolean zoomIn) {
         if (zoomIn) {

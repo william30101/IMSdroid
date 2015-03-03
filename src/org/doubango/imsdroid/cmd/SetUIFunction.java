@@ -425,6 +425,8 @@ public class SetUIFunction {
 			        gameView.execDrawPath(false);
 			        DrawPath.setText("DrawPath");
 			        InitMap.setEnabled(true);
+			        sendCmdToBoard();
+			        
 			    }
 				break;
 				
@@ -450,6 +452,17 @@ public class SetUIFunction {
 
 	};
 
+	private void sendCmdToBoard(){
+		synchronized (SendAlgo) {
+			try {
+				SendAlgo.RobotStart(gameView, game, XMPPSet);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 	/* Arc Menu */
 	private void initArcMenu(final ArcMenu menu, int[] itemDrawables, Activity v) {
