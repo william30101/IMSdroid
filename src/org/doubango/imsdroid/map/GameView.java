@@ -58,7 +58,7 @@ public class GameView extends View {
 	Bitmap target = BitmapFactory.decodeResource(getResources(),
 			R.drawable.target);
 	Paint paint = new Paint();
-
+	
 	// William Added
 	int touchX = 0, touchY = 0;
 	int x, y;
@@ -96,7 +96,7 @@ public class GameView extends View {
 
 	Canvas gcanvas;
 
-	/* shinhua add */
+	/* ZoomIn & ZoomOut Parameter */
 	Context mContext;
 	int width, height, screenWidth, screenHeight, mapWidth, mapHeight;
 	int xcoordinate = 5, ycoordinate = 5;
@@ -107,14 +107,15 @@ public class GameView extends View {
 	public boolean isInitMap = false;
 	private int cusRow = 0, cusCol = 0;
 	
-	/* Temporary code */
+	/* Manual Draw Path */
 	public boolean isInitPath = false;
 	ArrayList<int[][]> manualDrawPath = new ArrayList<int[][]>();
 	int [] StartingPoint = { 0, 0 }; // Record starting Point of each , StartingPoint[0]: X axis , StartingPoint[1]: Y axis
 	int [] EndPoint = { 0, 0 };
-	
 	int [] originalPoint = { 0, 0 };
 	
+	/* Temporary code */
+	Bitmap baseMap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_xyzlauncher1);
 	
 	private Toast toast;
 
@@ -206,9 +207,15 @@ public class GameView extends View {
 		paint.setStyle(Style.STROKE);
 		// canvas.drawRect(5, 55, 325, 376, paint);
 
-		getMapSize();
+		//getMapSize();
 		
-		for (int i = 0; i < row; i++) {
+		
+		
+		canvas.drawBitmap(baseMap, fixWidthMapData , fixHeightMapData, paint);
+		Log.i("shinhua", "fixWidthMapData " + fixWidthMapData + " fixHeightMapData " + fixHeightMapData);
+		
+		
+/*		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				if (map[i][j] == 0) {
 					paint.setColor(Color.WHITE);
@@ -238,7 +245,7 @@ public class GameView extends View {
 									+ i * (span + 1) + span, paint);
 				}
 			}
-		}
+		}*/
 
 		ArrayList<int[][]> searchProcess = game.getSearchProcess();
 		for (int k = 0; k < searchProcess.size(); k++) {
@@ -907,6 +914,10 @@ public class GameView extends View {
 		if(isZoom){
 			width = (col * (span + 1)) + xcoordinate;
 			height = (row * (span + 1)) + ycoordinate;
+			
+			
+			Log.i("shinhua", "width" + width);
+			
 			setVIEW_WIDTH(width);
 			setVIEW_HEIGHT(height);
 		}	
