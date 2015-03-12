@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Point;
@@ -100,7 +101,8 @@ public class GameView extends View {
 	Context mContext;
 	int width, height, screenWidth, screenHeight, mapWidth, mapHeight;
 	int xcoordinate = 5, ycoordinate = 5;
-	private boolean touchDown = false, zoomout = false, isZoom = false;
+	private boolean isZoom = false, reDraw = true;
+	
 
 	private CharSequence[] scenarioOptions = new CharSequence[]
 	        {"Source", "Target", "Obstacle", "Ground"};
@@ -115,7 +117,7 @@ public class GameView extends View {
 	int [] originalPoint = { 0, 0 };
 	
 	/* Temporary code */
-	Bitmap baseMap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_xyzlauncher1);
+	Bitmap baseMap = BitmapFactory.decodeResource(getResources(), R.drawable.basemap);
 	
 	private Toast toast;
 
@@ -207,29 +209,38 @@ public class GameView extends View {
 		paint.setStyle(Style.STROKE);
 		// canvas.drawRect(5, 55, 325, 376, paint);
 
-		//getMapSize();
 		
+		/* Draw BaseMap */
+		reDrawBitmapSize(canvas, paint, baseMap, fixWidthMapData, fixHeightMapData, mapWidth, mapHeight);
 		
-		
-		canvas.drawBitmap(baseMap, fixWidthMapData , fixHeightMapData, paint);
-		Log.i("shinhua", "fixWidthMapData " + fixWidthMapData + " fixHeightMapData " + fixHeightMapData);
-		
-		
-/*		for (int i = 0; i < row; i++) {
+		/* Draw Grid */
+		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				if (map[i][j] == 0) {
-					paint.setColor(Color.WHITE);
+					paint.setColor(Color.RED);
 					paint.setStyle(Style.FILL_AND_STROKE);
-					paint.setStrokeWidth(5); 
-					canvas.drawRect(fixWidthMapData + j * (span + 1),
-							fixHeightMapData + i * (span + 1), fixWidthMapData
-									+ j * (span + 1) + span, fixHeightMapData
-									+ i * (span + 1) + span, paint);
+					paint.setStrokeWidth(2); 
+					paint.setAlpha(64);
+					
+					
+//					canvas.drawRect(fixWidthMapData + j * (span + 1),
+//								   fixHeightMapData + i * (span + 1), 
+//							        fixWidthMapData + j * (span + 1) + span, 
+//							       fixHeightMapData + i * (span + 1) + span,
+//							       paint);
+					if(isZoom){
+						drawCross(canvas, paint, fixWidthMapData + j * (span + 1),
+												 fixHeightMapData + i * (span + 1), 
+												 fixWidthMapData + j * (span + 1) + span,
+												 fixHeightMapData + i * (span + 1) + span);
+					}
+					
 				} else if (map[i][j] == 1) {// �¦�
 					paint.setColor(Color.BLACK);
 					//paint.setStyle(Style.FILL);
 					paint.setStyle(Style.FILL_AND_STROKE);
 					paint.setStrokeWidth(5); 
+					paint.setAlpha(64);
 					canvas.drawRect(fixWidthMapData + j * (span + 1),
 							fixHeightMapData + i * (span + 1), fixWidthMapData
 									+ j * (span + 1) + span, fixHeightMapData
@@ -238,14 +249,15 @@ public class GameView extends View {
 					paint.setColor(Color.LTGRAY);
 					//paint.setStyle(Style.FILL);
 					paint.setStyle(Style.FILL_AND_STROKE);
-					paint.setStrokeWidth(5); 
+					paint.setStrokeWidth(5);
+					paint.setAlpha(64);
 					canvas.drawRect(fixWidthMapData + j * (span + 1),
 							fixHeightMapData + i * (span + 1), fixWidthMapData
 									+ j * (span + 1) + span, fixHeightMapData
 									+ i * (span + 1) + span, paint);
 				}
 			}
-		}*/
+		}
 
 		ArrayList<int[][]> searchProcess = game.getSearchProcess();
 		for (int k = 0; k < searchProcess.size(); k++) {
@@ -304,24 +316,21 @@ public class GameView extends View {
 		
 		
 		
-		// Manual drawing the path
-		paint.setColor(Color.RED);
-		paint.setStyle(Style.STROKE);
-		paint.setStrokeWidth(2);
+		/* Manual drawing the path */
 		drawMaunalPathOn(canvas, paint);
 
+		/* Canvas drawBitmap: Source */
+		canvas.drawBitmap(source, fixWidthMapData + game.source[0] * (span + 1), fixHeightMapData + game.source[1] * (span + 1), paint);
+//		reDrawBitmapSize(canvas, paint, source, 
+//				fixWidthMapData + game.source[0] * (span + 1), fixHeightMapData + game.source[1] * (span + 1), span+1, span+1);
 		
-		// Canvas drawBitmap: Source
-		canvas.drawBitmap(source,
-				fixWidthMapData + game.source[0] * (span + 1), fixHeightMapData
-						+ game.source[1] * (span + 1), paint);
-		// Canvas drawBitmap: Target
-		canvas.drawBitmap(target,
-				fixWidthMapData + game.target[0] * (span + 1), fixHeightMapData
-						+ game.target[1] * (span + 1), paint);
-
-		// Log.i(TAG,"Draw source = "+ game.source[0] + " , " + game.source[1]);
-		 Log.i("jamesdebug","Draw target = "+ game.target[0] + " , " + game.target[1]);
+		/* Canvas drawBitmap: Target */
+		canvas.drawBitmap(target, fixWidthMapData + game.target[0] * (span + 1), fixHeightMapData + game.target[1] * (span + 1), paint);
+//		reDrawBitmapSize(canvas, paint, target, 
+//				fixWidthMapData + game.target[0] * (span + 1), fixHeightMapData + game.target[1] * (span + 1), span+1, span+1);
+		
+		
+		Log.i("jamesdebug","Draw target = "+ game.target[0] + " , " + game.target[1]);
 
 		// William Added
 		//onDrawText(canvas);
@@ -334,9 +343,50 @@ public class GameView extends View {
 	}
 
 	
+	private void reDrawBitmapSize(Canvas mCanvas, Paint mPaint, Bitmap mBitmap, int xCoordinate, int yCoordinate, int newWidth, int newHeight){
+	
+		/* Get Original map size */
+		int width = mBitmap.getWidth();
+		int height = mBitmap.getHeight();
+		
+		/* Calculate Scale */
+		float scaleWidth = ((float) newWidth) / width;
+		float scaleHeight =((float) newHeight) / height;
+		
+		Matrix matrix = new Matrix();
+		matrix.postScale(scaleWidth, scaleHeight);
+
+		Bitmap newBasemap = Bitmap.createBitmap(mBitmap, 0, 0, width, height, matrix, true);
+		mCanvas.drawBitmap(newBasemap, xCoordinate, yCoordinate, mPaint);
+		
+	}
+
+	private void drawCross(Canvas mCanvas, Paint mPaint, int left, int top, int right, int bottom){
+		float nx = ((float)( left + right )) / 2;
+		float ny = ((float)( top + bottom )) / 2;
+		
+		
+		//mCanvas.drawLine( (left+nx), (top+ny), (right-nx), (bottom-ny), mPaint);
+		
+		/* Full Cross */
+		//mCanvas.drawLine(left, ny, right, ny, mPaint);
+		//mCanvas.drawLine(nx, top, nx, bottom, mPaint);
+	
+		/* 1/2 Cross */
+		mCanvas.drawLine((left+nx)/2, ny, (right+nx)/2, ny, mPaint);
+		mCanvas.drawLine(nx, (top+ny)/2, nx, (bottom+ny)/2, mPaint);
+
+	}
+	
+	
 	private void drawMaunalPathOn(Canvas canvas, Paint paint){
+		
 		int size = manualDrawPath.size();
 		int [][] path;
+		
+		paint.setColor(Color.RED);
+		paint.setStyle(Style.STROKE);
+		paint.setStrokeWidth(2);
 		
 		for(int i=0; i<size; i++){
 			path = manualDrawPath.get(i);
@@ -348,19 +398,6 @@ public class GameView extends View {
 		}
 		
 	}
-	
-	private void inverseDataIntoPathQueue(){
-		int n = manualDrawPath.size()-1;
-		int [][] path;
-		
-		for(int i=n; i>=0; i--){
-			path = manualDrawPath.get(i);
-			getPathQueue().add(path);
-		}
-		
-		algorithmDone = true;  
-	}
-	
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -381,8 +418,6 @@ public class GameView extends View {
 		return true;
 
 	}
-	
-
 
 	private void drawZoomMap(MotionEvent event) {
 		int pointerCount = event.getPointerCount();
@@ -571,6 +606,18 @@ public class GameView extends View {
 		}
 	}
 
+	private void inverseDataIntoPathQueue(){
+		int n = manualDrawPath.size()-1;
+		int [][] path;
+		
+		for(int i=n; i>=0; i--){
+			path = manualDrawPath.get(i);
+			getPathQueue().add(path);
+		}
+		
+		algorithmDone = true;  
+	}
+
     public void changeMapZoomIn(boolean zoomIn) {
         if (zoomIn) {
             span = 30;
@@ -584,15 +631,14 @@ public class GameView extends View {
             fixHeightMapData = ycoordinate;
 
             isZoom = true;
-            touchDown = true;
         }else {
             // Let map screen change back into small size
             isZoom = !isZoom;
-            zoomout = false;
 
             span = 15;
             xcoordinate = ycoordinate = 5;
             fixWidthMapData = fixHeightMapData = 5;
+            
         }
         requestLayout();
     }
@@ -881,7 +927,8 @@ public class GameView extends View {
 	 * }
 	 */
 
-	@SuppressLint("NewApi") public void getScreenSize() {
+	@SuppressLint("NewApi") 
+	public void getScreenSize() {
 		WindowManager wm = (WindowManager) mContext
 				.getSystemService(mContext.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
