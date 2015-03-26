@@ -31,12 +31,14 @@
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+    >
 
         <RelativeLayout
             android:id="@+id/layout_robot"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:background="#00000000" >
 
             <com.capricorn.ArcMenu
@@ -195,5 +197,13 @@
         android:layout_above="@+id/hangupbtn"
         android:layout_toRightOf="@+id/init_map"
         android:text="DrawPath" />
+
+    <Button
+        android:id="@+id/openslide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/getAxisBtn"
+        android:layout_alignLeft="@+id/getAxisBtn"
+        android:text="openslide" />
 
 </RelativeLayout>

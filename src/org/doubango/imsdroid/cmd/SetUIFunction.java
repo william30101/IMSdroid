@@ -11,6 +11,8 @@ import org.doubango.imsdroid.R;
 import org.doubango.imsdroid.UartCmd;
 import org.doubango.imsdroid.XMPPSetting;
 import org.doubango.imsdroid.BeaconUtils;
+import org.doubango.imsdroid.Screens.ScreenUIGestureListener;
+import org.doubango.imsdroid.Screens.ScreenUISildeMenu;
 import org.doubango.imsdroid.Screens.ScreenAV;
 import org.doubango.imsdroid.Screens.ScreenDraw;
 import org.doubango.imsdroid.Screens.ScreenUIJoyStick;
@@ -35,12 +37,15 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.DragEvent;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
 import android.view.View.OnDragListener;
+import android.view.View.OnGenericMotionListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
@@ -48,6 +53,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -154,13 +160,21 @@ public class SetUIFunction {
 	private BeaconUtils beaconUtils;
 	private Button BeaconReset, right90AngleBtn, left90AngleBtn;
 	private Button InitMap, DrawPath;
+	
+	
+	/* Slide Robot Menu */
+	LinearLayout slideLayout;
+	private Button OpenSlide;
+	private ScreenUISildeMenu mAinmMenuOpen, mAinmMenuClose;
+	private boolean isMenuOpen = false;
+
 
 	ScreenAV _ScreenAV;
-	
 	private static boolean supportBLEDevice = false;
-
 	/* Temporary declare */
-
+	public GestureDetector mGestureDetector = null;
+	
+	
 	private static SetUIFunction instance;
 
 	public SetUIFunction(Activity activity) {
@@ -276,8 +290,25 @@ public class SetUIFunction {
 		InitMap = (Button) globalActivity.findViewById(R.id.init_map);
 		InitMap.setOnClickListener(onClickListener);
 
+		
+		/* Draw Path function */
 		DrawPath = (Button) globalActivity.findViewById(R.id.draw_path);
 		DrawPath.setOnClickListener(onClickListener);
+		
+		/* Slide Menu */
+		slideLayout =  (LinearLayout) globalActivity.findViewById(R.id.linearLayout1);
+		OpenSlide = (Button)globalActivity.findViewById(R.id.openslide);
+		OpenSlide.setOnClickListener(onClickListener);
+		
+		ViewGroup.LayoutParams param = slideLayout.getLayoutParams();
+		param.width = 0;
+		slideLayout.setLayoutParams(param);
+		
+		mAinmMenuOpen = new ScreenUISildeMenu(slideLayout, 500, 0, (int)(width/6));
+		mAinmMenuClose = new ScreenUISildeMenu(slideLayout, 500, (int)(width/6), 0);
+		
+		
+		/* Temporary */
 		
 		
 		//uartRec = new UartReceive();
@@ -322,7 +353,7 @@ public class SetUIFunction {
 		seekbar.setProgress(0);
 		seekbar.setOnSeekBarChangeListener(seekbarListener);
 
-	}
+	}	
 
 	/* The OnTouchListener of Draw JoyStick */
 	OnTouchListener joystickListener = new OnTouchListener() {
@@ -430,6 +461,19 @@ public class SetUIFunction {
 			    }
 				break;
 				
+			case R.id.openslide:
+				if(isMenuOpen){
+					//slideLayout.setVisibility(v.GONE);
+					slideLayout.startAnimation(mAinmMenuClose);
+					isMenuOpen = false;
+					OpenSlide.setText("OpenSlide");
+					
+				}else if(!isMenuOpen){
+					slideLayout.startAnimation(mAinmMenuOpen);
+					isMenuOpen = true;
+					OpenSlide.setText("CloseSlide");
+				}
+				break;
 			    
 			    
 
@@ -452,6 +496,9 @@ public class SetUIFunction {
 
 	};
 
+	
+
+	
 	private void sendCmdToBoard(){
 		synchronized (SendAlgo) {
 			try {
@@ -760,5 +807,7 @@ public class SetUIFunction {
 		}
 	}
 
+	
+	
 
 }

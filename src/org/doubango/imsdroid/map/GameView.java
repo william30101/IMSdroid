@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.doubango.imsdroid.R;
+import org.doubango.imsdroid.Screens.ScreenUIGestureListener;
 import org.doubango.imsdroid.cmd.SetUIFunction;
 
 import android.annotation.SuppressLint;
@@ -27,14 +28,17 @@ import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class GameView extends View {
+public class GameView extends View{
 
 	private String TAG = "william";
 	private static int VIEW_WIDTH = 640;
@@ -116,8 +120,13 @@ public class GameView extends View {
 	int [] EndPoint = { 0, 0 };
 	int [] originalPoint = { 0, 0 };
 	
-	/* Temporary code */
+	
+	/* Drawing BashMap */
 	Bitmap baseMap = BitmapFactory.decodeResource(getResources(), R.drawable.basemap);
+	
+	/* Temporary code */
+	private GestureDetector mGesture;
+	
 	
 	private Toast toast;
 
@@ -131,6 +140,7 @@ public class GameView extends View {
 		}
 	};
 
+	@SuppressWarnings("deprecation")
 	public GameView(Context context, AttributeSet attrs) {// �غc����
 		super(context, attrs);
 		if (isInEditMode()) {
@@ -138,7 +148,8 @@ public class GameView extends View {
 		}
 		mContext = context;
 		st = new ShowThread();
-
+		mGesture = new GestureDetector(new ScreenUIGestureListener());
+		
 		getScreenSize();
 	}
 
@@ -398,6 +409,8 @@ public class GameView extends View {
 		}
 		
 	}
+
+	
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -406,18 +419,22 @@ public class GameView extends View {
 			    changeMapZoomIn(true);
 			}
 			drawZoomMap(event);
-			
 		}
 		else if(event.getAction() == MotionEvent.ACTION_MOVE && isInitPath == true){
 			if(event.getX() >= fixWidthMapData && event.getY() <= fixWidthMapData){
 			    changeMapZoomIn(true);
 			}
+			else if(event.getPointerCount()>=2){
+				getScroll(event.getX(0), event.getY(0),  event.getX(1), event.getY(1));
+			}
+			
 			drawZoomMap(event);
 		}
-			
+	
 		return true;
-
+		
 	}
+
 
 	private void drawZoomMap(MotionEvent event) {
 		int pointerCount = event.getPointerCount();
@@ -458,6 +475,7 @@ public class GameView extends View {
 				        postInvalidate();
 				    }else if (isInitPath){ 
 				    	recordManualDrawPath(gridX, gridY);
+				    	
 				    	postInvalidate();
 				    }
 				    else {
@@ -472,13 +490,28 @@ public class GameView extends View {
 		}
 	}
 	
+	private void getScroll(float x1, float y1, float x2, float y2){
+		int scale;
+		scale = (int)(Math.sqrt((x1-x2) * (x1 -x2) + (y1-y2) * (y1 -y2)))/100;
+		Log.i("shinhua", Integer.toString(scale));
+		
+		if(scale <= 2){
+			span = 30;
+		}else if (scale > 2 && scale <=10){
+			span = span + scale * 5;
+		}else if ( scale > 10){
+			span = span + scale * 2;
+		}
+		
+	}
+	
 	private void recordManualDrawPath(int gridX, int gridY){
 		
 		if(judgementAroundPoint(gridX, gridY)){
 	    	int [][] lineSection = { { gridX , gridY }, { StartingPoint[0], StartingPoint[1] } };
 	    	manualDrawPath.add(lineSection);
 	    	setNextSection(gridX, gridY);
-	     	
+	     		    	
 	    	/* Set final target */
 	    	game.target[0] = gridX;
 	    	game.target[1] = gridY;
@@ -584,7 +617,6 @@ public class GameView extends View {
 			manualDrawPath.clear();
 			getPathCoordinate();
 			
-			
 			isInitPath = true;
             game.goButton.setEnabled(false);
             game.runButton.setEnabled(false);
@@ -606,6 +638,7 @@ public class GameView extends View {
 		}
 	}
 
+	
 	private void inverseDataIntoPathQueue(){
 		int n = manualDrawPath.size()-1;
 		int [][] path;
@@ -831,7 +864,6 @@ public class GameView extends View {
 		int[] pos = new int[2];
 		double x = e.getX();
 		double y = e.getY();
-
 		// /////////////////////////////////////////////////////////////
 		// (col*(span+1)+fixMapData) = X total length //
 		// (row*(span+1)+fixMapData) = Y total length //
@@ -1009,5 +1041,7 @@ public class GameView extends View {
 	public void PathQueueClear() {
 		this.pathQueue.clear();
 	}
+
+
 
 }
